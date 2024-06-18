@@ -9,7 +9,11 @@ import { iUser } from '../../Models/iUser';
   styleUrl: './register.component.scss'
 })
 export class RegisterComponent {
-  registerData: Partial<iUser> = {}
+  registerData: Partial<iUser> = {
+    roles : []
+  }
+
+  privateOrCompany:boolean = false;
 
   constructor(
     private authSvc: AuthService,
@@ -17,6 +21,13 @@ export class RegisterComponent {
   ) { }
 
   signUp() {
+
+    if(this.privateOrCompany == false){
+      this.registerData.roles?.push({roleType:"PRIVATE"})
+    }else{
+      this.registerData.roles?.push({roleType:"COMPANY"})
+    }
+
     this.authSvc.register(this.registerData)
       .subscribe(data => {
 

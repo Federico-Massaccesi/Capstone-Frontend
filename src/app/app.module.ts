@@ -9,12 +9,14 @@ import { LoginComponent } from './auth/login/login.component';
 import { RegisterComponent } from './auth/register/register.component';
 import { LandingComponent } from './main-component/landing/landing.component';
 import { HttpClientModule } from '@angular/common/http';
+import { ContactsComponent } from './main-component/contacts/contacts.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     HeaderComponent,
-    LandingComponent
+    LandingComponent,
+    ContactsComponent
 
   ],
   imports: [

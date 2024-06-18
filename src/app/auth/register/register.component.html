@@ -4,65 +4,63 @@
       <h4 class="text-center">Register:</h4>
       <input
         type="text"
-        name="cognome"
+        name="username"
         [(ngModel)]="registerData.username"
         class="form-control my-4 rounded-5 w-100"
-        placeholder="Cognome"
+        placeholder="Username"
       />
       <input
-        type="email"
+      type="email"
         name="email"
         [(ngModel)]="registerData.email"
         class="form-control my-4 rounded-5 w-100"
         placeholder="Email"
-      />
-      <input
+        />
+        <input
         type="password"
         name="password"
         [(ngModel)]="registerData.password"
         class="form-control my-4 rounded-5 w-100"
         placeholder="Password"
-      />
+        />
+        <input
+          type="text"
+          name="address"
+          [(ngModel)]="registerData.address"
+          class="form-control my-4 rounded-5 w-100"
+          placeholder="Indirizzo"
+        />
+        <input
+          type="text"
+          name="city"
+          [(ngModel)]="registerData.city"
+          class="form-control my-4 rounded-5 w-100"
+          placeholder="Città"
+        />
       <!-- Campi visibili solo se la checkbox è spuntata -->
       <input
-        *ngIf="registerData.roles"
+        *ngIf="privateOrCompany"
         type="text"
-        name="company"
+        name="companyName"
         [(ngModel)]="registerData.companyName"
         class="form-control my-4 rounded-5 w-100"
-        placeholder="Nome Azienda"
+        placeholder="Nome azienda"
       />
       <input
-        *ngIf="registerData.roles"
+        *ngIf="privateOrCompany"
         type="text"
         name="vat"
         [(ngModel)]="registerData.pIVA"
         class="form-control my-4 rounded-5 w-100"
         placeholder="Partita IVA"
       />
-      <input
-        *ngIf="registerData.roles"
-        type="text"
-        name="address"
-        [(ngModel)]="registerData.address"
-        class="form-control my-4 rounded-5 w-100"
-        placeholder="Indirizzo"
-      />
-      <input
-        *ngIf="registerData.roles"
-        type="text"
-        name="address"
-        [(ngModel)]="registerData.city"
-        class="form-control my-4 rounded-5 w-100"
-        placeholder="Indirizzo"
-      />
       <div class="d-flex align-items-center mb-4">
         <input
-          [(ngModel)]="registerData.roles"
-          name="vendorOrNot"
+        (click)="privateOrCompany = !privateOrCompany"
+        name="vendorOrNot"
           type="checkbox"
         />
-        <span class="ms-2">Sei un venditore?</span>
+        <span class="ms-2">Sei un azienda?</span>
       </div>
       <button (click)="signUp()" class="btn-center button">Registrati</button>
     </form>

@@ -15,5 +15,5 @@ id?: number;
 
   city: string;
 
-  roles: string[];
+  roles: {roleType:string}[];
 }

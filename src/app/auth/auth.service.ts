@@ -45,7 +45,7 @@ export class AuthService {
         this.authSubject.next(data.user);
         localStorage.setItem('accessData',JSON.stringify(data))
 
-      this.autoLogout(data.accessToken)
+      //  this.autoLogout(data.accessToken)
       })
     )
   }
@@ -66,14 +66,33 @@ export class AuthService {
     return accessData.accessToken;
   }
 
-  autoLogout(jwt: string) {
-    const expDate = this.jwtHelper.getTokenExpirationDate(jwt) as Date;
-    const expMs = expDate.getTime() - new Date().getTime();
+  // autoLogout(jwt: string) {
+  //   const expDate = this.jwtHelper.getTokenExpirationDate(jwt) as Date;
+  //   const expMs = expDate.getTime() - new Date().getTime();
 
 
-    setTimeout(() => {
-      this.logout();
-    }, expMs);
+  //   setTimeout(() => {
+  //     this.logout();
+  //   }, expMs);
+  // }
+
+  getUserRole(): boolean{
+
+    const userJson = localStorage.getItem('accessData');
+    if (!userJson) return false
+
+      const accessData: AccessData = JSON.parse(userJson);
+
+    const user = accessData.user;
+
+      if(user && user.roles && user.roles.some(role => role.roleType === 'PRIVATE')){
+        return true
+      }else{
+        return false
+      }
+
+
+
   }
 
   restoreUser() {
@@ -84,6 +103,6 @@ export class AuthService {
     if (this.jwtHelper.isTokenExpired(accessData.accessToken)) return;
 
     this.authSubject.next(accessData.user);
-    this.autoLogout(accessData.accessToken);
+    //  this.autoLogout(accessData.accessToken);
   }
 }
