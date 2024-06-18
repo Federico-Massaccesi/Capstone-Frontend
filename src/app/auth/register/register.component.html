@@ -1,0 +1,70 @@
+<div class="container d-flex justify-content-center align-items-center vh-90">
+  <div class="card rounded-5 m-5 p-5" style="width: 28rem">
+    <form>
+      <h4 class="text-center">Register:</h4>
+      <input
+        type="text"
+        name="cognome"
+        [(ngModel)]="registerData.username"
+        class="form-control my-4 rounded-5 w-100"
+        placeholder="Cognome"
+      />
+      <input
+        type="email"
+        name="email"
+        [(ngModel)]="registerData.email"
+        class="form-control my-4 rounded-5 w-100"
+        placeholder="Email"
+      />
+      <input
+        type="password"
+        name="password"
+        [(ngModel)]="registerData.password"
+        class="form-control my-4 rounded-5 w-100"
+        placeholder="Password"
+      />
+      <!-- Campi visibili solo se la checkbox è spuntata -->
+      <input
+        *ngIf="registerData.roles"
+        type="text"
+        name="company"
+        [(ngModel)]="registerData.companyName"
+        class="form-control my-4 rounded-5 w-100"
+        placeholder="Nome Azienda"
+      />
+      <input
+        *ngIf="registerData.roles"
+        type="text"
+        name="vat"
+        [(ngModel)]="registerData.pIVA"
+        class="form-control my-4 rounded-5 w-100"
+        placeholder="Partita IVA"
+      />
+      <input
+        *ngIf="registerData.roles"
+        type="text"
+        name="address"
+        [(ngModel)]="registerData.address"
+        class="form-control my-4 rounded-5 w-100"
+        placeholder="Indirizzo"
+      />
+      <input
+        *ngIf="registerData.roles"
+        type="text"
+        name="address"
+        [(ngModel)]="registerData.city"
+        class="form-control my-4 rounded-5 w-100"
+        placeholder="Indirizzo"
+      />
+      <div class="d-flex align-items-center mb-4">
+        <input
+          [(ngModel)]="registerData.roles"
+          name="vendorOrNot"
+          type="checkbox"
+        />
+        <span class="ms-2">Sei un venditore?</span>
+      </div>
+      <button (click)="signUp()" class="btn-center button">Registrati</button>
+    </form>
+  </div>
+</div>
