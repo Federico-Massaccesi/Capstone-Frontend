@@ -1,11 +1,12 @@
-<a routerLink="/userList">userList</a>
-<a *ngIf="isUser"
- routerLink="/productList">productList</a>
-
-<a routerLink="/orderList">orderList</a>
 <a
-*ngIf="isUser"
-routerLink="/profile">profile</a>
+*ngIf="!isUser"
+routerLink="/userList">userList</a>
+<hr />
+<a *ngIf="isUser" routerLink="/productList">productList</a>
+<hr />
 
-
-
+<a
+*ngIf="!isUser"
+routerLink="/orderList">orderList</a>
+<hr />
+<a *ngIf="isUser" routerLink="/profile">profile</a>
