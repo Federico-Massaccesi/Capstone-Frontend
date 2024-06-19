@@ -3,6 +3,8 @@ import { iUser } from "./iUser";
 
 export interface IOrder {
 
+  id?:number;
+
    client:iUser;
 
    products: IProduct[];

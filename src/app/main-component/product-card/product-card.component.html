@@ -9,7 +9,9 @@
         <p *ngFor="let item of product.categories" class="card-text">{{item}}</p>
         <h5 class="card-title">{{product.description}}</h5>
         <h5 class="card-title">{{product.price}}</h5>
-
+        <button type="button" class="button" [routerLink]="['/product-details', product.id]">
+          Dettagli
+        </button>
 
       </div>
     </div>

@@ -22,4 +22,10 @@ export class SearchService<T> {
   getAllEntities(url:string): Observable<T[]> {
     return this.http.get<T[]>(url);
   }
+
+  getOneEntity(url:string,id:number): Observable<T> {
+
+    return this.http.get<T>(`${url}/${id}`);
+
+  }
 }
