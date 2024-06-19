@@ -8,7 +8,7 @@ import { iUser } from '../Models/iUser';
 import { HttpClient } from '@angular/common/http';
 
 type AccessData = {
-  accessToken:string,
+  token:string,
   user:iUser
 }
 
@@ -61,9 +61,9 @@ export class AuthService {
     if (!userJson) return '';
 
     const accessData: AccessData = JSON.parse(userJson);
-    if (this.jwtHelper.isTokenExpired(accessData.accessToken)) return '';
+    if (this.jwtHelper.isTokenExpired(accessData.token)) return '';
 
-    return accessData.accessToken;
+    return accessData.token;
   }
 
   // autoLogout(jwt: string) {
@@ -100,7 +100,7 @@ export class AuthService {
     if (!userJson) return;
 
     const accessData: AccessData = JSON.parse(userJson);
-    if (this.jwtHelper.isTokenExpired(accessData.accessToken)) return;
+    if (this.jwtHelper.isTokenExpired(accessData.token)) return;
 
     this.authSubject.next(accessData.user);
     //  this.autoLogout(accessData.accessToken);
