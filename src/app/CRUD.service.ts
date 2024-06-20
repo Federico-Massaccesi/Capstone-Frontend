@@ -29,8 +29,8 @@ export class CRUDService<T> {
 
   }
 
-  deleteEntity(url:string,id:number):void{
+  deleteEntity(url:string,id:number): Observable<void>{
 
-   this.http.delete<T>(`${url}/${id}`);
+    return this.http.delete<void>(`${url}/${id}`);
    }
 }

@@ -11,6 +11,7 @@ import { ContactsComponent } from './main-component/contacts/contacts.component'
 import { AuthInterceptor } from './auth.interceptor';
 import { AuthService } from './auth/auth.service';
 import { OrderCardComponent } from './main-component/order-card/order-card.component';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 @NgModule({
   declarations: [
@@ -24,7 +25,8 @@ import { OrderCardComponent } from './main-component/order-card/order-card.compo
     BrowserModule,
     AppRoutingModule,
     RouterModule,
-    HttpClientModule
+    HttpClientModule,
+    NgbModule
   ],
   providers: [
     AuthService,

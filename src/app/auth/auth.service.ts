@@ -85,7 +85,9 @@ export class AuthService {
 
     const user = accessData.user;
 
-      if(user && user.roles && user.roles.some(role => role.roleType === 'PRIVATE')){
+      if(user && user.roles && user.roles.some(role => role.roleType === 'PRIVATE'||
+        role.roleType === 'COMPANY'
+      )){
         return true
       }else{
         return false

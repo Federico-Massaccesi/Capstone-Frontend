@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { IProduct } from '../../Models/i-product';
 import { CRUDService } from '../../CRUD.service';
 import { environment } from '../../../environments/environment';
+import { AuthService } from '../../auth/auth.service';
 
 @Component({
   selector: 'app-product-details',
@@ -15,11 +16,19 @@ export class ProductDetailsComponent implements OnInit {
 
   product: IProduct | undefined;
 
+  isUser!:boolean;
+
+
   pageProductID!:number
   constructor(
   private route: ActivatedRoute,
-    private prodSvc: CRUDService<IProduct>
-){}
+  private router: Router,
+    private prodSvc: CRUDService<IProduct>,
+    private authSvc : AuthService
+){
+  this.isUser = authSvc.getUserRole();
+
+}
 
 ngOnInit(): void {
   const productId = this.route.snapshot.paramMap.get('id');
@@ -33,7 +42,9 @@ ngOnInit(): void {
   }
 }
 
-deleteProduct(){
-  this.prodSvc.deleteEntity(this.prodUrl,this.pageProductID)
+deleteProduct():void{
+  this.prodSvc.deleteEntity(this.prodUrl,this.pageProductID).subscribe(()=>{
+    this.router.navigate(['/productList']);
+  })
 }
 }
