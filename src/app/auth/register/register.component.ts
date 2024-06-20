@@ -12,15 +12,22 @@ export class RegisterComponent {
   registerData: Partial<iUser> = {
     roles : []
   }
+  registerDataAdmin: Partial<iUser> = {
+    roles : []
+  }
 
   privateOrCompany:boolean = false;
+
+  admin:boolean = false;
+
+  warehouse:boolean = false;
 
   constructor(
     private authSvc: AuthService,
     private router: Router
   ) { }
 
-  signUp() {
+  signUpClient() {
 
     if(this.privateOrCompany == false){
       this.registerData.roles?.push({roleType:"PRIVATE"})
@@ -29,6 +36,21 @@ export class RegisterComponent {
     }
 
     this.authSvc.register(this.registerData)
+      .subscribe(data => {
+
+        this.router.navigate(['/auth/login'])
+
+      })
+  }
+  signUpAdmin() {
+
+   if(this.admin == true && this.warehouse == true){
+    this.registerDataAdmin.roles?.push({roleType:" WAREHOUSE"})
+  }else if(this.admin == true && this.warehouse == false){
+      this.registerDataAdmin.roles?.push({roleType:"ADMIN"})
+  }
+
+    this.authSvc.register(this.registerDataAdmin)
       .subscribe(data => {
 
         this.router.navigate(['/auth/login'])

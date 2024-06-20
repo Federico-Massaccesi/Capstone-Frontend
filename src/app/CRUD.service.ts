@@ -5,7 +5,7 @@ import { BehaviorSubject, Observable } from 'rxjs';
 @Injectable({
   providedIn: 'root'
 })
-export class SearchService<T> {
+export class CRUDService<T> {
 
   public searchQuery = new BehaviorSubject<string>(''); // permette l'aggiornamento della query di ricerca
   currentSearchQuery = this.searchQuery.asObservable(); // permette di osservare la query di ricerca corrente
@@ -28,4 +28,9 @@ export class SearchService<T> {
     return this.http.get<T>(`${url}/${id}`);
 
   }
+
+  deleteEntity(url:string,id:number):void{
+
+   this.http.delete<T>(`${url}/${id}`);
+   }
 }

@@ -2,5 +2,6 @@
   <img [src]="product?.imageUrl" class="card-img-top" alt="...">
   <div class="card-body">
 <p class="card-text">{{product?.name}}</p>
+<a routerLink="/productList" (click)="deleteProduct()">DELETE</a>
  </div>
 </div>

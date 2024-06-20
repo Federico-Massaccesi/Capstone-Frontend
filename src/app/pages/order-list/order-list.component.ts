@@ -3,7 +3,7 @@ import { environment } from '../../../environments/environment';
 import { Observable } from 'rxjs';
 import { IOrder } from '../../Models/i-order';
 import { HttpClient } from '@angular/common/http';
-import { SearchService } from '../../search.service';
+import { CRUDService } from '../../CRUD.service';
 
 @Component({
   selector: 'app-order-list',
@@ -15,7 +15,7 @@ export class OrderListComponent {
 
   orders!: Observable<IOrder[]>;
   results: IOrder[] = [];
-  constructor(private http: HttpClient, public searchService: SearchService<IOrder>) {}
+  constructor(private http: HttpClient, public searchService: CRUDService<IOrder>) {}
 
   ngOnInit() {
     this.orders = this.searchService.getAllEntities(this.ordersUrl)
