@@ -1,9 +1,13 @@
 import { HttpClient } from '@angular/common/http';
-import { Component } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Component, TemplateRef, inject } from '@angular/core';
+import { Observable, tap } from 'rxjs';
 import { CRUDService } from '../../CRUD.service';
-import { IProduct } from '../../Models/i-product';
+import { IProduct, IProductRequest } from '../../Models/i-product';
 import { environment } from '../../../environments/environment';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { NgForm } from '@angular/forms';
+import { ICategory } from '../../Models/i-category';
+
 
 @Component({
   selector: 'app-product-list',
@@ -12,14 +16,41 @@ import { environment } from '../../../environments/environment';
 })
 export class ProductListComponent {
 
+  newProduct:Partial<IProductRequest> = {
+
+    available:false,
+    categories:[]
+  }
+
+  categoriesUrl :string = environment.categoriesUrl;
+
+  selectedCategoryIds: number[] = [];
+  allCategories: ICategory[] = [];
+
  productUrl:string = environment.productsUrl
+
+ availableCreate:boolean = false
+
+ private selectedFile: File | undefined;
 
   products!: Observable<IProduct[]>;
   results: IProduct[] = [];
-  constructor(private http: HttpClient, public searchService: CRUDService<IProduct>) {}
+  constructor(private http: HttpClient,
+     public searchService: CRUDService<IProduct>,
+     public catSvc:CRUDService<ICategory>
+    ) {}
 
   ngOnInit() {
-    this.products = this.searchService.getAllEntities(this.productUrl)
+    this.products = this.searchService.getAllEntities(this.productUrl).pipe(
+      tap((r) => {
+        this.searchService.productSbj.next(r);
+      })
+    )
+
+    this.catSvc.getAllEntities(this.categoriesUrl).subscribe(categories => {
+      this.allCategories = categories;
+    });
+  }
 
 
 
@@ -29,6 +60,56 @@ export class ProductListComponent {
     //     this.results = [...data];
     //   });
     // });
+
+
+  // open(content: any) {
+  //   this.modalService.open(content, { ariaLabelledBy: 'modal-basic-title' }).result.then(
+  //     (result) => {
+  //       console.log(`Closed with: ${result}`);
+  //       // Chiamare il metodo per creare il prodotto qui
+  //       this.createProduct();
+  //     },
+  //     (reason) => {
+  //       console.log(`Dismissed ${this.getDismissReason(reason)}`);
+  //     }
+  //   );
+  // }
+
+  private modalService = inject(NgbModal);
+
+	open(content: TemplateRef<any>) {
+		this.modalService.open(content, { ariaLabelledBy: 'modal-basic-title' }).result.then(
+			(result) => {
+        this.createProduct()
+			}
+		);
+	}
+
+
+  onFileSelected(event: any) {
+    const file: File = event.target.files[0];
+    this.selectedFile = file;
+  }
+onSubmit(form: NgForm) {
+  if (form.invalid) {
+      return;
+    }else{
+
+    }
+
+    }
+
+  createProduct() {
+    console.log('Nuovo prodotto:', this.newProduct);
+    console.log('Selected categories:', this.selectedCategoryIds);
+    console.log('Selected file:', this.selectedFile);
+    this.newProduct.categories = this.selectedCategoryIds;
+    this.newProduct.available = this.availableCreate;
+
+    if(this.selectedFile !== undefined && this.newProduct.name !== undefined) {
+    this.searchService.createEntityWithImage(this.productUrl,this.newProduct,this.selectedFile,this.newProduct.name ).subscribe();
+    }
+
   }
 
 }

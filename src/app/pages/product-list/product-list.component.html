@@ -10,8 +10,95 @@
   </div>
   <div class="row" *ngIf="searchService.searchQuery.value.length <= 1">
     <h2 class="my-5 text-center">I nostri prodotti:</h2>
+    <div class="card mb-3" style="max-width: 540px;">
+  <div class="row g-0">
+    <div>
+      <div class="card-body">
+        <a (click)="open(content)" ><i class="bi bi-plus-circle"></i></a>
+      </div>
+    </div>
+  </div>
+</div>
     <div class="col-md-6 col-lg-3" *ngFor="let prod of products | async">
       <app-product-card [product]="prod"></app-product-card>
     </div>
   </div>
 </div>
+
+<!-- TEMPLATE MODALE -->
+<ng-template #content let-modal>
+	<div class="modal-header">
+		<h4 class="modal-title" id="modal-basic-title">Profile update</h4>
+		<button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')"></button>
+	</div>
+	<div class="modal-body">
+    <form #productForm="ngForm" (ngSubmit)="onSubmit(productForm)" enctype="multipart/form-data">
+      <div class="input-group row">
+          <div class="mx-auto col-10">
+            <input
+              type="text"
+              required
+              name="name"
+              class="form-control rounded-5"
+              id="name"
+              [(ngModel)]="newProduct.name"
+              placeholder="Nome del prodotto"
+            />
+          </div>
+          <div class="mx-auto col-10">
+            <input
+              type="number"
+              required
+              name="price"
+              class="form-control rounded-5"
+              id="price"
+              [(ngModel)]="newProduct.price"
+              placeholder="Prezzo"
+            />
+          </div>
+          <div class="mx-auto col-10">
+            <input
+              type="text"
+              required
+              name="description"
+              class="form-control rounded-5"
+              id="description"
+              [(ngModel)]="newProduct.description"
+              placeholder="Descrizione"
+            />
+          </div>
+          <div class="mx-auto col-10">
+            <input
+                type="file"
+                required
+                name="file"
+                class="form-control rounded-5"
+                id="file"
+                (change)="onFileSelected($event)"
+                accept="image/*"
+            />
+        </div>
+        <div class="mx-auto col-10">
+          <label for="categories">Seleziona le categorie:</label>
+          <select id="categories" name="categories" class="form-select rounded-5" multiple required
+                  [(ngModel)]="selectedCategoryIds" #categories="ngModel">
+            <option *ngFor="let category of allCategories" [ngValue]="category.id">{{ category.name }}</option>
+          </select>
+        </div>
+          <div class="mx-auto col-10">
+            <input
+            name="available"
+        [(ngModel)]="availableCreate"
+          type="checkbox"
+        />
+        <span class="ms-2">Questo prodotto è già disponibile?</span>
+      </div>
+				</div>
+		</form>
+	</div>
+	<div class="modal-footer">
+		<button type="button" class="btn btn-outline-secondary" (click)="modal.close('Save click')">Save</button>
+	</div>
+</ng-template>
+
+<hr />
