@@ -33,24 +33,26 @@ export class ProductListComponent {
 
  private selectedFile: File | undefined;
 
-  products!: Observable<IProduct[]>;
-  results: IProduct[] = [];
-  constructor(private http: HttpClient,
+ products: IProduct[] = [];
+ results: IProduct[] = [];
+
+  constructor(
      public searchService: CRUDService<IProduct>,
-     public catSvc:CRUDService<ICategory>
+     private http:HttpClient
     ) {}
 
-  ngOnInit() {
-    this.products = this.searchService.getAllEntities(this.productUrl).pipe(
-      tap((r) => {
-        this.searchService.productSbj.next(r);
-      })
-    )
+    ngOnInit() {
+      this.searchService.getAllEntities(this.productUrl).subscribe(products => {
+        this.products = products;
+      });
 
-    this.catSvc.getAllEntities(this.categoriesUrl).subscribe(categories => {
-      this.allCategories = categories;
-    });
-  }
+      this.searchService.items$.subscribe((r) => {
+        this.products = r;
+      });
+
+      this.fetchCategories();
+    }
+
 
 
 
@@ -78,12 +80,12 @@ export class ProductListComponent {
   private modalService = inject(NgbModal);
 
 	open(content: TemplateRef<any>) {
-		this.modalService.open(content, { ariaLabelledBy: 'modal-basic-title' }).result.then(
-			(result) => {
-        this.createProduct()
-			}
-		);
-	}
+    this.modalService.open(content, { ariaLabelledBy: 'modal-basic-title' }).result.then(
+      () => {
+        this.createProduct();
+      }
+    );
+  }
 
 
   onFileSelected(event: any) {
@@ -93,23 +95,26 @@ export class ProductListComponent {
 onSubmit(form: NgForm) {
   if (form.invalid) {
       return;
-    }else{
-
     }
-
     }
 
   createProduct() {
-    console.log('Nuovo prodotto:', this.newProduct);
-    console.log('Selected categories:', this.selectedCategoryIds);
-    console.log('Selected file:', this.selectedFile);
     this.newProduct.categories = this.selectedCategoryIds;
     this.newProduct.available = this.availableCreate;
 
     if(this.selectedFile !== undefined && this.newProduct.name !== undefined) {
-    this.searchService.createEntityWithImage(this.productUrl,this.newProduct,this.selectedFile,this.newProduct.name ).subscribe();
+    this.searchService.createEntityWithImage(this.productUrl,this.newProduct, this.selectedFile ).subscribe();
     }
 
+  }
+
+  fetchCategories() {
+    this.http.get<ICategory[]>(this.categoriesUrl).subscribe(
+      (categories) => {
+        this.allCategories = categories;
+        console.log('Categories loaded:', this.allCategories); // Log per debug
+      }
+    );
   }
 
 }

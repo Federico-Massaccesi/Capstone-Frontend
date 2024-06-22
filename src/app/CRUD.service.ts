@@ -9,30 +9,35 @@ import { IOrder } from './Models/i-order';
 })
 export class CRUDService<T> {
 
-  productSbj = new BehaviorSubject<IProduct[]>([]);
+  private items:T[] = [];
 
-  product$ = this.productSbj.asObservable();
+  private itemsSubject = new BehaviorSubject<T[]>([]);
 
-  ordersSbj = new BehaviorSubject<IOrder[]>([]);
-
-  orders$ = this.ordersSbj.asObservable();
+  public items$ = this.itemsSubject.asObservable();
 
   public searchQuery = new BehaviorSubject<string>('');
   currentSearchQuery = this.searchQuery.asObservable();
-  constructor (private http: HttpClient) {}
+  constructor (private http: HttpClient) {
 
-  changeSearchQuery(query: string) {
-    this.searchQuery.next(query);
   }
 
-  searchEntities(url:string,query = ''): Observable<T[]> {
-    return this.http.get<T[]>(`${url}?q=${query}`);
-  }
+  //---------- CODICE PER BARRA DI RICERCA
+  // changeSearchQuery(query: string) {
+  //   this.searchQuery.next(query);
+  // }
 
-  getAllEntities(url:string): Observable<T[]> {
-    return this.http.get<T[]>(url)
-  }
+  // searchEntities(url:string,query = ''): Observable<T[]> {
+  //   return this.http.get<T[]>(`${url}?q=${query}`);
+  // }
 
+  getAllEntities(url: string): Observable<T[]> {
+    return this.http.get<T[]>(url).pipe(
+      tap((items) => {
+        this.items = items;
+        this.itemsSubject.next(this.items);
+      })
+    );
+  }
 
 
   getOneEntity(url:string,id:number): Observable<T> {
@@ -41,21 +46,34 @@ export class CRUDService<T> {
 
   }
 
-  deleteEntity(url:string,id:number): Observable<void>{
+  deleteEntity(url:string,id: number): Observable<void> {
+    return this.http.delete<void>(`${url}/${id}`).pipe(
+      tap(() => {
+        this.items = this.items.filter(item => (item as any).id !== id);
+        this.itemsSubject.next(this.items);
+      })
+    );
+  }
 
-    return this.http.delete<void>(`${url}/${id}`);
-   }
+  createEntity(url:string,body: Partial<T>): Observable<T> {
+    return this.http.post<T>(url, body).pipe(
+      tap((newItem) => {
+        this.items.push(newItem);
+        this.itemsSubject.next(this.items);
+      })
+    );
+  }
 
-   createEntity(url:string,body:Partial<T>): Observable<T> {
-
-    return this.http.post<T>(url, body)
-   }
-
-   createEntityWithImage(url: string, entity: Partial<IProductRequest>, file: File, entityName: string): Observable<T> {
+   createEntityWithImage(url:string,entity: Partial<IProductRequest>, file: File): Observable<T> {
     const formData = new FormData();
     formData.append('product', new Blob([JSON.stringify(entity)], { type: 'application/json' }));
     formData.append('file', file);
 
-    return this.http.post<T>(url, formData);
+    return this.http.post<T>(url, formData).pipe(
+      tap((newItem) => {
+        this.items.push(newItem);
+        this.itemsSubject.next(this.items);
+      })
+    );
   }
 }
