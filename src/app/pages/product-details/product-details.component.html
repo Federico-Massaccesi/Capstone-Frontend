@@ -12,8 +12,9 @@
     <button *ngIf="!isUser" (click)="deleteProduct()">DELETE</button>
 
     <div (click)="productAvailable = !productAvailable" class="checkbox">
-      <i *ngIf="product?.available" class="bi bi-check "></i>
-      <i *ngIf="!product?.available" class="bi bi-x"></i>
+      <i *ngIf="productAvailable" class="bi bi-check "></i>
+      <i *ngIf="!productAvailable" class="bi bi-x"></i>
     </div>
+    <button (click)="toggleAvailability(productAvailable)">Salva disponibilità prodotto</button>
   </div>
 </div>

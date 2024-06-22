@@ -19,7 +19,7 @@ export class ProductDetailsComponent implements OnInit {
 
   isUser!:boolean;
 
-  productAvailable!:boolean|undefined
+  productAvailable!:boolean
 
 
   pageProductID!:number
@@ -44,7 +44,7 @@ ngOnInit(): void {
       this.product = product;
     });
   }
-
+  if(this.product != undefined)
   this.productAvailable = this.product?.available
 }
 
@@ -53,7 +53,9 @@ deleteProduct():void{
     this.router.navigate(['/productList']);
   })
 }
-
+//FIXARE L NGIF DELLE ICONE DEL TOGGLE
+//DEVO FARE IN MODO CHE IL BOTTONE PER FARE PARTIRE IL METODO PUT VENGA VISUALIZZATO
+//SOLO NEL MOMENTO IN CUI LA DISPONIBILITà IMPOSTATA è DIVERSA DA QUELLA DEL PRODOTTO
 toggleAvailability(boolean:boolean) {
   if (this.product !== undefined) {
     const url = `${this.prodUrl}/${this.product.id}/availability`;
