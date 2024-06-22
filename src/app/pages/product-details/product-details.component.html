@@ -1,9 +1,19 @@
-<div class="card" style="width: 18rem;">
+<div [ngClass]="{
+  'bg-warning': !product?.available,
+  'bg-success': product?.available
+}" class="card" style="width: 18rem;">
   <img [src]="product?.imageUrl" class="card-img-top" alt="...">
   <div class="card-body">
-<p class="card-text">{{product?.name}}</p>
-<button
-*ngIf="!isUser"
-(click)="deleteProduct()">DELETE</button>
- </div>
+    <p class="card-text">{{product?.name}}</p>
+    <p class="card-text">{{product?.description}}</p>
+    <p class="card-text">{{product?.price}}</p>
+    <p *ngFor="let item of product?.categories" class="card-text">{{item.name}}</p>
+
+    <button *ngIf="!isUser" (click)="deleteProduct()">DELETE</button>
+
+    <div (click)="productAvailable = !productAvailable" class="checkbox">
+      <i *ngIf="product?.available" class="bi bi-check "></i>
+      <i *ngIf="!product?.available" class="bi bi-x"></i>
+    </div>
+  </div>
 </div>

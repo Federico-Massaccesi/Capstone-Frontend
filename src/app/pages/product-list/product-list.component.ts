@@ -64,18 +64,7 @@ export class ProductListComponent {
     // });
 
 
-  // open(content: any) {
-  //   this.modalService.open(content, { ariaLabelledBy: 'modal-basic-title' }).result.then(
-  //     (result) => {
-  //       console.log(`Closed with: ${result}`);
-  //       // Chiamare il metodo per creare il prodotto qui
-  //       this.createProduct();
-  //     },
-  //     (reason) => {
-  //       console.log(`Dismissed ${this.getDismissReason(reason)}`);
-  //     }
-  //   );
-  // }
+
 
   private modalService = inject(NgbModal);
 
