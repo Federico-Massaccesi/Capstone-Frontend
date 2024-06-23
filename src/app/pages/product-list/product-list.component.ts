@@ -50,7 +50,6 @@ export class ProductListComponent {
         this.products = r;
       });
 
-      this.fetchCategories();
     }
 
 
@@ -69,6 +68,8 @@ export class ProductListComponent {
   private modalService = inject(NgbModal);
 
 	open(content: TemplateRef<any>) {
+    this.fetchCategories();
+
     this.modalService.open(content, { ariaLabelledBy: 'modal-basic-title' }).result.then(
       () => {
         this.createProduct();

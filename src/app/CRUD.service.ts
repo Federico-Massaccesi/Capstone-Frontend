@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable, tap } from 'rxjs';
 import { IProduct, IProductRequest } from './Models/i-product';
@@ -76,4 +76,11 @@ export class CRUDService<T> {
       })
     );
   }
+
+  // DA VEDERE CON MAURO
+  // updateEntity(url: string, id: number,formData : FormData ): Observable<T> {
+  //     const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+  //     return this.http.put<T>(`${url}/${id}`, formData, { headers });
+
+  // }
 }
