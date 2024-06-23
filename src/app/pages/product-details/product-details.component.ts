@@ -32,6 +32,7 @@ export class ProductDetailsComponent implements OnInit {
 ){
   this.isUser = authSvc.getUserRole();
 
+
 }
 
 ngOnInit(): void {
@@ -42,10 +43,12 @@ ngOnInit(): void {
     this.pageProductID = idNumber
     this.prodSvc.getOneEntity(this.prodUrl,idNumber).subscribe((product: IProduct) => {
       this.product = product;
+      console.log(product);
+
+        this.productAvailable = this.product?.available
     });
   }
-  if(this.product != undefined)
-  this.productAvailable = this.product?.available
+
 }
 
 deleteProduct():void{
@@ -53,24 +56,22 @@ deleteProduct():void{
     this.router.navigate(['/productList']);
   })
 }
-//FIXARE L NGIF DELLE ICONE DEL TOGGLE
-//DEVO FARE IN MODO CHE IL BOTTONE PER FARE PARTIRE IL METODO PUT VENGA VISUALIZZATO
-//SOLO NEL MOMENTO IN CUI LA DISPONIBILITà IMPOSTATA è DIVERSA DA QUELLA DEL PRODOTTO
-toggleAvailability(boolean:boolean) {
-  if (this.product !== undefined) {
+
+toggleAvailability(checked: boolean): void {
+  if (this.product) {
     const url = `${this.prodUrl}/${this.product.id}/availability`;
-    this.http.put<IProduct>(url, { available: boolean }).subscribe(
-      (updatedProduct) => {
-        if (updatedProduct !== undefined) {
+    this.http.patch<IProduct>(url, { available: checked }).subscribe({
+      next: (updatedProduct) => {
+        if (updatedProduct) {
           this.productAvailable = updatedProduct.available;
         }
-        return;
+        this.router.navigate(['/productList']);
+
+      },
+      error: (error) => {
+        console.error('Error updating product availability:', error);
       }
-    );
-  }else{
-    return;
-
+    });
   }
-
 }
 }
