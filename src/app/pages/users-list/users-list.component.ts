@@ -39,7 +39,4 @@ export class UsersListComponent {
     return roles.some(role => role.roleType === roleType);
   }
 
-  getPivaType(user: iUser): string {
-    return user.pIVA ? typeof user.pIVA : 'undefined';
-  }
 }

@@ -12,6 +12,7 @@ import { AuthInterceptor } from './auth.interceptor';
 import { AuthService } from './auth/auth.service';
 import { OrderCardComponent } from './main-component/order-card/order-card.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { ProfileCardComponent } from './main-component/profile-card/profile-card.component';
 
 @NgModule({
   declarations: [

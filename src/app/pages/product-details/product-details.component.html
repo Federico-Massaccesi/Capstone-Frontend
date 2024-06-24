@@ -1,69 +1,133 @@
-<div [ngClass]="{
-  'bg-warning': !productAvailable,
-  'bg-success': productAvailable
-}" class="card" style="width: 18rem;">
-  <img [src]="product?.imageUrl" class="card-img-top" alt="...">
+<div
+  [ngClass]="{
+    'bg-warning': !productAvailable,
+    'bg-success': productAvailable
+  }"
+  class="card"
+  style="width: 18rem"
+>
+  <img [src]="product?.imageUrl" class="card-img-top" alt="..." />
   <div class="card-body">
-    <p class="card-text">{{product?.name}}</p>
-    <p class="card-text">{{product?.description}}</p>
-    <p class="card-text">{{product?.price}}</p>
-    <p *ngFor="let item of product?.categories" class="card-text">{{item.name}}</p>
+    <p class="card-text">{{ product?.name }}</p>
+    <p class="card-text">{{ product?.description }}</p>
+    <p class="card-text">{{ product?.price }}</p>
+    <p *ngFor="let item of product?.categories" class="card-text">
+      {{ item.name }}
+    </p>
 
-    <button *ngIf="!isUser" (click)="deleteProduct()">DELETE</button>
-
-    <div (click)="productAvailable = !productAvailable" class="checkbox">
-      <i *ngIf="productAvailable" class="bi bi-check "></i>
-      <i *ngIf="!productAvailable" class="bi bi-x"></i>
+    <div *ngIf="!isUser">
+      <button (click)="deleteProduct()">DELETE</button>
+      <div (click)="productAvailable = !productAvailable" class="checkbox">
+        <i *ngIf="productAvailable" class="bi bi-check"></i>
+        <i *ngIf="!productAvailable" class="bi bi-x"></i>
+      </div>
+      <button
+        *ngIf="productAvailable !== product?.available"
+        (click)="toggleAvailability(productAvailable)"
+      >
+        Salva disponibilità e torna alla lista prodotti
+      </button>
+      <button *ngIf="!isUser" (click)="open(content)">Modifica prodotto</button>
     </div>
-    <button *ngIf="productAvailable !== product?.available"
-     (click)="toggleAvailability(productAvailable)">Salva disponibilità e torna alla lista prodotti</button>
-    <button *ngIf="!isUser"
-    (click)="open(content)"
-     >Modifica prodotto</button>
   </div>
 </div>
 
-
- <ng-template #content let-modal>
+<ng-template #content let-modal>
   <div class="modal-header">
     <h4 class="modal-title" id="modal-basic-title">Modifica prodotto</h4>
-    <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')"></button>
+    <button
+      type="button"
+      class="btn-close"
+      aria-label="Close"
+      (click)="modal.dismiss('Cross click')"
+    ></button>
   </div>
   <div class="modal-body">
     <form #productForm="ngForm" (ngSubmit)="onSubmit(productForm)">
       <div class="input-group row">
         <div class="mx-auto col-10">
-          <input type="text" required name="name" class="form-control rounded-5"
-           id="name" [(ngModel)]="editedProduct.name"
-           placeholder="Nome del prodotto" [value]="editedProduct.name"/>
+          <input
+            type="text"
+            required
+            name="name"
+            class="form-control rounded-5"
+            id="name"
+            [(ngModel)]="editedProduct.name"
+            placeholder="Nome del prodotto"
+            [value]="editedProduct.name"
+          />
         </div>
         <div class="mx-auto col-10">
-          <input type="number" required name="price" class="form-control rounded-5"
-           id="price" [(ngModel)]="editedProduct.price"
-           placeholder="Prezzo" [value]="editedProduct.price"/>
+          <input
+            type="number"
+            required
+            name="price"
+            class="form-control rounded-5"
+            id="price"
+            [(ngModel)]="editedProduct.price"
+            placeholder="Prezzo"
+            [value]="editedProduct.price"
+          />
         </div>
         <div class="mx-auto col-10">
-          <input type="text" required name="description" class="form-control rounded-5"
-           id="description" [(ngModel)]="editedProduct.description"
-            placeholder="Descrizione" [value]="editedProduct.description"/>
+          <input
+            type="text"
+            required
+            name="description"
+            class="form-control rounded-5"
+            id="description"
+            [(ngModel)]="editedProduct.description"
+            placeholder="Descrizione"
+            [value]="editedProduct.description"
+          />
         </div>
         <div class="mx-auto col-10">
           <label for="categories">Seleziona le categorie:</label>
-          <select id="categories" name="categories" class="form-select rounded-5"
-          multiple required [(ngModel)]="selectedCategoryIds" #categories="ngModel">
-            <option *ngFor="let category of allCategories" [ngValue]="category.id">{{ category.name }}</option>
+          <select
+            id="categories"
+            name="categories"
+            class="form-select rounded-5"
+            multiple
+            required
+            [(ngModel)]="selectedCategoryIds"
+            #categories="ngModel"
+          >
+            <option
+              *ngFor="let category of allCategories"
+              [ngValue]="category.id"
+            >
+              {{ category.name }}
+            </option>
           </select>
         </div>
         <div class="mx-auto col-10">
-          <input type="file" name="file" class="form-control rounded-5" id="file" (change)="onFileSelected($event)" accept="image/*" />
+          <input
+            type="file"
+            name="file"
+            class="form-control rounded-5"
+            id="file"
+            (change)="onFileSelected($event)"
+            accept="image/*"
+          />
         </div>
         <div class="mx-auto col-10">
-          <img  [src]="editedProduct.imageUrl" class="img-thumbnail mt-2" alt="Product Image" style="max-height: 200px;">
+          <img
+            [src]="editedProduct.imageUrl"
+            class="img-thumbnail mt-2"
+            alt="Product Image"
+            style="max-height: 200px"
+          />
         </div>
       </div>
     </form>
   </div>
   <div class="modal-footer">
-    <button type="button" class="btn btn-outline-secondary" (click)="updateProduct(modal)">Save</button>
+    <button
+      type="button"
+      class="btn btn-outline-secondary"
+      (click)="updateProduct(modal)"
+    >
+      Save
+    </button>
   </div>
 </ng-template>

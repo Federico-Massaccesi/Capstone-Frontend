@@ -1,3 +1,5 @@
+import { IOrder } from "./i-order";
+
 export interface iUser {
 id?: number;
 
@@ -14,6 +16,8 @@ id?: number;
   address: string;
 
   city: string;
+
+  orders: IOrder[];
 
   roles: {roleType:string}[];
 }

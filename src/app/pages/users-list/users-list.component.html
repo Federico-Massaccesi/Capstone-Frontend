@@ -1,8 +1,10 @@
 <div class="container">
-  <div *ngFor="let user of userList">
-    <p>{{user.id}}</p>
-    <p *ngIf="hasRole(user.roles, 'COMPANY')">{{user.companyName}}</p>
-    <p *ngIf="!hasRole(user.roles, 'COMPANY')">{{user.username}}</p>
-    <p *ngIf="hasRole(user.roles, 'COMPANY') && user.pIVA">pIVA: {{user.pIVA}}</p>
-  </div>
+  <div class="row" *ngFor="let user of userList">
+    <p class="col-3">{{user.id}}</p>
+    <p class="col-3"*ngIf="hasRole(user.roles, 'COMPANY')">{{user.companyName}}</p>
+    <p class="col-3"*ngIf="!hasRole(user.roles, 'COMPANY')">{{user.username}}</p>
+    <p class="col-3"*ngIf="hasRole(user.roles, 'COMPANY') && user.pIVA">pIVA: {{user.pIVA}}</p>
+    <button type="button" class="button col-3" [routerLink]="['/user-details', user.id]">
+      Dettagli utente
+    </button>  </div>
 </div>
