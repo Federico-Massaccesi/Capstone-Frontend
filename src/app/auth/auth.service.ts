@@ -45,7 +45,7 @@ export class AuthService {
         this.authSubject.next(data.user);
         localStorage.setItem('accessData',JSON.stringify(data))
 
-      //  this.autoLogout(data.accessToken)
+        this.autoLogout(data.token)
       })
     )
   }
@@ -66,15 +66,15 @@ export class AuthService {
     return accessData.token;
   }
 
-  // autoLogout(jwt: string) {
-  //   const expDate = this.jwtHelper.getTokenExpirationDate(jwt) as Date;
-  //   const expMs = expDate.getTime() - new Date().getTime();
+   autoLogout(jwt: string) {
+     const expDate = this.jwtHelper.getTokenExpirationDate(jwt) as Date;
+     const expMs = expDate.getTime() - new Date().getTime();
 
 
-  //   setTimeout(() => {
-  //     this.logout();
-  //   }, expMs);
-  // }
+     setTimeout(() => {
+       this.logout();
+     }, expMs);
+   }
 
   getUserRole(): boolean{
 
@@ -105,6 +105,6 @@ export class AuthService {
     if (this.jwtHelper.isTokenExpired(accessData.token)) return;
 
     this.authSubject.next(accessData.user);
-    //  this.autoLogout(accessData.accessToken);
+      this.autoLogout(accessData.token);
   }
 }

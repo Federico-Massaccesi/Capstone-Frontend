@@ -77,10 +77,20 @@ export class CRUDService<T> {
     );
   }
 
-  // DA VEDERE CON MAURO
-  // updateEntity(url: string, id: number,formData : FormData ): Observable<T> {
-  //     const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
-  //     return this.http.put<T>(`${url}/${id}`, formData, { headers });
+  updateEntity(apiUrl: string, id: number, entity: Partial<IProductRequest>, file?: File): Observable<any> {
+    const formData: FormData = new FormData();
 
-  // }
+    formData.append('product', new Blob([JSON.stringify(entity)], {
+      type: 'application/json'
+    }));
+
+    if (file) {
+      formData.append('file', file, file.name),{
+        type: 'multipart/form-data'
+      }
+    }
+
+    return this.http.put(`${apiUrl}/${id}`, formData)
+    ;
+  }
 }

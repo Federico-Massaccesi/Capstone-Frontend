@@ -1,6 +1,6 @@
 import { Component, OnInit, TemplateRef, inject } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { IProduct } from '../../Models/i-product';
+import { IProduct, IProductRequest } from '../../Models/i-product';
 import { CRUDService } from '../../CRUD.service';
 import { environment } from '../../../environments/environment';
 import { AuthService } from '../../auth/auth.service';
@@ -58,6 +58,8 @@ ngOnInit(): void {
       this.product = product;
       this.productAvailable = this.product?.available || false;
       this.editedProduct = { ...this.product };
+      console.log('editedproduct',this.editedProduct);
+
       if(product !=undefined && product.categories !=undefined)
         this.selectedCategoryIds = this.product?.categories
       ? this.product.categories.map(category => category.id).filter((id): id is number => id !== undefined)
@@ -101,24 +103,31 @@ private modalService = inject(NgbModal);
     );
   }
 
-  // DA VEDERE CON MAURO
-  // onSaveClick(modal: NgbActiveModal): void {
+  updateProduct(modal: NgbActiveModal): void {
+    if (this.product) {
+      const updatedProduct:IProductRequest = {
+        ...this.product,
+        name: this.editedProduct.name!,
+        price: this.editedProduct.price!,
+        description: this.editedProduct.description!,
+        imageUrl: this.editedProduct.imageUrl!,
+        available: this.editedProduct.available!,
+        categories: this.selectedCategoryIds
+      };
 
-  //   const formData = new FormData();
-  //   formData.append('product', new Blob([JSON.stringify(this.editedProduct)], { type: 'application/json' }));
+      this.prodSvc.updateEntity(this.prodUrl, this.pageProductID, updatedProduct, this.selectedFile).subscribe({
+        next: (response) => {
+          console.log('Product updated successfully', response);
+          modal.close(); // Chiude la modale dopo il successo della richiesta
+        },
+        error: (error) => {
+          console.error('Error updating product', error);
+        }
+      });
+    }
+  }
 
-  //   if (this.selectedFile) {
 
-  //     formData.append('file', this.selectedFile);
-  //   }
-
-  //   this.prodSvc.updateEntity(this.prodUrl, this.pageProductID , formData).subscribe({
-  //     next: (updatedProduct) => {
-  //       this.product = updatedProduct;
-  //       modal.close('Save click');
-  //     }
-  //   });
-  // }
 
   onSubmit(form: NgForm) {
     if (form.invalid) {

@@ -1,1 +1,8 @@
-<p>users-list works!</p>
+<div class="container">
+  <div *ngFor="let user of userList">
+    <p>{{user.id}}</p>
+    <p *ngIf="hasRole(user.roles, 'COMPANY')">{{user.companyName}}</p>
+    <p *ngIf="!hasRole(user.roles, 'COMPANY')">{{user.username}}</p>
+    <p *ngIf="hasRole(user.roles, 'COMPANY') && user.pIVA">pIVA: {{user.pIVA}}</p>
+  </div>
+</div>

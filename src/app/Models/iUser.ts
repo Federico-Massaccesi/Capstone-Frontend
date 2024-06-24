@@ -5,11 +5,11 @@ id?: number;
 
  password: string;
 
- companyName: string;
+ companyName?: string;
 
   email: string;
 
-  pIVA: string;
+  pIVA?: string;
 
   address: string;
 

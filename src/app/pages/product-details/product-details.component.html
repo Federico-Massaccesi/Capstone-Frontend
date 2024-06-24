@@ -1,4 +1,4 @@
-button<div [ngClass]="{
+<div [ngClass]="{
   'bg-warning': !productAvailable,
   'bg-success': productAvailable
 }" class="card" style="width: 18rem;">
@@ -55,7 +55,7 @@ button<div [ngClass]="{
           </select>
         </div>
         <div class="mx-auto col-10">
-          <input type="file" required name="file" class="form-control rounded-5" id="file" (change)="onFileSelected($event)" accept="image/*" />
+          <input type="file" name="file" class="form-control rounded-5" id="file" (change)="onFileSelected($event)" accept="image/*" />
         </div>
         <div class="mx-auto col-10">
           <img  [src]="editedProduct.imageUrl" class="img-thumbnail mt-2" alt="Product Image" style="max-height: 200px;">
@@ -64,6 +64,6 @@ button<div [ngClass]="{
     </form>
   </div>
   <div class="modal-footer">
-    <button type="button" class="btn btn-outline-secondary" (click)="onSaveClick(modal)">Save</button>
+    <button type="button" class="btn btn-outline-secondary" (click)="updateProduct(modal)">Save</button>
   </div>
 </ng-template>
