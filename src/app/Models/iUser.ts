@@ -19,5 +19,10 @@ id?: number;
 
   orders: IOrder[];
 
-  roles: {roleType:string}[];
+  roles: iRole[];
+}
+
+export interface iRole{
+  id?:number;
+  roleType:string;
 }

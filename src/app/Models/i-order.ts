@@ -17,3 +17,8 @@ export interface IOrder {
 
   checked:boolean;
 }
+
+export interface CartItem {
+  product: IProduct;
+  quantity: number;
+}

@@ -1,12 +1,12 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, TemplateRef, inject } from '@angular/core';
-import { Observable, tap } from 'rxjs';
 import { CRUDService } from '../../CRUD.service';
 import { IProduct, IProductRequest } from '../../Models/i-product';
 import { environment } from '../../../environments/environment';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { NgForm } from '@angular/forms';
 import { ICategory } from '../../Models/i-category';
+import { AuthService } from '../../auth/auth.service';
 
 
 @Component({
@@ -21,6 +21,8 @@ export class ProductListComponent {
     available:false,
     categories:[]
   }
+
+  isUser!:boolean | undefined;
 
   categoriesUrl :string = environment.categoriesUrl;
 
@@ -38,10 +40,18 @@ export class ProductListComponent {
 
   constructor(
      public searchService: CRUDService<IProduct>,
-     private http:HttpClient
+     private http:HttpClient,
+     private authSvc: AuthService
     ) {}
 
     ngOnInit() {
+
+      if (this.authSvc.getUserRole()?.some(role => role.roleType === 'PRIVATE' || role.roleType === 'COMPANY')) {
+        this.isUser = true
+      } else {
+        this.isUser = false
+      }
+
       this.searchService.getAllEntities(this.productUrl).subscribe(products => {
         this.products = products;
       });

@@ -4,7 +4,7 @@ import { environment } from '../../environments/environment';
 import { JwtHelperService } from '@auth0/angular-jwt';
 import { Router } from '@angular/router';
 import { LoginDTO } from '../Models/login-dto';
-import { iUser } from '../Models/iUser';
+import { iRole, iUser } from '../Models/iUser';
 import { HttpClient } from '@angular/common/http';
 
 type AccessData = {
@@ -76,25 +76,19 @@ export class AuthService {
      }, expMs);
    }
 
-  getUserRole(): boolean{
+  getUserRole(): iRole[] | undefined{
 
     const userJson = localStorage.getItem('accessData');
-    if (!userJson) return false
-
+    if (!userJson){
+      console.error('No access data found');
+      return undefined
+    }else{
       const accessData: AccessData = JSON.parse(userJson);
 
     const user = accessData.user;
 
-      if(user && user.roles && user.roles.some(role => role.roleType === 'PRIVATE'||
-        role.roleType === 'COMPANY'
-      )){
-        return true
-      }else{
-        return false
-      }
-
-
-
+      return user.roles
+    }
   }
 
   restoreUser() {

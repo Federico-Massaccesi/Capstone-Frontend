@@ -12,7 +12,14 @@ export class HomeComponent {
 
   constructor(private authSvc : AuthService){
 
-    this.isUser = authSvc.getUserRole();
+    if (this.authSvc.getUserRole()?.some(role => role.roleType === 'PRIVATE' || role.roleType === 'COMPANY')) {
+
+    this.isUser = true
+
+    } else {
+      this.isUser = false
+    }
+    console.log(this.isUser);
 
 
   }

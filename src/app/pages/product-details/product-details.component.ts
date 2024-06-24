@@ -1,3 +1,4 @@
+import { iUser } from './../../Models/iUser';
 import { Component, OnInit, TemplateRef, inject } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { IProduct, IProductRequest } from '../../Models/i-product';
@@ -8,6 +9,8 @@ import { HttpClient } from '@angular/common/http';
 import { NgbActiveModal, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { NgForm } from '@angular/forms';
 import { ICategory } from '../../Models/i-category';
+import { iRole } from '../../Models/iUser';
+import { CartService } from '../cart/cart.service';
 
 @Component({
   selector: 'app-product-details',
@@ -36,16 +39,23 @@ export class ProductDetailsComponent implements OnInit {
 
   private selectedFile: File | undefined;
 
+  quantity:number = 1;
+
 
   constructor(
   private route: ActivatedRoute,
   private router: Router,
     private prodSvc: CRUDService<IProduct>,
     private authSvc : AuthService,
-    private http:HttpClient
+    private http:HttpClient,
+    private cartSvc: CartService
 ){
-  this.isUser = authSvc.getUserRole();
+  if (this.authSvc.getUserRole()?.some(role => role.roleType === 'private' || role.roleType === 'company')) {
 
+    this.isUser = true
+    } else {
+      this.isUser = false
+  }
 
 }
 
@@ -58,12 +68,12 @@ ngOnInit(): void {
       this.product = product;
       this.productAvailable = this.product?.available || false;
       this.editedProduct = { ...this.product };
-      console.log('editedproduct',this.editedProduct);
-
       if(product !=undefined && product.categories !=undefined)
         this.selectedCategoryIds = this.product?.categories
       ? this.product.categories.map(category => category.id).filter((id): id is number => id !== undefined)
       : [];
+
+
     });
   }
 }
@@ -149,4 +159,13 @@ private modalService = inject(NgbModal);
         const file: File = event.target.files[0];
         this.selectedFile = file;
       }
-}
+
+      addToCart(product: IProduct): void {
+        if (!this.cartSvc.isProductInCart(product.id!)) {
+          this.cartSvc.addProductToCart(product, this.quantity);
+          console.log('Product added to cart:', product);
+        } else {
+          console.log('Product is already in the cart:', product);
+        }
+      }
+    }
