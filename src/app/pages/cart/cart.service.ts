@@ -1,24 +1,32 @@
 import { Injectable } from '@angular/core';
 import { IProduct } from '../../Models/i-product';
-import { CartItem } from '../../Models/i-order';
+import { iCartItem } from '../../Models/cart-item';
+import { BehaviorSubject } from 'rxjs';
+import { HttpClient } from '@angular/common/http';
+import { environment } from '../../../environments/environment';
+import { IOrderRequest } from '../../Models/i-order-request';
 
 @Injectable({
   providedIn: 'root'
 })
 export class CartService {
 
+  private cart: iCartItem[] = [];
+  private cartSubject = new BehaviorSubject<iCartItem[]>([]);
 
-  cart: CartItem[] = [];
+  cart$ = this.cartSubject.asObservable();
 
-  constructor() {
+  constructor(private http:HttpClient) {
     const savedCart = localStorage.getItem('cart');
     if (savedCart) {
       this.cart = JSON.parse(savedCart);
+      this.cartSubject.next(this.cart);
     }
   }
 
   private saveCart() {
     localStorage.setItem('cart', JSON.stringify(this.cart));
+    this.cartSubject.next(this.cart);
   }
 
   addProductToCart(product: IProduct, quantity: number) {
@@ -36,7 +44,7 @@ export class CartService {
     this.saveCart();
   }
 
-  getCart(): CartItem[] {
+  getCart(): iCartItem[] {
     return this.cart;
   }
 
@@ -53,4 +61,11 @@ export class CartService {
     return this.cart.some(item => item.product.id === productId);
   }
 
+  getTotalPrice(): number {
+    return this.cart.reduce((total, item) => total + item.product.price * item.quantity, 0);
+  }
+
+  createOrder(order: IOrderRequest) {
+    return this.http.post<IOrderRequest>(`${environment.apiUrl}/orders`, order);
+  }
 }

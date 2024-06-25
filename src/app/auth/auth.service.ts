@@ -101,4 +101,13 @@ export class AuthService {
     this.authSubject.next(accessData.user);
       this.autoLogout(accessData.token);
   }
+
+  getUserId(): number | null {
+    const userJson = localStorage.getItem('accessData');
+    if (userJson) {
+      const accessData = JSON.parse(userJson);
+      return accessData.user?.id || null;
+    }
+    return null;
+  }
 }

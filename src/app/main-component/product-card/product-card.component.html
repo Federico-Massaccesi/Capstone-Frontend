@@ -19,16 +19,16 @@
         </button>
 
         <div *ngIf="isUser">
-          <i *ngIf="!showTooltip" (click)="showTooltip = true" class="bi bi-bag-plus-fill"></i>
-          <div *ngIf="showTooltip">
+          <i *ngIf="!showTooltip[product.id!]" (click)="toggleTooltip()" class="bi bi-bag-plus-fill"></i>
+          <div *ngIf="showTooltip[product.id!]">
 
             <label for="quantity">Quantità:</label>
             <div class="input-group mb-3">
               <input type="number" [(ngModel)]="quantity" id="quantity" name="quantity" min="0" class="form-control" [value]="quantity">
               <p *ngIf="quantityWarnings">Imposta una quantità maggiore di 0 per aggiungere al carrello.</p>
             </div>
-            <button (click)="addToCart(product, quantity)">Conferma ordine</button>
-            <button *ngIf="productInCart  && quantity >0" (click)="removeFromCart(product)">Rimuovi dal carrello</button>
+            <button (click)="addToCart()">Conferma ordine</button>
+            <button *ngIf="productInCart  && quantity >0" (click)="removeFromCart()">Rimuovi dal carrello</button>
 
           </div>
         </div>

@@ -1,15 +1,11 @@
-import { iCartItem } from './cart-item';
-import { iUser } from "./iUser";
+import { iCartItem } from "./cart-item";
 
-export interface IOrder {
-
+export interface IOrderRequest {
   id?: number;
-  client: iUser;
+  client: number;
   items: iCartItem[];
   localDate: Date;
   pending: boolean;
   totalPrice: number;
   checked: boolean;
 }
-
-

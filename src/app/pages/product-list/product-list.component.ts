@@ -1,12 +1,13 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, TemplateRef, inject } from '@angular/core';
 import { CRUDService } from '../../CRUD.service';
-import { IProduct, IProductRequest } from '../../Models/i-product';
+import { IProduct } from '../../Models/i-product';
 import { environment } from '../../../environments/environment';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { NgForm } from '@angular/forms';
 import { ICategory } from '../../Models/i-category';
 import { AuthService } from '../../auth/auth.service';
+import { IProductRequest } from '../../Models/iproduct-request';
 
 
 @Component({
@@ -58,8 +59,6 @@ export class ProductListComponent {
 
       this.searchService.items$.subscribe((r) => {
         this.products = r;
-        console.log(r);
-
       });
 
     }

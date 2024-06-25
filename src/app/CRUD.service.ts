@@ -1,8 +1,9 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable, tap } from 'rxjs';
-import { IProduct, IProductRequest } from './Models/i-product';
+import { IProduct,  } from './Models/i-product';
 import { IOrder } from './Models/i-order';
+import { IProductRequest } from './Models/iproduct-request';
 
 @Injectable({
   providedIn: 'root'

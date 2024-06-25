@@ -1,6 +1,7 @@
 import { CartService } from './../../pages/cart/cart.service';
 import { Component, Input } from '@angular/core';
 import { IProduct } from '../../Models/i-product';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-product-card',
@@ -11,58 +12,59 @@ export class ProductCardComponent {
 
   constructor(private cartSvc: CartService){  }
 
-  @Input() product!:IProduct
+  @Input() product!: IProduct;
+  @Input() isUser: boolean | undefined;
 
-  @Input() isUser:boolean|undefined;
+  productInCart!: boolean;
+  quantity: number = 0;
+  showTooltip: { [key: number]: boolean } = {};
+  quantityWarnings: boolean = false;
 
-  productInCart!:boolean
-
-  quantity:number=0;
-
-  showTooltip:boolean=false
-
-  quantityWarnings:boolean=false;
+  private cartSubscription!: Subscription;
 
   ngOnInit(): void {
-    console.log('Product input in child:', this.product);
-    if (!this.product || !this.product.id) {
-      console.error('Product or product ID is not defined');
-    } else {
-      this.productInCart = this.cartSvc.isProductInCart(this.product.id);
-      const cartItem = this.cartSvc.getCart().find(item => item.product.id === this.product.id);
+    if (!this.product || this.product.id === undefined) {
+      console.error('Product is not defined or ID is undefined');
+      return;
+    }
+
+    this.cartSubscription = this.cartSvc.cart$.subscribe(cart => {
+      const cartItem = cart.find(item => item.product.id === this.product.id);
       if (cartItem) {
+        this.productInCart = true;
         this.quantity = cartItem.quantity;
+      } else {
+        this.productInCart = false;
       }
-      console.log('Product loaded:', this.product);
+    });
+  }
+
+  ngOnDestroy(): void {
+    if (this.cartSubscription) {
+      this.cartSubscription.unsubscribe();
     }
   }
 
-  incrementQuantity(): void {
-    this.quantity++;
-  }
-
-  decrementQuantity(): void {
-    if (this.quantity > 1) {
-      this.quantity--;
-    }
-  }
-
-  addToCart(product: IProduct, quantity: number): void {
-    if (quantity > 0) {
-      this.cartSvc.addProductToCart(product, quantity);
-      console.log('Product added to cart:', product);
-      console.log(this.cartSvc.getCart());
+  toggleTooltip(): void {
+    if (this.product.id !== undefined) {
+      this.showTooltip[this.product.id] = !this.showTooltip[this.product.id];
     } else {
-      this.quantityWarnings = true
-      console.error('Invalid quantity:', quantity);
+      console.error('Product ID is undefined');
     }
   }
 
-  removeFromCart(product: IProduct): void {
-    this.cartSvc.removeProductFromCart(product);
+  addToCart(): void {
+    if (this.quantity > 0) {
+      this.cartSvc.addProductToCart(this.product, this.quantity);
+    } else {
+      this.quantityWarnings = true;
+      console.error('Invalid quantity:', this.quantity);
+    }
+  }
+
+  removeFromCart(): void {
+    this.cartSvc.removeProductFromCart(this.product);
     this.productInCart = false;
-    this.quantity = 1;
-    console.log('Product removed from cart:', product);
-    console.log(this.cartSvc.getCart());
+    this.quantity = 0;
   }
 }

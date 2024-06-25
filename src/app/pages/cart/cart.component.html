@@ -1,1 +1,18 @@
-<p>cart works!</p>
+<div *ngIf="cartList && cartList.length > 0; else emptyCart">
+  <div *ngFor="let item of cartList">
+    <p>Product Name: {{ item.product.name }}</p>
+    <p>Quantity: {{ item.quantity }}</p>
+    <p>Price: {{ item.product.price | currency:'EUR' }}</p>
+    <button (click)="incrementQuantity(item)">+</button>
+    <button *ngIf="item.quantity > 1" (click)="decrementQuantity(item)">-</button>
+    <button *ngIf="item.quantity === 1" (click)="removeFromCart(item)">🗑️</button>
+  </div>
+  <div class="total-price">
+    <p>Total Price: {{ totalPrice | currency:'EUR' }}</p>
+
+    <button (click)="createOrder()">Conferma ordine</button>
+  </div>
+</div>
+<ng-template #emptyCart>
+  <p>Your cart is empty.</p>
+</ng-template>

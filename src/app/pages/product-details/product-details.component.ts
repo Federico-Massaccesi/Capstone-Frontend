@@ -1,7 +1,6 @@
-import { iUser } from './../../Models/iUser';
 import { Component, OnInit, TemplateRef, inject } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { IProduct, IProductRequest } from '../../Models/i-product';
+import { IProduct } from '../../Models/i-product';
 import { CRUDService } from '../../CRUD.service';
 import { environment } from '../../../environments/environment';
 import { AuthService } from '../../auth/auth.service';
@@ -9,8 +8,8 @@ import { HttpClient } from '@angular/common/http';
 import { NgbActiveModal, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { NgForm } from '@angular/forms';
 import { ICategory } from '../../Models/i-category';
-import { iRole } from '../../Models/iUser';
 import { CartService } from '../cart/cart.service';
+import { IProductRequest } from '../../Models/iproduct-request';
 
 @Component({
   selector: 'app-product-details',
