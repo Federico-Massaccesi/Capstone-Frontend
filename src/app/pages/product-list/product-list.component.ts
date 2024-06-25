@@ -22,7 +22,7 @@ export class ProductListComponent {
     categories:[]
   }
 
-  isUser!:boolean | undefined;
+  isUser:boolean = true;
 
   categoriesUrl :string = environment.categoriesUrl;
 
@@ -58,6 +58,8 @@ export class ProductListComponent {
 
       this.searchService.items$.subscribe((r) => {
         this.products = r;
+        console.log(r);
+
       });
 
     }

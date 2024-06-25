@@ -9,9 +9,7 @@ import { IProduct } from '../../Models/i-product';
 })
 export class ProductCardComponent {
 
-  constructor(private cartSvc: CartService){
-    this.productInCart = cartSvc.isProductInCart(this.product.id!)
-  }
+  constructor(private cartSvc: CartService){  }
 
   @Input() product!:IProduct
 
@@ -19,17 +17,52 @@ export class ProductCardComponent {
 
   productInCart!:boolean
 
+  quantity:number=0;
+
+  showTooltip:boolean=false
+
+  quantityWarnings:boolean=false;
+
   ngOnInit(): void {
-    if (!this.product) {
-      console.error('Product is not defined');
+    console.log('Product input in child:', this.product);
+    if (!this.product || !this.product.id) {
+      console.error('Product or product ID is not defined');
     } else {
+      this.productInCart = this.cartSvc.isProductInCart(this.product.id);
+      const cartItem = this.cartSvc.getCart().find(item => item.product.id === this.product.id);
+      if (cartItem) {
+        this.quantity = cartItem.quantity;
+      }
       console.log('Product loaded:', this.product);
     }
   }
 
-  // addToCart(product:IProduct){
-  //   this.cartSvc.addProductToCart(product)
-  //   console.log(this.cartSvc.cart);
+  incrementQuantity(): void {
+    this.quantity++;
+  }
 
-  // }
+  decrementQuantity(): void {
+    if (this.quantity > 1) {
+      this.quantity--;
+    }
+  }
+
+  addToCart(product: IProduct, quantity: number): void {
+    if (quantity > 0) {
+      this.cartSvc.addProductToCart(product, quantity);
+      console.log('Product added to cart:', product);
+      console.log(this.cartSvc.getCart());
+    } else {
+      this.quantityWarnings = true
+      console.error('Invalid quantity:', quantity);
+    }
+  }
+
+  removeFromCart(product: IProduct): void {
+    this.cartSvc.removeProductFromCart(product);
+    this.productInCart = false;
+    this.quantity = 1;
+    console.log('Product removed from cart:', product);
+    console.log(this.cartSvc.getCart());
+  }
 }
