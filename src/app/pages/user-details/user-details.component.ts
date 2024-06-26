@@ -16,21 +16,19 @@ export class UserDetailsComponent {
 
   constructor(
     private route: ActivatedRoute,
-    private userSvc: CRUDService<iUser>
+    private userSvc: CRUDService
   ){
 
   }
 
-    ngOnInit(){
-
-      const productId = this.route.snapshot.paramMap.get('id');
-      if (productId) {
-        const idNumber = Number(productId);
-        this.userSvc.getOneEntity(this.userUrl, idNumber).subscribe((user: iUser) => {
-          this.user = user;
-          console.log(user);
-
-        })
-      }
+  ngOnInit(): void {
+    const userId = this.route.snapshot.paramMap.get('id');
+    if (userId) {
+      const idNumber = Number(userId);
+      this.userSvc.getOneEntity(this.userUrl, idNumber, 'user').subscribe((user: iUser) => {
+        this.user = user;
+        console.log(user);
+      });
     }
+  }
 }

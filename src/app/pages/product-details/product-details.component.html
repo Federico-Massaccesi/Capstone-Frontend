@@ -6,7 +6,7 @@
   class="card"
   style="width: 18rem"
 >
-<img [src]="imageUrl" class="card-img-top" alt="..." (error)="onImageError()" />
+<img [src]="product?.imageUrl" class="card-img-top" alt="..." (error)="onImageError()" />
   <div class="card-body">
     <p class="card-text">{{ product?.name }}</p>
     <p class="card-text">{{ product?.description }}</p>
@@ -14,10 +14,18 @@
     <p *ngFor="let item of product?.categories" class="card-text">
       {{ item.name }}
     </p>
-    <div *ngIf="isUser">
-      <label for="quantity">Quantità:</label>
-      <input type="number" [(ngModel)]="quantity" id="quantity" name="quantity" min="1" class="form-control">
-      <button (click)="addToCart(product!)">Aggiungi all'ordine</button>
+    <div *ngIf="isUser && product">
+      <i *ngIf="!showTooltip[product.id!]" (click)="openCartCommands()" class="bi bi-bag-plus-fill"></i>
+      <div *ngIf="showTooltip[product.id!]">
+        <label for="quantity">Quantità:</label>
+        <div class="input-group mb-3">
+          <input type="number" [(ngModel)]="quantity" id="quantity" name="quantity" min="0" class="form-control" (input)="checkQuantity()">
+        </div>
+        <button *ngIf="productInCart && quantity === storedQuantity" routerLink="/cart">Vai al carrello</button>
+        <button *ngIf="quantity !== storedQuantity && quantity > 0" (click)="addToCart(product!)">Conferma ordine</button>
+        <button *ngIf="productInCart && quantity === 1" (click)="removeFromCart()">Rimuovi dal carrello</button>
+        <p *ngIf="quantityWarnings" class="text-danger">Imposta una quantità maggiore di 0 per aggiungere al carrello.</p>
+      </div>
     </div>
     <div *ngIf="!isUser">
       <button (click)="deleteProduct()">DELETE</button>

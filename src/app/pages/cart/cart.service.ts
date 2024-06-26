@@ -35,7 +35,8 @@ export class CartService {
     if (existingItem) {
       existingItem.quantity = quantity;
     } else {
-      this.cart.push({ product, quantity });
+      const newItem: iCartItem = { product, quantity };
+      this.cart.push(newItem);
     }
     this.saveCart();
   }
@@ -63,7 +64,12 @@ export class CartService {
   }
 
   getTotalPrice(): number {
-    return this.cart.reduce((total, item) => total + item.product.price * item.quantity, 0);
+    return this.cart.reduce((total, item) => {
+      if (item.product && item.product.price) { // Aggiunto controllo per product e price
+        return total + item.product.price * item.quantity;
+      }
+      return total;
+    }, 0);
   }
 
   createOrder(order: IOrderRequest):Observable<IOrder> {

@@ -6,9 +6,7 @@ import { ProfileCardComponent } from '../main-component/profile-card/profile-car
 
 @NgModule({
   declarations: [ProfileCardComponent],
-  imports: [
-    CommonModule
-  ],
+  imports: [CommonModule],
   exports: [ProfileCardComponent]
 })
 export class ShareModuleModule { }

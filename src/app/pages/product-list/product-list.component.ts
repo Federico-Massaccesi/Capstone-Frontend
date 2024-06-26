@@ -40,28 +40,27 @@ export class ProductListComponent {
  results: IProduct[] = [];
 
   constructor(
-     public searchService: CRUDService<IProduct>,
+     public searchService: CRUDService,
      private http:HttpClient,
      private authSvc: AuthService
     ) {}
 
-    ngOnInit() {
-
+    ngOnInit(): void {
       if (this.authSvc.getUserRole()?.some(role => role.roleType === 'PRIVATE' || role.roleType === 'COMPANY')) {
-        this.isUser = true
+        this.isUser = true;
       } else {
-        this.isUser = false
+        this.isUser = false;
       }
 
-      this.searchService.getAllEntities(this.productUrl).subscribe(products => {
+      this.searchService.getAllEntities(this.productUrl, 'product').subscribe(products => {
         this.products = products;
       });
 
-      this.searchService.items$.subscribe((r) => {
-        this.products = r;
+      this.searchService.productItems$.subscribe((products) => {
+        this.products = products;
       });
-
     }
+
 
     //RIGHE PER BARRA DI RICERCA
     // this.searchService.currentSearchQuery.subscribe(query => {
@@ -94,15 +93,14 @@ onSubmit(form: NgForm) {
     }
     }
 
-  createProduct() {
-    this.newProduct.categories = this.selectedCategoryIds;
-    this.newProduct.available = this.availableCreate;
+    createProduct() {
+      this.newProduct.categories = this.selectedCategoryIds;
+      this.newProduct.available = this.availableCreate;
 
-    if(this.selectedFile !== undefined && this.newProduct.name !== undefined) {
-    this.searchService.createEntityWithImage(this.productUrl,this.newProduct, this.selectedFile ).subscribe();
+      if (this.selectedFile !== undefined && this.newProduct.name !== undefined) {
+        this.searchService.createProductWithImage(this.productUrl, this.newProduct, this.selectedFile).subscribe();
+      }
     }
-
-  }
 
   fetchCategories() {
     this.http.get<ICategory[]>(this.categoriesUrl).subscribe(

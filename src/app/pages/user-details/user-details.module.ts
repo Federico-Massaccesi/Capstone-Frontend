@@ -3,16 +3,17 @@ import { CommonModule } from '@angular/common';
 
 import { UserDetailsRoutingModule } from './user-details-routing.module';
 import { UserDetailsComponent } from './user-details.component';
-import { ProfileCardComponent } from '../../main-component/profile-card/profile-card.component';
+import { ShareModuleModule } from '../../share-module/share-module.module';
 
 
 @NgModule({
   declarations: [
-    UserDetailsComponent, ProfileCardComponent
+    UserDetailsComponent
   ],
   imports: [
     CommonModule,
-    UserDetailsRoutingModule
+    UserDetailsRoutingModule,
+    ShareModuleModule
   ]
 })
 export class UserDetailsModule { }

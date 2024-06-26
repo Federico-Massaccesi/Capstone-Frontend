@@ -4,17 +4,24 @@ import { BehaviorSubject, Observable, tap } from 'rxjs';
 import { IProduct,  } from './Models/i-product';
 import { IOrder } from './Models/i-order';
 import { IProductRequest } from './Models/iproduct-request';
+import { iUser } from './Models/iUser';
 
 @Injectable({
   providedIn: 'root'
 })
-export class CRUDService<T> {
+export class CRUDService {
 
-  private items:T[] = [];
+  private productItems: IProduct[] = [];
+  private orderItems: IOrder[] = [];
+  private userItems: iUser[] = [];
 
-  private itemsSubject = new BehaviorSubject<T[]>([]);
+  private productItemsSubject = new BehaviorSubject<IProduct[]>([]);
+  private orderItemsSubject = new BehaviorSubject<IOrder[]>([]);
+  private userItemsSubject = new BehaviorSubject<iUser[]>([]);
 
-  public items$ = this.itemsSubject.asObservable();
+  public productItems$ = this.productItemsSubject.asObservable();
+  public orderItems$ = this.orderItemsSubject.asObservable();
+  public userItems$ = this.userItemsSubject.asObservable();
 
   public searchQuery = new BehaviorSubject<string>('');
   currentSearchQuery = this.searchQuery.asObservable();
@@ -31,67 +38,100 @@ export class CRUDService<T> {
   //   return this.http.get<T[]>(`${url}?q=${query}`);
   // }
 
-  getAllEntities(url: string): Observable<T[]> {
-    return this.http.get<T[]>(url).pipe(
+  getAllEntities(url: string, type: 'product' | 'order' | 'user'): Observable<any[]> {
+    return this.http.get<any[]>(url).pipe(
       tap((items) => {
-        this.items = items;
-        this.itemsSubject.next(this.items);
+        switch (type) {
+          case 'product':
+            this.productItems = items as IProduct[];
+            this.productItemsSubject.next(this.productItems);
+            break;
+          case 'order':
+            this.orderItems = items as IOrder[];
+            this.orderItemsSubject.next(this.orderItems);
+            break;
+          case 'user':
+            this.userItems = items as iUser[];
+            this.userItemsSubject.next(this.userItems);
+            break;
+        }
       })
     );
   }
 
 
-  getOneEntity(url:string,id:number): Observable<T> {
-
-    return this.http.get<T>(`${url}/${id}`);
-
+  getOneEntity(url: string, id: number, type: 'product' | 'order' | 'user'): Observable<any> {
+    return this.http.get<any>(`${url}/${id}`);
   }
 
-  deleteEntity(url:string,id: number): Observable<void> {
+  deleteEntity(url: string, id: number, type: 'product' | 'order' | 'user'): Observable<void> {
     return this.http.delete<void>(`${url}/${id}`).pipe(
       tap(() => {
-        this.items = this.items.filter(item => (item as any).id !== id);
-        this.itemsSubject.next(this.items);
+        switch (type) {
+          case 'product':
+            this.productItems = this.productItems.filter(item => item.id !== id);
+            this.productItemsSubject.next(this.productItems);
+            break;
+          case 'order':
+            this.orderItems = this.orderItems.filter(item => item.id !== id);
+            this.orderItemsSubject.next(this.orderItems);
+            break;
+          case 'user':
+            this.userItems = this.userItems.filter(item => item.id !== id);
+            this.userItemsSubject.next(this.userItems);
+            break;
+        }
       })
     );
   }
 
-  createEntity(url:string,body: Partial<T>): Observable<T> {
-    return this.http.post<T>(url, body).pipe(
+  createEntity(url: string, body: Partial<any>, type: 'product' | 'order' | 'user'): Observable<any> {
+    return this.http.post<any>(url, body).pipe(
       tap((newItem) => {
-        this.items.push(newItem);
-        this.itemsSubject.next(this.items);
+        switch (type) {
+          case 'product':
+            this.productItems.push(newItem as IProduct);
+            this.productItemsSubject.next(this.productItems);
+            break;
+          case 'order':
+            this.orderItems.push(newItem as IOrder);
+            this.orderItemsSubject.next(this.orderItems);
+            break;
+          case 'user':
+            this.userItems.push(newItem as iUser);
+            this.userItemsSubject.next(this.userItems);
+            break;
+        }
       })
     );
   }
 
-   createEntityWithImage(url:string,entity: Partial<IProductRequest>, file: File): Observable<T> {
+  createProductWithImage(url: string, entity: Partial<IProductRequest>, file: File): Observable<IProduct> {
     const formData = new FormData();
     formData.append('product', new Blob([JSON.stringify(entity)], { type: 'application/json' }));
     formData.append('file', file);
 
-    return this.http.post<T>(url, formData).pipe(
+    return this.http.post<IProduct>(url, formData).pipe(
       tap((newItem) => {
-        this.items.push(newItem);
-        this.itemsSubject.next(this.items);
+        this.productItems.push(newItem);
+        this.productItemsSubject.next(this.productItems);
       })
     );
   }
 
-  updateEntity(apiUrl: string, id: number, entity: Partial<IProduct>, file?: File): Observable<any> {
+  updateProduct(apiUrl: string, id: number, entity: Partial<IProduct>, file?: File): Observable<IProduct> {
     const formData: FormData = new FormData();
-
-    formData.append('product', new Blob([JSON.stringify(entity)], {
-      type: 'application/json'
-    }));
+    formData.append('product', new Blob([JSON.stringify(entity)], { type: 'application/json' }));
 
     if (file) {
-      formData.append('file', file, file.name),{
-        type: 'multipart/form-data'
-      }
+      formData.append('file', file, file.name);
     }
 
-    return this.http.put(`${apiUrl}/${id}`, formData)
-    ;
+    return this.http.put<IProduct>(`${apiUrl}/${id}`, formData).pipe(
+      tap((updatedItem) => {
+        this.productItems = this.productItems.map(item => item.id === id ? updatedItem : item);
+        this.productItemsSubject.next(this.productItems);
+      })
+    );
   }
 }

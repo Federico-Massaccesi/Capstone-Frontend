@@ -13,12 +13,19 @@ import { CRUDService } from '../../CRUD.service';
 export class OrderListComponent {
   ordersUrl:string = environment.productsUrl
 
-  orders!: Observable<IOrder[]>;
+  orders!: IOrder[];
   results: IOrder[] = [];
-  constructor(private http: HttpClient, public searchService: CRUDService<IOrder>) {}
+  constructor(private http: HttpClient, public searchService: CRUDService) {}
 
-  ngOnInit() {
-    this.orders = this.searchService.getAllEntities(this.ordersUrl)
+  ngOnInit(): void {
+    this.searchService.getAllEntities(this.ordersUrl, 'order').subscribe((orders: IOrder[]) => {
+      this.orders = orders;
+    });
+
+    this.searchService.orderItems$.subscribe((orders: IOrder[]) => {
+      this.orders = orders;
+    });
+  }
 
 
     //RIGHE PER BARRA DI RICERCA
@@ -27,5 +34,5 @@ export class OrderListComponent {
     //     this.results = [...data];
     //   });
     // });
-  }
+
 }

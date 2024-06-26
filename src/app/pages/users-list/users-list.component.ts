@@ -15,25 +15,25 @@ export class UsersListComponent {
   userUrl:string = environment.usersUrl;
 
   constructor(
-    private userSvc: CRUDService<iUser>
+    private userSvc: CRUDService
   ){
 
   }
 
-  ngOnInit() {
-    this.userSvc.getAllEntities(this.userUrl).subscribe(users => {
-      this.userList = users.filter(user =>
-        user.roles.some(role => role.roleType === 'COMPANY' || role.roleType === 'PRIVATE')
+  ngOnInit(): void {
+    this.userSvc.getAllEntities(this.userUrl, 'user').subscribe((users: iUser[]) => {
+      this.userList = users.filter((user: iUser) =>
+        user.roles.some((role: { roleType: string }) => role.roleType === 'COMPANY' || role.roleType === 'PRIVATE')
       );
-      console.log(this.userList);
     });
 
-    this.userSvc.items$.subscribe((r) => {
-      this.userList = r.filter(user =>
-        user.roles.some(role => role.roleType === 'COMPANY' || role.roleType === 'PRIVATE')
+    this.userSvc.userItems$.subscribe((users: iUser[]) => {
+      this.userList = users.filter((user: iUser) =>
+        user.roles.some((role: { roleType: string }) => role.roleType === 'COMPANY' || role.roleType === 'PRIVATE')
       );
     });
   }
+
 
   hasRole(roles: any[], roleType: string): boolean {
     return roles.some(role => role.roleType === roleType);

@@ -9,8 +9,7 @@ import { NgbActiveModal, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { NgForm } from '@angular/forms';
 import { ICategory } from '../../Models/i-category';
 import { CartService } from '../cart/cart.service';
-import { IProductRequest } from '../../Models/iproduct-request';
-import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-product-details',
@@ -39,52 +38,71 @@ export class ProductDetailsComponent implements OnInit {
 
   private selectedFile: File | undefined;
 
-  quantity:number = 1;
+  productInCart!: boolean;
 
-  imageUrl!: SafeUrl;
+  quantity: number = 0;
 
+  showTooltip: { [key: number]: boolean } = {};
+
+  quantityWarnings: boolean = false;
+
+  storedQuantity: number = 0;
+
+  private cartSubscription!: Subscription;
 
   constructor(
   private route: ActivatedRoute,
   private router: Router,
-    private prodSvc: CRUDService<IProduct>,
+    private prodSvc: CRUDService,
     private authSvc : AuthService,
     private http:HttpClient,
     private cartSvc: CartService,
-    private sanitizer: DomSanitizer
-){
-  if (this.authSvc.getUserRole()?.some(role => role.roleType === 'private' || role.roleType === 'company')) {
-
-    this.isUser = true
-    } else {
-      this.isUser = false
-  }
-
-}
+){}
 
 ngOnInit(): void {
+  this.isUser = this.authSvc.getUserRole()?.some(role => role.roleType === 'PRIVATE' || role.roleType === 'COMPANY') || false;
+
   const productId = this.route.snapshot.paramMap.get('id');
   if (productId) {
     const idNumber = Number(productId);
     this.pageProductID = idNumber;
-    this.prodSvc.getOneEntity(this.prodUrl, idNumber).subscribe((product: IProduct) => {
+    this.prodSvc.getOneEntity(this.prodUrl, idNumber, 'product').subscribe((product: IProduct) => {
       this.product = product;
       this.productAvailable = this.product?.available || false;
       this.editedProduct = { ...this.product };
-      if(product !=undefined && product.categories !=undefined)
-        this.selectedCategoryIds = this.product?.categories
-      ? this.product.categories.map(category => category.id).filter((id): id is number => id !== undefined)
-      : [];
 
+      if (product !== undefined && product.categories !== undefined) {
+        this.selectedCategoryIds = this.product.categories.map(category => category.id).filter((id): id is number => id !== undefined);
+      }
 
+      this.cartSubscription = this.cartSvc.cart$.subscribe(cart => {
+        const cartItem = cart.find(item => item.product.id === this.product?.id);
+        if (cartItem) {
+          this.productInCart = true;
+          this.quantity = cartItem.quantity;
+          this.storedQuantity = cartItem.quantity;
+        } else {
+          this.productInCart = false;
+          this.quantity = 0;
+          this.storedQuantity = 0;
+        }
+      });
     });
   }
 }
 
-deleteProduct():void{
-  this.prodSvc.deleteEntity(this.prodUrl,this.pageProductID).subscribe(()=>{
-    this.router.navigate(['/productList']);
-  })
+ngOnDestroy(): void {
+  if (this.cartSubscription) {
+    this.cartSubscription.unsubscribe();
+  }
+}
+
+deleteProduct(): void {
+  if (this.pageProductID !== undefined) {
+    this.prodSvc.deleteEntity(this.prodUrl, this.pageProductID, 'product').subscribe(() => {
+      this.router.navigate(['/productList']);
+    });
+  }
 }
 
 toggleAvailability(checked: boolean): void {
@@ -133,10 +151,10 @@ private modalService = inject(NgbModal);
       };
 
 
-      this.prodSvc.updateEntity(this.prodUrl, this.pageProductID, updatedProduct, this.selectedFile).subscribe({
+      this.prodSvc.updateProduct(this.prodUrl, this.pageProductID, updatedProduct, this.selectedFile).subscribe({
         next: (response) => {
           this.product = updatedProduct
-          modal.close(); // Chiude la modale dopo il successo della richiesta
+          modal.close();
         },
         error: (error) => {
           console.error('Error updating product', error);
@@ -167,15 +185,57 @@ private modalService = inject(NgbModal);
       }
 
       addToCart(product: IProduct): void {
-        if (!this.cartSvc.isProductInCart(product.id!)) {
-          this.cartSvc.addProductToCart(product, this.quantity);
-          console.log('Product added to cart:', product);
+        if (this.quantity < 1) {
+          this.quantityWarnings = true;
+          return;
         } else {
-          console.log('Product is already in the cart:', product);
+          this.cartSvc.addProductToCart(product, this.quantity);
+          this.quantityWarnings = false;
+          console.log('Product added to cart:', product);
         }
       }
+      removeFromCart(): void {
+        if (this.product) {
+          this.cartSvc.removeProductFromCart(this.product);
+          this.productInCart = false;
+          this.quantity = 0;
+          this.storedQuantity = 0;
+          this.showTooltip[this.product.id!] = false;
+          console.log('Product removed from cart:', this.product);
+        }
+      }
+
+      openCartCommands(): void {
+        if (this.product) {
+          this.showTooltip[this.product.id!] = true;
+          if (!this.productInCart) {
+            this.quantity = 1;
+          } else {
+            const cartItem = this.cartSvc.getCart().find(item => item.product.id === this.product!.id);
+            if (cartItem) {
+              this.quantity = cartItem.quantity;
+            }
+          }
+        }
+      }
+
+      checkQuantity(): void {
+        if (this.quantity === 0) {
+          this.removeFromCart();
+          this.quantityWarnings = true;
+        } else if (this.quantity === null || this.quantity === undefined ) {
+          this.quantity = 1;
+          this.quantityWarnings = false;
+        } else {
+          this.quantityWarnings = false;
+        }
+      }
+
+
 
       onImageError() {
         console.error('L\'immagine non può essere caricata.');
       }
+
+
     }

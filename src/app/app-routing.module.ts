@@ -16,7 +16,7 @@ const routes: Routes = [
   { path: 'userList', loadChildren: () => import('./pages/users-list/users-list.module').then(m => m.UsersListModule) },
   { path: 'productList', loadChildren: () => import('./pages/product-list/product-list.module').then(m => m.ProductListModule) },
   { path: 'orderList', loadChildren: () => import('./pages/order-list/order-list.module').then(m => m.OrderListModule) },
-  { path: 'profile', loadChildren: () => import('./pages/profile/profile.module').then(m => m.ProfileModule) },
+  { path: 'profile/:id', loadChildren: () => import('./pages/profile/profile.module').then(m => m.ProfileModule) },
   { path: 'product-details/:id', loadChildren: () => import('./pages/product-details/product-details.module').then(m => m.ProductDetailsModule) },
   { path: 'order-details/:id', loadChildren: () => import('./pages/order-details/order-details.module').then(m => m.OrderDetailsModule) },
   { path: 'user-details/:id', loadChildren: () => import('./pages/user-details/user-details.module').then(m => m.UserDetailsModule) },

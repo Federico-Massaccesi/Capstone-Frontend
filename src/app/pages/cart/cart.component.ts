@@ -12,7 +12,7 @@ import { IOrderRequest } from '../../Models/i-order-request';
 })
 export class CartComponent {
 
-  cartList!: iCartItem[];
+  cartList: iCartItem[] = []
   totalPrice: number = 0;
   private cartSubscription!: Subscription;
 
@@ -21,6 +21,8 @@ export class CartComponent {
   ngOnInit(): void {
     this.cartSubscription = this.cartSvc.cart$.subscribe(cart => {
       this.cartList = cart;
+      console.log(this.cartList);
+
       this.updateTotalPrice();
       console.log('Cart updated:', this.cartList);
     });
