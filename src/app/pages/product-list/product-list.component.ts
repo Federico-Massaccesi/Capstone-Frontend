@@ -63,17 +63,12 @@ export class ProductListComponent {
 
     }
 
-
-
-
     //RIGHE PER BARRA DI RICERCA
     // this.searchService.currentSearchQuery.subscribe(query => {
     //   this.http.get<IProduct[]>(`${this.productUrl}?q=${query}`).subscribe(data => {
     //     this.results = [...data];
     //   });
     // });
-
-
 
 
   private modalService = inject(NgbModal);

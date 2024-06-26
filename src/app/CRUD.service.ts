@@ -78,7 +78,7 @@ export class CRUDService<T> {
     );
   }
 
-  updateEntity(apiUrl: string, id: number, entity: Partial<IProductRequest>, file?: File): Observable<any> {
+  updateEntity(apiUrl: string, id: number, entity: Partial<IProduct>, file?: File): Observable<any> {
     const formData: FormData = new FormData();
 
     formData.append('product', new Blob([JSON.stringify(entity)], {

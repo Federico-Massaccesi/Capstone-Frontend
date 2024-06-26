@@ -10,6 +10,7 @@ import { NgForm } from '@angular/forms';
 import { ICategory } from '../../Models/i-category';
 import { CartService } from '../cart/cart.service';
 import { IProductRequest } from '../../Models/iproduct-request';
+import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-product-details',
@@ -40,6 +41,8 @@ export class ProductDetailsComponent implements OnInit {
 
   quantity:number = 1;
 
+  imageUrl!: SafeUrl;
+
 
   constructor(
   private route: ActivatedRoute,
@@ -47,7 +50,8 @@ export class ProductDetailsComponent implements OnInit {
     private prodSvc: CRUDService<IProduct>,
     private authSvc : AuthService,
     private http:HttpClient,
-    private cartSvc: CartService
+    private cartSvc: CartService,
+    private sanitizer: DomSanitizer
 ){
   if (this.authSvc.getUserRole()?.some(role => role.roleType === 'private' || role.roleType === 'company')) {
 
@@ -114,19 +118,24 @@ private modalService = inject(NgbModal);
 
   updateProduct(modal: NgbActiveModal): void {
     if (this.product) {
-      const updatedProduct:IProductRequest = {
+
+      const selectedCategories = this.selectedCategoryIds.map(id => {
+        return this.allCategories.find(category => category.id === id)!});
+
+      const updatedProduct:IProduct = {
         ...this.product,
         name: this.editedProduct.name!,
         price: this.editedProduct.price!,
         description: this.editedProduct.description!,
         imageUrl: this.editedProduct.imageUrl!,
         available: this.editedProduct.available!,
-        categories: this.selectedCategoryIds
+        categories: selectedCategories
       };
+
 
       this.prodSvc.updateEntity(this.prodUrl, this.pageProductID, updatedProduct, this.selectedFile).subscribe({
         next: (response) => {
-          console.log('Product updated successfully', response);
+          this.product = updatedProduct
           modal.close(); // Chiude la modale dopo il successo della richiesta
         },
         error: (error) => {
@@ -148,8 +157,6 @@ private modalService = inject(NgbModal);
         this.http.get<ICategory[]>(this.categoryUrl).subscribe(
           (categories) => {
             this.allCategories = categories;
-            console.log(categories);
-
           }
         );
       }
@@ -166,5 +173,9 @@ private modalService = inject(NgbModal);
         } else {
           console.log('Product is already in the cart:', product);
         }
+      }
+
+      onImageError() {
+        console.error('L\'immagine non può essere caricata.');
       }
     }

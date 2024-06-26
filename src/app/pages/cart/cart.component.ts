@@ -2,7 +2,6 @@ import { Component } from '@angular/core';
 import { CartService } from './cart.service';
 import { iCartItem } from '../../Models/cart-item';
 import { Subscription } from 'rxjs';
-import { IOrder } from '../../Models/i-order';
 import { AuthService } from '../../auth/auth.service';
 import { IOrderRequest } from '../../Models/i-order-request';
 
@@ -59,29 +58,21 @@ export class CartComponent {
   }
 
   createOrder(): void {
-    const clientId = this.authSvc.getUserId();
-    if (clientId === null) {
-      console.error('User ID not found');
-      return;
-    }
-
-    const order: IOrderRequest = {
-      client: clientId,
-      items: this.cartList,
-      localDate: new Date(),
-      pending: true,
-      totalPrice: this.totalPrice,
-      checked: false
-    };
-
-    this.cartSvc.createOrder(order).subscribe(
-      response => {
-        console.log('Order created successfully', response);
-        this.cartSvc.cleanCart();
-      },
-      error => {
-        console.error('Error creating order', error);
-      }
-    );
+  const clientId = this.authSvc.getUserId();
+  if (clientId === null) {
+    return;
   }
+
+  const order: IOrderRequest = {
+    clientId: clientId,
+    products: this.cartList,
+    totalPrice: this.totalPrice
+  };
+
+  this.cartSvc.createOrder(order).subscribe({
+    next: (response) => {
+      this.cartSvc.cleanCart();
+    }
+  });
+}
 }

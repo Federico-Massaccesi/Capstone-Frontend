@@ -1,10 +1,11 @@
 import { Injectable } from '@angular/core';
 import { IProduct } from '../../Models/i-product';
 import { iCartItem } from '../../Models/cart-item';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../../environments/environment';
 import { IOrderRequest } from '../../Models/i-order-request';
+import { IOrder } from '../../Models/i-order';
 
 @Injectable({
   providedIn: 'root'
@@ -65,7 +66,7 @@ export class CartService {
     return this.cart.reduce((total, item) => total + item.product.price * item.quantity, 0);
   }
 
-  createOrder(order: IOrderRequest) {
-    return this.http.post<IOrderRequest>(`${environment.apiUrl}/orders`, order);
+  createOrder(order: IOrderRequest):Observable<IOrder> {
+    return this.http.post<IOrder>(environment.ordersUrl, order,{responseType: 'json'});
   }
 }

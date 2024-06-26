@@ -6,7 +6,7 @@
   class="card"
   style="width: 18rem"
 >
-  <img [src]="product?.imageUrl" class="card-img-top" alt="..." />
+<img [src]="imageUrl" class="card-img-top" alt="..." (error)="onImageError()" />
   <div class="card-body">
     <p class="card-text">{{ product?.name }}</p>
     <p class="card-text">{{ product?.description }}</p>
@@ -19,7 +19,7 @@
       <input type="number" [(ngModel)]="quantity" id="quantity" name="quantity" min="1" class="form-control">
       <button (click)="addToCart(product!)">Aggiungi all'ordine</button>
     </div>
-    <div *ngIf="isUser">
+    <div *ngIf="!isUser">
       <button (click)="deleteProduct()">DELETE</button>
       <div (click)="productAvailable = !productAvailable" class="checkbox">
         <i *ngIf="productAvailable" class="bi bi-check"></i>
@@ -31,7 +31,7 @@
       >
         Salva disponibilità e torna alla lista prodotti
       </button>
-      <button *ngIf="isUser" (click)="open(content)">Modifica prodotto</button>
+      <button *ngIf="!isUser" (click)="open(content)">Modifica prodotto</button>
 
     </div>
   </div>
@@ -116,12 +116,8 @@
           />
         </div>
         <div class="mx-auto col-10">
-          <img
-            [src]="editedProduct.imageUrl"
-            class="img-thumbnail mt-2"
-            alt="Product Image"
-            style="max-height: 200px"
-          />
+          <img [src]="editedProduct.imageUrl" class="img-thumbnail mt-2"
+           alt="Product Image" style="max-height: 200px;">
         </div>
       </div>
     </form>
