@@ -8,12 +8,13 @@
   </div>
   <div class="row">
     <div class="col-md-4" *ngFor="let order of filteredOrders$ | async">
-      <div class="card mb-3" [ngClass]="{'bg-danger': !order.checked, 'bg-success': order.checked}">
+      <div class="card mb-3" [ngClass]="{'bg-danger': order.pending, 'bg-success': !order.pending}">
         <div class="card-header">
           Order #{{ order.id }}
           <button class="btn btn-danger btn-sm float-right" (click)="deleteOrder(order.id!)">
             Delete
           </button>
+          <p>{{order.checked}}</p>
         </div>
         <div class="card-body">
           <h5 class="card-title">Customer: {{ order.client.username }}</h5>

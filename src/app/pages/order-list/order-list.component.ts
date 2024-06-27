@@ -23,16 +23,18 @@ export class OrderListComponent {
   ) { }
 
   ngOnInit(): void {
-
     this.userRoles = this.authSvc.getUserRole();
 
-
-    this.orders$.subscribe(orders => {
-      const filtered = orders.filter(order => !order.checked);
-      this.filteredOrders$.next(filtered);
+    this.crudService.getAllEntities(environment.ordersUrl, 'order').subscribe(() => {
+      this.orders$.subscribe(orders => {
+        const uncheckedOrders = orders.filter(order => !order.checked);
+        if (uncheckedOrders.length > 0) {
+          this.filteredOrders$.next(uncheckedOrders);
+        } else {
+          this.setFilter('incomplete');
+        }
+      });
     });
-
-    this.crudService.getAllEntities(environment.ordersUrl, 'order').subscribe();
   }
 
   markAsChecked(orderId: number): void {
