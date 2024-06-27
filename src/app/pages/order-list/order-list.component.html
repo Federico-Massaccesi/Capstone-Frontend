@@ -1,1 +1,33 @@
-<p>order-list works!</p>
+<div class="container">
+  <div class="row">
+    <div class="col-12 text-center my-4">
+      <button class="btn btn-primary mx-2" (click)="setFilter('all')">Lista Completa</button>
+      <button class="btn btn-success mx-2" (click)="setFilter('completed')">Ordini Completati</button>
+      <button class="btn btn-warning mx-2" (click)="setFilter('incomplete')">Ordini da Completare</button>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-4" *ngFor="let order of filteredOrders$ | async">
+      <div class="card mb-3" [ngClass]="{'bg-danger': !order.checked, 'bg-success': order.checked}">
+        <div class="card-header">
+          Order #{{ order.id }}
+          <button class="btn btn-danger btn-sm float-right" (click)="deleteOrder(order.id!)">
+            Delete
+          </button>
+        </div>
+        <div class="card-body">
+          <h5 class="card-title">Customer: {{ order.client.username }}</h5>
+          <p class="card-text">Total Price: {{ order.totalPrice | currency }}</p>
+          <p class="card-text">Order Date: {{ order.localDate | date }}</p>
+          <p class="card-text">Pending: {{ order.pending }}</p>
+          <ul class="list-group list-group-flush">
+            <li class="list-group-item" *ngFor="let item of order.items">
+              {{ item.product.name }} - Quantity: {{ item.quantity }}
+            </li>
+          </ul>
+          <button class="btn btn-info mt-2" (click)="viewOrderDetails(order.id!, order.checked)">View Order Details</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

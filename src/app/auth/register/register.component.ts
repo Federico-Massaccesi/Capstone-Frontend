@@ -43,18 +43,16 @@ export class RegisterComponent {
       })
   }
   signUpAdmin() {
-
-   if(this.admin == true && this.warehouse == true){
-    this.registerDataAdmin.roles?.push({roleType:" WAREHOUSE"})
-  }else if(this.admin == true && this.warehouse == false){
-      this.registerDataAdmin.roles?.push({roleType:"ADMIN"})
-  }
+    if (this.admin == true && this.warehouse == true) {
+      this.registerDataAdmin.roles?.push({ roleType: "WAREHOUSE" });
+    } else if (this.admin == true && this.warehouse == false) {
+      this.registerDataAdmin.roles?.push({ roleType: "ADMIN" });
+    }
 
     this.authSvc.register(this.registerDataAdmin)
-      .subscribe(data => {
-
-        this.router.navigate(['/auth/login'])
-
-      })
+      .subscribe({
+        next: data => this.router.navigate(['/auth/login']),
+        error: error => console.error('Error during admin registration:', error)
+      });
   }
 }

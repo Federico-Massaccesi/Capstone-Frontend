@@ -1,9 +1,11 @@
 import { Component } from '@angular/core';
 import { environment } from '../../../environments/environment';
-import { Observable } from 'rxjs';
 import { IOrder } from '../../Models/i-order';
-import { HttpClient } from '@angular/common/http';
 import { CRUDService } from '../../CRUD.service';
+import { BehaviorSubject, Observable, map } from 'rxjs';
+import { Router } from '@angular/router';
+import { iRole } from '../../Models/iUser';
+import { AuthService } from '../../auth/auth.service';
 
 @Component({
   selector: 'app-order-list',
@@ -11,28 +13,59 @@ import { CRUDService } from '../../CRUD.service';
   styleUrl: './order-list.component.scss'
 })
 export class OrderListComponent {
-  ordersUrl:string = environment.productsUrl
+  orders$: Observable<IOrder[]> = this.crudService.orderItems$;
+  filteredOrders$: BehaviorSubject<IOrder[]> = new BehaviorSubject<IOrder[]>([]);
+  userRoles: iRole[] | undefined;
 
-  orders!: IOrder[];
-  results: IOrder[] = [];
-  constructor(private http: HttpClient, public searchService: CRUDService) {}
+  constructor(private crudService: CRUDService,
+    private router :Router,
+    private authSvc: AuthService
+  ) { }
 
   ngOnInit(): void {
-    this.searchService.getAllEntities(this.ordersUrl, 'order').subscribe((orders: IOrder[]) => {
-      this.orders = orders;
+
+    this.userRoles = this.authSvc.getUserRole();
+
+
+    this.orders$.subscribe(orders => {
+      const filtered = orders.filter(order => !order.checked);
+      this.filteredOrders$.next(filtered);
     });
 
-    this.searchService.orderItems$.subscribe((orders: IOrder[]) => {
-      this.orders = orders;
-    });
+    this.crudService.getAllEntities(environment.ordersUrl, 'order').subscribe();
   }
 
+  markAsChecked(orderId: number): void {
+    this.crudService.patchOrderChecked(environment.ordersUrl, orderId, true).subscribe();
+  }
 
-    //RIGHE PER BARRA DI RICERCA
-    // this.searchService.currentSearchQuery.subscribe(query => {
-    //   this.http.get<IProduct[]>(`${this.productUrl}?q=${query}`).subscribe(data => {
-    //     this.results = [...data];
-    //   });
-    // });
+  deleteOrder(orderId: number): void {
+    this.crudService.deleteEntity(environment.ordersUrl, orderId, 'order').subscribe();
+  }
 
+  setFilter(filter: string): void {
+    this.orders$.pipe(
+      map(orders => {
+        switch (filter) {
+          case 'completed':
+            return orders.filter(order => !order.pending);
+          case 'incomplete':
+            return orders.filter(order => order.pending);
+          default:
+            return orders;
+        }
+      })
+    ).subscribe(filtered => this.filteredOrders$.next(filtered));
+  }
+
+  viewOrderDetails(orderId: number, checked: boolean): void {
+    const isWarehouse = this.userRoles?.some(role => role.roleType === 'WAREHOUSE');
+    if (isWarehouse && !checked) {
+      this.crudService.patchOrderChecked(environment.ordersUrl, orderId, true).subscribe(() => {
+        this.router.navigate(['/order-details', orderId]);
+      });
+    } else {
+      this.router.navigate(['/order-details', orderId]);
+    }
+  }
 }

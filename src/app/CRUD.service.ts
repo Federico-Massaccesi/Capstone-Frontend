@@ -134,4 +134,22 @@ export class CRUDService {
       })
     );
   }
+
+  patchOrderChecked(url: string, id: number, checked: boolean): Observable<IOrder> {
+    return this.http.patch<IOrder>(`${url}/${id}/checked`, { checked }).pipe(
+      tap((updatedOrder) => {
+        this.orderItems = this.orderItems.map(order => order.id === id ? updatedOrder : order);
+        this.orderItemsSubject.next(this.orderItems);
+      })
+    );
+  }
+
+  patchOrderPending(url: string, id: number, pending: boolean): Observable<IOrder> {
+    return this.http.patch<IOrder>(`${url}/${id}/pending`, { pending }).pipe(
+      tap((updatedOrder) => {
+        this.orderItems = this.orderItems.map(order => order.id === id ? updatedOrder : order);
+        this.orderItemsSubject.next(this.orderItems);
+      })
+    );
+  }
 }
