@@ -28,6 +28,10 @@ export class ProductDetailsComponent implements OnInit {
 
   isUser!:boolean;
 
+  isAdmin!:boolean;
+
+  isWarehouse!: boolean;
+
   productAvailable!:boolean
 
   allCategories!:ICategory[]
@@ -61,6 +65,8 @@ export class ProductDetailsComponent implements OnInit {
 
 ngOnInit(): void {
   this.isUser = this.authSvc.getUserRole()?.some(role => role.roleType === 'PRIVATE' || role.roleType === 'COMPANY') || false;
+  this.isAdmin = this.authSvc.getUserRole()?.some(role => role.roleType === 'ADMIN') || false;
+  this.isWarehouse = this.authSvc.getUserRole()?.some(role => role.roleType === 'WAREHOUSE') || false;
 
   const productId = this.route.snapshot.paramMap.get('id');
   if (productId) {

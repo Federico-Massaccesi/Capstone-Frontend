@@ -3,31 +3,31 @@
     <div class="container">
       <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
         <a href="/" class="d-flex align-items-center my-2 my-lg-0 me-lg-auto text-white text-decoration-none">
-        <img src="" alt="">
+          <img src="" alt="">
         </a>
 
         <ul class="nav col-12 col-lg-auto my-2 justify-content-center my-md-0 text-small">
-          <li>
+          <li *ngIf="isUser || isAdmin || isWarehouse">
             <a routerLink="/home" class="nav-link text-secondary">
               Home
             </a>
           </li>
-          <li>
+          <li *ngIf="!isUser">
             <a routerLink="/orderList" class="nav-link text-white">
               Orders
             </a>
           </li>
-          <li>
+          <li *ngIf="isUser || isAdmin || isWarehouse">
             <a routerLink="/productList" class="nav-link text-white">
               Products
             </a>
           </li>
-          <li>
+          <li *ngIf="isAdmin">
             <a routerLink="/userList" class="nav-link text-white">
               Customers
             </a>
           </li>
-          <li>
+          <li *ngIf="isUser">
             <a routerLink="/profile" class="nav-link text-white">
               Profilo
             </a>
@@ -43,9 +43,11 @@
       </form>
 
       <div class="text-end">
-        <button type="button" class="btn btn-light text-dark me-2">Login</button>
-        <button type="button" (click)="logout()" class="btn btn-primary">Logout</button>
-        <button type="button" routerLink="/cart" class="btn btn-light text-dark me-2"><i class="bi bi-cart-check"></i></button>
+        <button type="button" class="btn btn-light text-dark me-2" *ngIf="!(isAuthenticated$ | async)">Login</button>
+        <button type="button" (click)="logout()" class="btn btn-primary" *ngIf="isAuthenticated$ | async">Logout</button>
+        <button *ngIf="isUser && (isAuthenticated$ | async)" type="button" routerLink="/cart" class="btn btn-light text-dark me-2">
+          <i class="bi bi-cart-check"></i>
+        </button>
       </div>
     </div>
   </div>

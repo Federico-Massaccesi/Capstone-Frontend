@@ -12,6 +12,7 @@ import { AuthInterceptor } from './auth.interceptor';
 import { AuthService } from './auth/auth.service';
 import { OrderCardComponent } from './main-component/order-card/order-card.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { NotAuthorizedComponent } from './main-component/not-authorized/not-authorized.component';
 
 @NgModule({
   declarations: [
@@ -20,6 +21,7 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
     LandingComponent,
     ContactsComponent,
     OrderCardComponent,
+    NotAuthorizedComponent,
   ],
   imports: [
     BrowserModule,

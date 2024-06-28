@@ -24,6 +24,9 @@ export class AuthService {
 
   syncIsLoggedIn: boolean = false;
 
+  private rolesSubject = new BehaviorSubject<iRole[]>([]);
+  roles$ = this.rolesSubject.asObservable();
+
   constructor(private http: HttpClient,
     private router: Router
   ) {
@@ -43,6 +46,7 @@ export class AuthService {
     return this.http.post<AccessData>(this.loginUrl,loginData).pipe(
       tap((data) =>{
         this.authSubject.next(data.user);
+        this.rolesSubject.next(data.user.roles);
         localStorage.setItem('accessData',JSON.stringify(data))
 
         this.autoLogout(data.token)
@@ -52,6 +56,7 @@ export class AuthService {
 
   logout() {
     this.authSubject.next(null);
+    this.rolesSubject.next([]);
     localStorage.removeItem('accessData');
     this.router.navigate(['/']);
   }
@@ -99,7 +104,8 @@ export class AuthService {
     if (this.jwtHelper.isTokenExpired(accessData.token)) return;
 
     this.authSubject.next(accessData.user);
-      this.autoLogout(accessData.token);
+    this.rolesSubject.next(accessData.user.roles);
+    this.autoLogout(accessData.token);
   }
 
   getUserId(): number | null {
@@ -109,5 +115,14 @@ export class AuthService {
       return accessData.user?.id || null;
     }
     return null;
+  }
+
+  isAuthenticated(): Observable<boolean> {
+    return this.isLoggedIn$;
+  }
+
+
+  getUserRoles$(): Observable<iRole[]> {
+    return this.roles$;
   }
 }

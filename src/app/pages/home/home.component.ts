@@ -19,7 +19,6 @@ export class HomeComponent {
     } else {
       this.isUser = false
     }
-    console.log(this.isUser);
 
 
   }

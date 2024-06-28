@@ -27,8 +27,8 @@
         <p *ngIf="quantityWarnings" class="text-danger">Imposta una quantità maggiore di 0 per aggiungere al carrello.</p>
       </div>
     </div>
-    <div *ngIf="!isUser">
-      <button (click)="deleteProduct()">DELETE</button>
+    <div *ngIf="isAdmin || isWarehouse">
+      <button *ngIf="isAdmin" (click)="deleteProduct()">DELETE</button>
       <div (click)="productAvailable = !productAvailable" class="checkbox">
         <i *ngIf="productAvailable" class="bi bi-check"></i>
         <i *ngIf="!productAvailable" class="bi bi-x"></i>
@@ -39,7 +39,7 @@
       >
         Salva disponibilità e torna alla lista prodotti
       </button>
-      <button *ngIf="!isUser" (click)="open(content)">Modifica prodotto</button>
+      <button *ngIf="isAdmin" (click)="open(content)">Modifica prodotto</button>
 
     </div>
   </div>
