@@ -28,7 +28,7 @@
             </a>
           </li>
           <li *ngIf="isUser">
-            <a routerLink="/profile" class="nav-link text-white">
+            <a [routerLink]="['/profile', userId]" class="nav-link text-white">
               Profilo
             </a>
           </li>

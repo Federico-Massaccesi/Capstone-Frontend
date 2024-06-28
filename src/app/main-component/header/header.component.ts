@@ -13,12 +13,15 @@ export class HeaderComponent {
   isAdmin: boolean = false;
   isWarehouse: boolean = false;
   isAuthenticated$: Observable<boolean>;
+  userId: number | null = null;
+
 
   constructor(private authSvc: AuthService) {
     this.isAuthenticated$ = this.authSvc.isAuthenticated();
   }
 
   ngOnInit(): void {
+    this.userId = this.authSvc.getUserId();
     this.authSvc.getUserRoles$().subscribe(roles => {
       this.isUser = roles.some(role => role.roleType === 'PRIVATE' || role.roleType === 'COMPANY');
       this.isAdmin = roles.some(role => role.roleType === 'ADMIN');
