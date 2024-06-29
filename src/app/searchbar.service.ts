@@ -26,6 +26,6 @@ export class SearchbarService {
   }
 
   searchUsers(query = ''): Observable<iUser[]> {
-    return this.http.get<iUser[]>(`${this.userUrl}?q=${query}`);
+    return this.http.get<iUser[]>(`${this.userUrl}/search?q=${query}`);
   }
 }

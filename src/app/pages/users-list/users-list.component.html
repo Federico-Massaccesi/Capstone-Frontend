@@ -1,10 +1,35 @@
 <div class="container">
-  <div class="row" *ngFor="let user of userList">
-    <p class="col-3">{{user.id}}</p>
-    <p class="col-3"*ngIf="hasRole(user.roles, 'COMPANY')">{{user.companyName}}</p>
-    <p class="col-3"*ngIf="!hasRole(user.roles, 'COMPANY')">{{user.username}}</p>
-    <p class="col-3"*ngIf="hasRole(user.roles, 'COMPANY') && user.pIVA">pIVA: {{user.pIVA}}</p>
-    <button type="button" class="button col-3" [routerLink]="['/user-details', user.id]">
-      Dettagli utente
-    </button>  </div>
+  <div class="row my-4">
+    <div class="col-12">
+      <input type="text" class="form-control" placeholder="Search..." (input)="updateSearchQuery($event)" />
+    </div>
+  </div>
+  <div class="row" *ngIf="searchQuery.length > 0">
+    <ng-container *ngIf="results.length > 0; else noResultsFound">
+      <div class="row" *ngFor="let user of results">
+        <p class="col-3">{{ user.id }}</p>
+        <p class="col-3" *ngIf="hasRole(user.roles, 'COMPANY')">{{ user.companyName }}</p>
+        <p class="col-3" *ngIf="!hasRole(user.roles, 'COMPANY')">{{ user.username }}</p>
+        <p class="col-3" *ngIf="hasRole(user.roles, 'COMPANY') && user.pIVA">pIVA: {{ user.pIVA }}</p>
+        <button type="button" class="button col-3" [routerLink]="['/user-details', user.id]">
+          Dettagli utente
+        </button>
+      </div>
+    </ng-container>
+    <ng-template #noResultsFound>
+      <h2>Nessun risultato trovato</h2>
+    </ng-template>
+  </div>
+  <div class="row" *ngIf="searchQuery.length === 0 && userList.length > 0">
+    <h2 class="my-5 text-center">I nostri utenti:</h2>
+    <div class="row" *ngFor="let user of userList">
+      <p class="col-3">{{ user.id }}</p>
+      <p class="col-3" *ngIf="hasRole(user.roles, 'COMPANY')">{{ user.companyName }}</p>
+      <p class="col-3" *ngIf="!hasRole(user.roles, 'COMPANY')">{{ user.username }}</p>
+      <p class="col-3" *ngIf="hasRole(user.roles, 'COMPANY') && user.pIVA">pIVA: {{ user.pIVA }}</p>
+      <button type="button" class="button col-3" [routerLink]="['/user-details', user.id]">
+        Dettagli utente
+      </button>
+    </div>
+  </div>
 </div>
