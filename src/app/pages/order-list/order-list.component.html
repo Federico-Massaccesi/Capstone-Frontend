@@ -20,7 +20,6 @@
           <h5 class="card-title">Customer: {{ order.client.username }}</h5>
           <p class="card-text">Total Price: {{ order.totalPrice | currency }}</p>
           <p class="card-text">Order Date: {{ order.localDate | date }}</p>
-          <p class="card-text">Completed: {{ order.completed }}</p>
           <ul class="list-group list-group-flush">
             <li class="list-group-item" *ngFor="let item of order.items">
               {{ item.product.name }} - Quantity: {{ item.quantity }}

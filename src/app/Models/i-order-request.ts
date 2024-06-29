@@ -4,4 +4,5 @@ export interface IOrderRequest {
   clientId: number;
   products: iCartItem[];
   totalPrice: number;
+  pending: boolean;
 }

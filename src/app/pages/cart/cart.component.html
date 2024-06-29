@@ -12,6 +12,11 @@
   <div class="total-price">
     <p>Total Price: {{ totalPrice | currency:'EUR' }}</p>
 
+    <div *ngIf="isCompanyUser">
+      <input type="checkbox" id="payLater" [(ngModel)]="payLater">
+      <label for="payLater">Vuoi pagare in futuro?</label>
+    </div>
+
     <button (click)="createOrder()">Conferma ordine</button>
   </div>
 </div>

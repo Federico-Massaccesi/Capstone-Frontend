@@ -4,6 +4,8 @@ import { iCartItem } from '../../Models/cart-item';
 import { Subscription } from 'rxjs';
 import { AuthService } from '../../auth/auth.service';
 import { IOrderRequest } from '../../Models/i-order-request';
+import { iRole } from '../../Models/iUser';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-cart',
@@ -15,16 +17,22 @@ export class CartComponent {
   cartList: iCartItem[] = []
   totalPrice: number = 0;
   private cartSubscription!: Subscription;
+  private userRoles: iRole[] | undefined;
+  isCompanyUser: boolean = false;
+  payLater: boolean = false;
 
-  constructor(private cartSvc: CartService,private authSvc: AuthService) { }
+
+  constructor(private cartSvc: CartService
+    ,private authSvc: AuthService,
+  private router:Router) { }
 
   ngOnInit(): void {
     this.cartSubscription = this.cartSvc.cart$.subscribe(cart => {
       this.cartList = cart;
-      console.log(this.cartList);
-
       this.updateTotalPrice();
-      console.log('Cart updated:', this.cartList);
+
+      this.userRoles = this.authSvc.getUserRole();
+    this.isCompanyUser = this.userRoles?.some(role => role.roleType === 'COMPANY') || false;
     });
   }
 
@@ -60,21 +68,31 @@ export class CartComponent {
   }
 
   createOrder(): void {
-  const clientId = this.authSvc.getUserId();
-  if (clientId === null) {
-    return;
-  }
-
-  const order: IOrderRequest = {
-    clientId: clientId,
-    products: this.cartList,
-    totalPrice: this.totalPrice
-  };
-
-  this.cartSvc.createOrder(order).subscribe({
-    next: (response) => {
-      this.cartSvc.cleanCart();
+    const clientId = this.authSvc.getUserId();
+    if (clientId === null) {
+      return;
     }
-  });
-}
+
+    if (this.userRoles?.some(role => role.roleType === 'PRIVATE')) {
+      this.router.navigate(['/payment'], { state: { clientId, cartList: this.cartList, totalPrice: this.totalPrice, pending: false } });
+    } else if (this.isCompanyUser) {
+      if (this.payLater) {
+        const order: IOrderRequest = {
+          clientId: clientId,
+          products: this.cartList,
+          totalPrice: this.totalPrice,
+          pending: true  // Imposta pending su true se l'utente ha selezionato "Vuoi pagare in futuro?"
+        };
+
+        this.cartSvc.createOrder(order).subscribe({
+          next: (response) => {
+            this.cartSvc.cleanCart();
+            this.router.navigate(['/home']); // Reindirizza alla home dopo aver creato l'ordine
+          }
+        });
+      } else {
+        this.router.navigate(['/payment'], { state: { clientId, cartList: this.cartList, totalPrice: this.totalPrice, pending: false } });
+      }
+    }
+  }
 }

@@ -1,11 +1,11 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { LandingComponent } from './main-component/landing/landing.component';
-import { AuthGuard } from './auth/auth.guard';
-import { AdminGuard } from './auth/admin.guard';
-import { GuestGuard } from './auth/guest.guard';
-import { AdminOrWarehouseGuard } from './auth/admin-or-warehouse.guard';
+import { GuestGuard } from './auth/guards/guest.guard';
 import { NotAuthorizedComponent } from './main-component/not-authorized/not-authorized.component';
+import { AuthGuard } from './auth/guards/auth.guard';
+import { AdminGuard } from './auth/guards/admin.guard';
+import { AdminOrWarehouseGuard } from './auth/guards/admin-or-warehouse.guard';
 
 const routes: Routes = [
   {
@@ -13,7 +13,6 @@ const routes: Routes = [
       loadChildren: () => import('./auth/auth.module')
       .then(m => m.AuthModule)
   },
-
   {
     path:'',
     component:LandingComponent
@@ -56,7 +55,13 @@ const routes: Routes = [
   { path: 'cart', loadChildren: () => import('./pages/cart/cart.module').then(m => m.CartModule),
     canActivate:[AuthGuard],
     canActivateChild: [AuthGuard]
-   }
+   },
+   {
+    path: 'cart/payment',
+    loadChildren: () => import('./pages/cart/cart.module').then(m => m.CartModule),
+    canActivate: [AuthGuard],
+    canActivateChild: [AuthGuard]
+  }
   ];
 
 @NgModule({

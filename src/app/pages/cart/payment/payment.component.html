@@ -1,0 +1,12 @@
+<div class="container">
+  <h2>Pagamento</h2>
+  <div *ngFor="let item of cartList">
+    <p>Product Name: {{ item.product.name }}</p>
+    <p>Quantity: {{ item.quantity }}</p>
+    <p>Price: {{ item.product.price | currency:'EUR' }}</p>
+  </div>
+  <div class="total-price">
+    <p>Total Price: {{ totalPrice | currency:'EUR' }}</p>
+    <button (click)="processPayment()">Paga Ora</button>
+  </div>
+</div>
