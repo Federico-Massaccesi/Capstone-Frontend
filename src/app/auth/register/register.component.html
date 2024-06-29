@@ -82,6 +82,10 @@
         <span
         class="ms-2">Sei un amministratore?</span>
       </div>
+      <div class="d-flex align-items-center mb-4">
+        <input type="checkbox" [(ngModel)]="registerData.newsletter" name="newsletter" />
+        <span class="ms-2">Iscriviti alla newsletter</span>
+      </div>
       <button (click)="signUpClient()" class="btn-center button">Registrati</button>
     </form>
   </div>

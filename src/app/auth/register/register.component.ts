@@ -10,7 +10,8 @@ import { iUser } from '../../Models/iUser';
 })
 export class RegisterComponent {
   registerData: Partial<iUser> = {
-    roles : []
+    roles : [],
+    newsletter: false
   }
   registerDataAdmin: Partial<iUser> = {
     roles : []

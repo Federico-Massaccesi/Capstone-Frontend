@@ -8,6 +8,7 @@ import { NgForm } from '@angular/forms';
 import { ICategory } from '../../Models/i-category';
 import { AuthService } from '../../auth/auth.service';
 import { IProductRequest } from '../../Models/iproduct-request';
+import { SearchbarService } from '../../searchbar.service';
 
 
 @Component({
@@ -39,10 +40,13 @@ export class ProductListComponent {
  products: IProduct[] = [];
  results: IProduct[] = [];
 
+ searchQuery: string = '';
+
   constructor(
-     public searchService: CRUDService,
+     public crudSvc: CRUDService,
      private http:HttpClient,
-     private authSvc: AuthService
+     private authSvc: AuthService,
+     private searchSvc: SearchbarService
     ) {}
 
     ngOnInit(): void {
@@ -52,23 +56,31 @@ export class ProductListComponent {
         this.isUser = false;
       }
 
-      this.searchService.getAllEntities(this.productUrl, 'product').subscribe(products => {
+      this.crudSvc.getAllEntities(this.productUrl, 'product').subscribe(products => {
+        console.log('Prodotti caricati:', products);
         this.products = products;
+        this.results = products;
       });
 
-      this.searchService.productItems$.subscribe((products) => {
+      this.crudSvc.productItems$.subscribe(products => {
+        console.log('Prodotti aggiornati:', products);
         this.products = products;
+        if (!this.searchQuery) {
+          this.results = products;
+        }
+      });
+
+      this.searchSvc.$currentSearchQuery.subscribe(query => {
+        this.searchQuery = query;
+        if (query) {
+          this.searchSvc.searchProducts(query).subscribe(data => {
+            this.results = data.length > 0 ? [...data] : [];
+          });
+        } else {
+          this.results = this.products;
+        }
       });
     }
-
-
-    //RIGHE PER BARRA DI RICERCA
-    // this.searchService.currentSearchQuery.subscribe(query => {
-    //   this.http.get<IProduct[]>(`${this.productUrl}?q=${query}`).subscribe(data => {
-    //     this.results = [...data];
-    //   });
-    // });
-
 
   private modalService = inject(NgbModal);
 
@@ -98,7 +110,7 @@ onSubmit(form: NgForm) {
       this.newProduct.available = this.availableCreate;
 
       if (this.selectedFile !== undefined && this.newProduct.name !== undefined) {
-        this.searchService.createProductWithImage(this.productUrl, this.newProduct, this.selectedFile).subscribe();
+        this.crudSvc.createProductWithImage(this.productUrl, this.newProduct, this.selectedFile).subscribe();
       }
     }
 
@@ -106,9 +118,17 @@ onSubmit(form: NgForm) {
     this.http.get<ICategory[]>(this.categoriesUrl).subscribe(
       (categories) => {
         this.allCategories = categories;
-        console.log('Categories loaded:', this.allCategories); // Log per debug
       }
     );
   }
 
+  get searchQuery$() {
+    return this.searchSvc.$currentSearchQuery;
+  }
+
+  updateSearchQuery(event: Event) {
+    const target = event.target as HTMLInputElement;
+    const query = target?.value ?? '';
+    this.searchSvc.changeSearchQuery(query);
+  }
 }

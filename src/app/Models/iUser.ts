@@ -20,6 +20,8 @@ id?: number;
   orders: IOrder[];
 
   roles: iRole[];
+
+  newsletter:boolean;
 }
 
 export interface iRole{
