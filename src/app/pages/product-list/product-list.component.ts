@@ -82,6 +82,10 @@ export class ProductListComponent {
       });
     }
 
+    ngOnDestroy(): void {
+      this.searchSvc.resetSearchQuery();
+    }
+
   private modalService = inject(NgbModal);
 
 	open(content: TemplateRef<any>) {

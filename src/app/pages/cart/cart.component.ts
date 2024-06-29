@@ -74,7 +74,7 @@ export class CartComponent {
     }
 
     if (this.userRoles?.some(role => role.roleType === 'PRIVATE')) {
-      this.router.navigate(['/payment'], { state: { clientId, cartList: this.cartList, totalPrice: this.totalPrice, pending: false } });
+      this.router.navigate(['/cart/payment'], { state: { clientId, cartList: this.cartList, totalPrice: this.totalPrice, pending: false } });
     } else if (this.isCompanyUser) {
       if (this.payLater) {
         const order: IOrderRequest = {
@@ -91,7 +91,7 @@ export class CartComponent {
           }
         });
       } else {
-        this.router.navigate(['/payment'], { state: { clientId, cartList: this.cartList, totalPrice: this.totalPrice, pending: false } });
+        this.router.navigate(['/cart/payment'], { state: { clientId, cartList: this.cartList, totalPrice: this.totalPrice, pending: false } });
       }
     }
   }

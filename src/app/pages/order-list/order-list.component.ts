@@ -38,6 +38,8 @@ export class OrderListComponent {
         }
       });
     });
+    console.log(this.orders$);
+
   }
 
   markAsChecked(orderId: number): void {

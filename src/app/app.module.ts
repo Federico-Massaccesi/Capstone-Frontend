@@ -13,7 +13,6 @@ import { AuthService } from './auth/auth.service';
 import { OrderCardComponent } from './main-component/order-card/order-card.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { NotAuthorizedComponent } from './main-component/not-authorized/not-authorized.component';
-import { PaymentComponent } from './pages/cart/payment/payment.component';
 import { FormsModule } from '@angular/forms';
 
 @NgModule({
@@ -23,8 +22,7 @@ import { FormsModule } from '@angular/forms';
     LandingComponent,
     ContactsComponent,
     OrderCardComponent,
-    NotAuthorizedComponent,
-    PaymentComponent,
+    NotAuthorizedComponent
   ],
   imports: [
     BrowserModule,

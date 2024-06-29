@@ -16,21 +16,15 @@ export class PaymentComponent {
   pending: boolean = false;
 
   constructor(
-    private route: ActivatedRoute,
     private cartSvc: CartService,
     private authSvc: AuthService,
     private router: Router
   ) { }
 
   ngOnInit(): void {
-    const navigation = this.router.getCurrentNavigation();
-    const state = navigation?.extras.state as { clientId: number, cartList: any[], totalPrice: number };
-
-    if (state) {
-      this.clientId = state.clientId;
-      this.cartList = state.cartList;
-      this.totalPrice = state.totalPrice;
-    }
+    this.clientId = this.authSvc.getUserId();
+    this.cartList = this.cartSvc.getCart();
+    this.totalPrice = this.cartSvc.getTotalPrice();
   }
 
   processPayment(): void {

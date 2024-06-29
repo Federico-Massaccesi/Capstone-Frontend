@@ -28,4 +28,8 @@ export class SearchbarService {
   searchUsers(query = ''): Observable<iUser[]> {
     return this.http.get<iUser[]>(`${this.userUrl}/search?q=${query}`);
   }
+
+  resetSearchQuery() {
+    this.searchQuery.next('');
+  }
 }
