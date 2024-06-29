@@ -3,6 +3,7 @@ import { iUser } from '../../Models/iUser';
 import { CRUDService } from '../../CRUD.service';
 import { environment } from '../../../environments/environment';
 import { SearchbarService } from '../../searchbar.service';
+import { AuthService } from '../../auth/auth.service';
 
 @Component({
   selector: 'app-users-list',
@@ -17,7 +18,8 @@ export class UsersListComponent {
 
   constructor(
     private userSvc: CRUDService,
-    private searchSvc: SearchbarService
+    private searchSvc: SearchbarService,
+    private authSvc: AuthService
   ) { }
 
   ngOnInit(): void {
@@ -52,7 +54,8 @@ export class UsersListComponent {
   }
 
   hasRole(roles: any[], roleType: string): boolean {
-    return roles.some(role => role.roleType === roleType);
+    const userRoles = this.authSvc.getUserRole();
+    return userRoles ? userRoles.some(role => role.roleType === roleType) : false;
   }
 
 }

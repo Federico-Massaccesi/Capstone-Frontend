@@ -5,6 +5,7 @@ import { IProduct,  } from './Models/i-product';
 import { IOrder } from './Models/i-order';
 import { IProductRequest } from './Models/iproduct-request';
 import { iUser } from './Models/iUser';
+import { environment } from '../environments/environment';
 
 @Injectable({
   providedIn: 'root'
@@ -29,14 +30,6 @@ export class CRUDService {
 
   }
 
-  //---------- CODICE PER BARRA DI RICERCA
-  // changeSearchQuery(query: string) {
-  //   this.searchQuery.next(query);
-  // }
-
-  // searchEntities(url:string,query = ''): Observable<T[]> {
-  //   return this.http.get<T[]>(`${url}?q=${query}`);
-  // }
 
   getAllEntities(url: string, type: 'product' | 'order' | 'user'): Observable<any[]> {
     return this.http.get<any[]>(url).pipe(
@@ -145,9 +138,19 @@ export class CRUDService {
   }
 
   patchOrderPending(url: string, id: number, pending: boolean): Observable<IOrder> {
-    return this.http.patch<IOrder>(`${url}/${id}/pending`, { pending }).pipe(
+    return this.http.patch<IOrder>(`${url}/${id}/completed`, { pending }).pipe(
       tap((updatedOrder) => {
         this.orderItems = this.orderItems.map(order => order.id === id ? updatedOrder : order);
+        this.orderItemsSubject.next(this.orderItems);
+      })
+    );
+  }
+
+  getUserOrders(userId: number): Observable<IOrder[]> {
+    const url = `${environment.ordersUrl}/${userId}/orders`;
+    return this.http.get<IOrder[]>(url).pipe(
+      tap((orders) => {
+        this.orderItems = orders;
         this.orderItemsSubject.next(this.orderItems);
       })
     );

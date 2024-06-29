@@ -10,6 +10,7 @@ export interface IOrder {
   pending: boolean;
   totalPrice: number;
   checked: boolean;
+  completed:boolean;
 }
 
 

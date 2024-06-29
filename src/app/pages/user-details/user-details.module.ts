@@ -4,6 +4,7 @@ import { CommonModule } from '@angular/common';
 import { UserDetailsRoutingModule } from './user-details-routing.module';
 import { UserDetailsComponent } from './user-details.component';
 import { ShareModuleModule } from '../../share-module/share-module.module';
+import { RouterModule } from '@angular/router';
 
 
 @NgModule({
@@ -13,7 +14,8 @@ import { ShareModuleModule } from '../../share-module/share-module.module';
   imports: [
     CommonModule,
     UserDetailsRoutingModule,
-    ShareModuleModule
+    ShareModuleModule,
+    RouterModule
   ]
 })
 export class UserDetailsModule { }

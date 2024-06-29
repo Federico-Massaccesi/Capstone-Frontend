@@ -16,6 +16,8 @@ export class OrderListComponent {
   orders$: Observable<IOrder[]> = this.crudService.orderItems$;
   filteredOrders$: BehaviorSubject<IOrder[]> = new BehaviorSubject<IOrder[]>([]);
   userRoles: iRole[] | undefined;
+  isAdmin: boolean = false;
+
 
   constructor(private crudService: CRUDService,
     private router :Router,
@@ -24,6 +26,7 @@ export class OrderListComponent {
 
   ngOnInit(): void {
     this.userRoles = this.authSvc.getUserRole();
+    this.isAdmin = this.userRoles?.some(role => role.roleType === 'ADMIN') || false;
 
     this.crudService.getAllEntities(environment.ordersUrl, 'order').subscribe(() => {
       this.orders$.subscribe(orders => {
