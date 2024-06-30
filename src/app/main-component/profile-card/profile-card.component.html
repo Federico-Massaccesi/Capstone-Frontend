@@ -19,7 +19,7 @@
                       <p *ngIf="isCompanyUser" class="text-muted text-start">
                         {{ user.companyName }}
                       </p>
-                      <p *ngIf="user.city && user.address">{{user.city}}, {{user.address}}</p>
+                      <p *ngIf="user.town && user.address">{{ user.town }}, {{ user.address }}</p>
                     </div>
                     <div class="col-6 mb-3" *ngIf="user">
                       <h6 class="text-start">Email</h6>
@@ -36,20 +36,31 @@
                       </div>
                     </div>
                     <div class="col-12 mb-3">
-                      <h6>Ordini:</h6>
-                      <hr class="mt-0 mb-4" />
-                      <button type="button" class="btn btn-outline-primary mt-2" (click)="isOrdersCollapsed = !isOrdersCollapsed" [attr.aria-expanded]="!isOrdersCollapsed" aria-controls="ordersCollapse">
-                        Visualizza Ordini
-                      </button>
-                      <div [ngbCollapse]="isOrdersCollapsed" class="mt-2" id="ordersCollapse">
-                        <div *ngFor="let order of orders" class="mb-3">
-                          <p>Data ordine: {{ order.localDate | date }}</p>
-                          <p>Stato: {{ order.pending ? 'In sospeso' : 'Completato' }}</p>
-                          <p>Totale: {{ order.totalPrice | currency }}</p>
-                          <a class="btn btn-primary mt-3" [routerLink]="['/order-details', order.id]">
-                            Dettagli ordine
-                          </a>
-                          <hr class="mt-0 mb-4" />
+                      <h6 *ngIf="orders.length == 0">L'utente non ha ancora effettuato nessun ordine</h6>
+                      <div *ngIf="orders.length > 0">
+                        <h6>Ordini:</h6>
+                        <hr class="mt-0 mb-4" />
+                        <button type="button" class="btn btn-outline-primary mt-2" (click)="isOrdersCollapsed = !isOrdersCollapsed" [attr.aria-expanded]="!isOrdersCollapsed" aria-controls="ordersCollapse">
+                          Visualizza Ordini
+                        </button>
+                        <div [ngbCollapse]="isOrdersCollapsed" class="mt-2" id="ordersCollapse">
+                          <div *ngFor="let order of orders" class="mb-3">
+                            <p>Data ordine: {{ order.localDate | date }}</p>
+                            <p>Stato: {{ order.pending ? 'In sospeso' : 'Completato' }}</p>
+                            <p>Totale: {{ order.totalPrice | currency }}</p>
+                            <div *ngIf="isAdmin">
+                              <a class="btn btn-primary mt-3" [routerLink]="['/order-details', order.id]">
+                                Dettagli ordine
+                              </a>
+                            </div>
+                            <div *ngIf="!isAdmin && order.pending">
+                              <button class="btn btn-warning mt-3" (click)="navigateToPayment(order.id!)">
+                                Paga Ora
+                              </button>
+                            </div>
+                            <i [ngClass]="getOrderStatusClass(order.localDate)" *ngIf="order.pending" class="bi bi-exclamation-triangle-fill"></i>
+                            <hr class="mt-2 mb-4" />
+                          </div>
                         </div>
                       </div>
                     </div>

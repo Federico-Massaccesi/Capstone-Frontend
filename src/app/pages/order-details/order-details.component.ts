@@ -43,7 +43,7 @@ export class OrderDetailsComponent {
     if (this.order) {
       if (this.isWarehouse && this.order.pending) {
         this.order.pending = false;
-        this.crudService.patchOrderPending(environment.ordersUrl, this.order.id!, false).subscribe(() => {
+        this.crudService.patchOrderCompleted(environment.ordersUrl, this.order.id!, false).subscribe(() => {
           //AGGIUNGERE EMAIL DI AVVISO ORDINE
           window.print();
           this.router.navigate(['/order-list']);

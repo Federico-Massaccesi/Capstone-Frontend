@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { ChangeDetectorRef, Component } from '@angular/core';
 import { AuthService } from '../../auth/auth.service';
 
 @Component({
@@ -8,19 +8,26 @@ import { AuthService } from '../../auth/auth.service';
 })
 export class HomeComponent {
 
-  isUser!:boolean;
+  isUser!: boolean;
+  userId!: number;
 
-  constructor(private authSvc : AuthService){
+  constructor(private authSvc: AuthService,private cdr: ChangeDetectorRef) { }
 
-    if (this.authSvc.getUserRole()?.some(role => role.roleType === 'PRIVATE' || role.roleType === 'COMPANY')) {
+  ngOnInit() {
+    this.checkUserRole();
+    this.userId = this.authSvc.getUserId()!;
+  }
 
-    this.isUser = true
-
+  //DA FIXARE LO USER NON VEDE IL TASTO PROFILO
+  checkUserRole() {
+    const userRole = this.authSvc.getUserRole();
+    if (userRole && userRole.some(role => role.roleType === 'PRIVATE' || role.roleType === 'COMPANY')) {
+      this.isUser = true;
     } else {
-      this.isUser = false
+      this.isUser = false;
     }
-
-
+    console.log(this.isUser);
+    this.cdr.detectChanges();
   }
 
 }

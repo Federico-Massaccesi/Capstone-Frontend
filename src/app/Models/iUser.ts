@@ -15,13 +15,15 @@ id?: number;
 
   address: string;
 
-  city: string;
+  town: string;
 
   orders: IOrder[];
 
   roles: iRole[];
 
   newsletter:boolean;
+
+  telephoneNumber:number;
 }
 
 export interface iRole{

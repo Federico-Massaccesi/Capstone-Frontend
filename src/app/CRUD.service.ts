@@ -137,8 +137,17 @@ export class CRUDService {
     );
   }
 
+  patchOrderCompleted(url: string, id: number, completed: boolean): Observable<IOrder> {
+    return this.http.patch<IOrder>(`${url}/${id}/completed`, { completed }).pipe(
+      tap((updatedOrder) => {
+        this.orderItems = this.orderItems.map(order => order.id === id ? updatedOrder : order);
+        this.orderItemsSubject.next(this.orderItems);
+      })
+    );
+  }
+
   patchOrderPending(url: string, id: number, pending: boolean): Observable<IOrder> {
-    return this.http.patch<IOrder>(`${url}/${id}/completed`, { pending }).pipe(
+    return this.http.patch<IOrder>(`${url}/${id}/pending`, { pending }).pipe(
       tap((updatedOrder) => {
         this.orderItems = this.orderItems.map(order => order.id === id ? updatedOrder : order);
         this.orderItemsSubject.next(this.orderItems);
@@ -155,4 +164,6 @@ export class CRUDService {
       })
     );
   }
+
+
 }
