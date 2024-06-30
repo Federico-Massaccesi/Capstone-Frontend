@@ -1,8 +1,9 @@
-<!-- home.component.html -->
-<a *ngIf="!isUser" routerLink="/userList">userList</a>
+<h1>Benvenuto {{ (user$ | async)?.username }}</h1>
+
+<a *ngIf="!(isUser$ | async)" routerLink="/userList">userList</a>
 <hr />
 <a routerLink="/productList">productList</a>
 <hr />
-<a *ngIf="!isUser" routerLink="/orderList">orderList</a>
+<a *ngIf="!(isUser$ | async)" routerLink="/orderList">orderList</a>
 <hr />
-<a *ngIf="isUser && isUser == true" [routerLink]="['/profile', userId]" class="nav-link text-white">Profilo</a>
+<a *ngIf="isUser$ | async" [routerLink]="['/profile', userId]" class="nav-link text-white">Profilo</a>

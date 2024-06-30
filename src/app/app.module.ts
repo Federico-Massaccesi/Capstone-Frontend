@@ -11,7 +11,7 @@ import { ContactsComponent } from './main-component/contacts/contacts.component'
 import { AuthInterceptor } from './auth.interceptor';
 import { AuthService } from './auth/auth.service';
 import { OrderCardComponent } from './main-component/order-card/order-card.component';
-import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { NgbCollapseModule, NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { NotAuthorizedComponent } from './main-component/not-authorized/not-authorized.component';
 import { FormsModule } from '@angular/forms';
 
@@ -30,7 +30,8 @@ import { FormsModule } from '@angular/forms';
     RouterModule,
     HttpClientModule,
     NgbModule,
-    FormsModule
+    FormsModule,
+    NgbCollapseModule
   ],
   providers: [
     AuthService,

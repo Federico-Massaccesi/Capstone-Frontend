@@ -57,7 +57,7 @@ const routes: Routes = [
     canActivateChild: [AuthGuard]
    },
    {
-    path: 'cart/payment',
+    path: 'cart',
     loadChildren: () => import('./pages/cart/cart.module').then(m => m.CartModule),
     canActivate: [AuthGuard],
     canActivateChild: [AuthGuard]

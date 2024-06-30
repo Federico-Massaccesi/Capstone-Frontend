@@ -17,6 +17,8 @@ id?: number;
 
   town: string;
 
+  CAP:number;
+
   orders: IOrder[];
 
   roles: iRole[];

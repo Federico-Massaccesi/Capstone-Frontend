@@ -116,6 +116,14 @@ export class AuthService {
     }
     return null;
   }
+  getUserInfo(): iUser | null {
+    const userJson = localStorage.getItem('accessData');
+    if (userJson) {
+      const accessData = JSON.parse(userJson);
+      return accessData
+    }
+    return null;
+  }
 
   isAuthenticated(): Observable<boolean> {
     return this.isLoggedIn$;
