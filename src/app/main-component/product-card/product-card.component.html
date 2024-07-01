@@ -10,7 +10,14 @@
     <div class="col-md-8">
       <div class="card-body">
         <h5 class="card-title">{{product.name}}</h5>
-        <p *ngFor="let item of product.categories" class="card-text">{{item.name}}</p>
+        <p class="text-truncate">{{product.description}}</p>
+        <p class="card-text">
+          {{ product.categories.length > 1 ? 'Categorie:' : 'Categoria:' }}
+        </p>
+        <ul>
+
+          <li *ngFor="let item of product.categories" class="card-text">{{item.name}}</li>
+        </ul>
         <h5 class="card-title">{{product.price}}</h5>
 
         <button type="button" class="button" [routerLink]="['/product-details', product.id]">
@@ -36,10 +43,4 @@
   </div>
 </div>
 
-<div>
-  <img [src]="product.imageURL" [alt]="product.name">
-  <div class="d-flex">
-    <p>{{product.name}}</p>
-<p class="text-truncate">{{product.description}}</p>
-  </div>
-</div>
+
