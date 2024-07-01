@@ -23,3 +23,22 @@
 <ng-template #emptyCart>
   <p>Your cart is empty.</p>
 </ng-template>
+
+<div class="d-flex">
+  <div *ngIf="cartList && cartList.length > 0; else emptyCart">
+    <div class="d-flex" *ngFor="let item of cartList">
+      <div>
+        <img [src]="item.product.imageURL" alt={{item.product.name}}>
+      </div>
+      <div class="flex-column">
+        <p>{{item.product.name}}</p>
+        <p>{{item.product.price}}</p>
+        <p>Quantità: {{item.quantity}}</p>
+        <p>Spesa totale per questo prodotto: {{item.product.price * item.quantity}}</p>
+      </div>
+    </div>
+  </div>
+  <div>
+    <p>Totale carrello: {{totalPrice}}</p>
+  </div>
+</div>

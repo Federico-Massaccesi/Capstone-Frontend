@@ -22,6 +22,7 @@ export class HeaderComponent {
 
   ngOnInit(): void {
     this.userId = this.authSvc.getUserId();
+
     this.authSvc.getUserRoles$().subscribe(roles => {
       this.isUser = roles.some(role => role.roleType === 'PRIVATE' || role.roleType === 'COMPANY');
       this.isAdmin = roles.some(role => role.roleType === 'ADMIN');

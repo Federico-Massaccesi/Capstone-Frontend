@@ -11,7 +11,7 @@
       <div class="card mb-3" [ngClass]="{'bg-danger': !order.completed, 'bg-success': order.completed}">
         <div class="card-header">
           Order #{{ order.id }}
-          <button *ngIf="isAdmin" class="btn btn-danger btn-sm float-right" (click)="deleteOrder(order.id!)">
+          <button *ngIf="isAdmin && order.checked == true && order.completed == true" class="btn btn-danger btn-sm float-right" (click)="deleteOrder(order.id!)">
             Delete
           </button>
           <p>{{order.checked}}</p>

@@ -151,7 +151,7 @@ private modalService = inject(NgbModal);
         name: this.editedProduct.name!,
         price: this.editedProduct.price!,
         description: this.editedProduct.description!,
-        imageUrl: this.editedProduct.imageUrl!,
+        imageURL: this.editedProduct.imageURL!,
         available: this.editedProduct.available!,
         categories: selectedCategories
       };

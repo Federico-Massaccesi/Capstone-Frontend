@@ -5,13 +5,12 @@
   }"class="card mb-3" style="max-width: 540px;">
   <div class="row g-0">
     <div class="col-md-4">
-      <img [src]="product.imageUrl" class="img-fluid rounded-start" alt="...">
+      <img [src]="product.imageURL" class="img-fluid rounded-start" alt={{product.name}}>
     </div>
     <div class="col-md-8">
       <div class="card-body">
         <h5 class="card-title">{{product.name}}</h5>
         <p *ngFor="let item of product.categories" class="card-text">{{item.name}}</p>
-        <h5 class="card-title">{{product.description}}</h5>
         <h5 class="card-title">{{product.price}}</h5>
 
         <button type="button" class="button" [routerLink]="['/product-details', product.id]">
@@ -34,5 +33,13 @@
         </div>
       </div>
     </div>
+  </div>
+</div>
+
+<div>
+  <img [src]="product.imageURL" [alt]="product.name">
+  <div class="d-flex">
+    <p>{{product.name}}</p>
+<p class="text-truncate">{{product.description}}</p>
   </div>
 </div>

@@ -6,7 +6,7 @@
   class="card"
   style="width: 18rem"
 >
-<img [src]="product?.imageUrl" class="card-img-top" alt="..." (error)="onImageError()" />
+<img [src]="product?.imageURL" class="card-img-top" alt="..." (error)="onImageError()" />
   <div class="card-body">
     <p class="card-text">{{ product?.name }}</p>
     <p class="card-text">{{ product?.description }}</p>
@@ -124,7 +124,7 @@
           />
         </div>
         <div class="mx-auto col-10">
-          <img [src]="editedProduct.imageUrl" class="img-thumbnail mt-2"
+          <img [src]="editedProduct.imageURL" class="img-thumbnail mt-2"
            alt="Product Image" style="max-height: 200px;">
         </div>
       </div>

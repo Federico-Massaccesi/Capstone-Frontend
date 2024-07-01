@@ -6,7 +6,7 @@ name: string,
 categories: ICategory[];
 price:number;
 description:string;
-imageUrl:string;
+imageURL:string;
 available:boolean;
 }
 

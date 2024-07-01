@@ -46,14 +46,14 @@
                         <div [ngbCollapse]="isOrdersCollapsed" class="mt-2" id="ordersCollapse">
                           <div *ngFor="let order of orders" class="mb-3">
                             <p>Data ordine: {{ order.localDate | date }}</p>
-                            <p>Stato: {{ order.pending ? 'In sospeso' : 'Completato' }}</p>
+                            <p *ngIf="order.pending == true">Stato: {{ order.pending ? 'In sospeso' : 'Completato' }}</p>
                             <p>Totale: {{ order.totalPrice | currency }}</p>
                             <div *ngIf="isAdmin">
                               <a class="btn btn-primary mt-3" [routerLink]="['/order-details', order.id]">
                                 Dettagli ordine
                               </a>
                             </div>
-                            <div *ngIf="!isAdmin && order.pending">
+                            <div *ngIf="isCompanyUser && order.pending">
                               <button class="btn btn-warning mt-3" (click)="navigateToPayment(order.id!)">
                                 Paga Ora
                               </button>

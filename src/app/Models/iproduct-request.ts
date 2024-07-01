@@ -3,6 +3,6 @@ export interface IProductRequest {
 categories: number[];
 price:number;
 description:string;
-imageUrl:string;
+imageURL:string;
 available:boolean;
 }

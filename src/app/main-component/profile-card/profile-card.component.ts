@@ -77,7 +77,7 @@ export class ProfileCardComponent {
     } else if (diffDays > 7) {
       return 'text-warning'; // giallo
     } else {
-      return ''; // nessuna classe aggiuntiva
+      return 'd-none'; // nessuna classe aggiuntiva
     }
   }
 
