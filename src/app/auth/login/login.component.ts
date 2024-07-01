@@ -21,7 +21,10 @@ export class LoginComponent {
     ){}
 
     signIn(){
-
+      this.submitted = true;
+      if (!this.loginData.username || !this.loginData.password) {
+        return;
+      }
       this.authSvc.login(this.loginData)
       .subscribe(data => {
         this.router.navigate(['/home'])

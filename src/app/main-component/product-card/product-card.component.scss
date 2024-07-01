@@ -1,0 +1,40 @@
+img{
+  width: 100%;
+  border-radius: 50%;
+  height: 100%;
+}
+
+.cardTitle{
+
+  font-size: 1.5rem;
+  font-weight: 700;
+}
+
+
+
+.button-confirm-order{
+  width: 80%;;
+}
+
+
+.card {
+  position: relative;
+}
+
+.availability-icon {
+  display: none; /* Nascondi l'icona di default */
+  position: absolute;
+  top: -35px;
+  right:-23px;
+  font-size: 50px;
+  font-weight: 900; /* Puoi modificare la dimensione dell'icona */
+  color: red; /* Colore dell'icona */
+}
+
+.card.available .availability-icon {
+  display: none; /* Nascondi l'icona se il prodotto è disponibile */
+}
+
+.card:not(.available) .availability-icon {
+  display: inline; /* Mostra l'icona se il prodotto non è disponibile */
+}

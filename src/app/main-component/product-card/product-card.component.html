@@ -1,46 +1,61 @@
 <div
-[ngClass]="{
-  'bg-warning': !product.available,
-   'bg-success': product.available
-  }"class="card mb-3" style="max-width: 540px;">
-  <div class="row g-0">
-    <div class="col-md-4">
-      <img [src]="product.imageURL" class="img-fluid rounded-start" alt={{product.name}}>
+  class="card mb-4"
+>
+  <div class="row">
+    <div class="col-12 col-md-4 px-4 mb-3">
+      <img class="my-3" [src]="product.imageURL" [alt]="product.name" />
     </div>
-    <div class="col-md-8">
+    <div class="h-50 col-md-8">
       <div class="card-body">
-        <h5 class="card-title">{{product.name}}</h5>
-        <p class="text-truncate">{{product.description}}</p>
-        <p class="card-text">
-          {{ product.categories.length > 1 ? 'Categorie:' : 'Categoria:' }}
-        </p>
-        <ul>
-
-          <li *ngFor="let item of product.categories" class="card-text">{{item.name}}</li>
-        </ul>
-        <h5 class="card-title">{{product.price}}</h5>
-
-        <button type="button" class="button" [routerLink]="['/product-details', product.id]">
-          Dettagli
-        </button>
-
-        <div *ngIf="isUser">
-          <i *ngIf="!showTooltip[product.id!]" (click)="toggleTooltip()" class="bi bi-bag-plus-fill"></i>
-          <div *ngIf="showTooltip[product.id!]">
-
+        <p class="cardTitle">{{ product.name }}</p>
+        <div class="d-flex flex-column align-items-end">
+          <p class="fs-1">{{ product.price | currency : "EUR" }}</p>
+          <div class="d-flex justify-content-evenly">
+            <button
+              type="button"
+              class="button"
+              [routerLink]="['/product-details', product.id]"
+            >
+              Dettagli
+            </button>
+            <div *ngIf="isUser">
+              <button
+                class="button"
+                *ngIf="!showTooltip[product.id!]"
+                (click)="toggleTooltip()"
+              >
+                <i class="bi bi-bag-plus-fill"></i>
+              </button>
+            </div>
+          </div>
+          <div class="row justify-content-center col-12" *ngIf="showTooltip[product.id!]">
             <label for="quantity">Quantità:</label>
             <div class="input-group mb-3">
-              <input type="number" [(ngModel)]="quantity" id="quantity" name="quantity" min="0" class="form-control" [value]="quantity">
-              <p *ngIf="quantityWarnings">Imposta una quantità maggiore di 0 per aggiungere al carrello.</p>
+              <input
+                type="number"
+                [(ngModel)]="quantity"
+                id="quantity"
+                name="quantity"
+                min="0"
+                class="form-control"
+                [value]="quantity"
+              />
+              <p *ngIf="quantityWarnings">
+                Imposta una quantità maggiore di 0 per aggiungere al carrello.
+              </p>
             </div>
-            <button (click)="addToCart()">Conferma ordine</button>
-            <button *ngIf="productInCart  && quantity >0" (click)="removeFromCart()">Rimuovi dal carrello</button>
-
+            <button class="align-self-center button button-confirm-order" (click)="addToCart()">Conferma ordine</button>
+            <button
+              *ngIf="productInCart && quantity > 0"
+              (click)="removeFromCart()"
+            >
+              Rimuovi dal carrello
+            </button>
           </div>
         </div>
       </div>
     </div>
   </div>
+  <i placement="start" ngbTooltip="Il prodotto tornerà presto disponibile"
+  class="bi bi-ban availability-icon" *ngIf="!product.available"></i>
 </div>
-
-
