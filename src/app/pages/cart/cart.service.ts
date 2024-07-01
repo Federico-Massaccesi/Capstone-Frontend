@@ -65,7 +65,7 @@ export class CartService {
 
   getTotalPrice(): number {
     return this.cart.reduce((total, item) => {
-      if (item.product && item.product.price) { // Aggiunto controllo per product e price
+      if (item.product && item.product.price) {
         return total + item.product.price * item.quantity;
       }
       return total;

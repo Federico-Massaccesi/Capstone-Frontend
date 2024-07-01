@@ -1,9 +1,10 @@
 <div class="container">
-  <div class="row my-4">
-    <div class="col-12">
-      <input type="text" class="form-control" placeholder="Search..." (input)="updateSearchQuery($event)" />
+    <div class="search-container mt-3">
+      <i class="bi bi-search" (click)="toggleSearchBar()"></i>
+      <div class="search-bar-container" [class.active]="isSearchBarActive">
+        <input type="text" class="search-bar mb-4" placeholder="Cerca..." (input)="updateSearchQuery($event)" />
+      </div>
     </div>
-  </div>
   <div class="row" *ngIf="searchQuery.length > 0">
     <ng-container *ngIf="results.length > 0; else noResultsFound">
       <h2>I tuoi risultati</h2>
@@ -16,8 +17,8 @@
     </ng-template>
   </div>
   <div class="row" *ngIf="searchQuery.length === 0 && products.length > 0">
-    <h2 class="my-5 text-center">I nostri prodotti:</h2>
-    <div *ngIf="!isUser" class="card mb-3" style="max-width: 540px;">
+    <h2 class="my-2 text-center">I nostri prodotti:</h2>
+    <div *ngIf="isAdmin" class="card mb-3" style="max-width: 540px;">
       <div class="row g-0">
         <div class="card-body">
           <a (click)="open(content)"><i class="bi bi-plus-circle"></i></a>

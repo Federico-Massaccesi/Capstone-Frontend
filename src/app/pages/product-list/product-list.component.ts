@@ -24,23 +24,28 @@ export class ProductListComponent {
     categories:[]
   }
 
+  isSearchBarActive: boolean = false;
+
+
   isUser:boolean = true;
+
+  isAdmin:boolean = false;
 
   categoriesUrl :string = environment.categoriesUrl;
 
   selectedCategoryIds: number[] = [];
   allCategories: ICategory[] = [];
 
- productUrl:string = environment.productsUrl
+  productUrl:string = environment.productsUrl
 
- availableCreate:boolean = false
+  availableCreate:boolean = false
 
- private selectedFile: File | undefined;
+  private selectedFile: File | undefined;
 
- products: IProduct[] = [];
- results: IProduct[] = [];
+  products: IProduct[] = [];
+  results: IProduct[] = [];
 
- searchQuery: string = '';
+  searchQuery: string = '';
 
   constructor(
      public crudSvc: CRUDService,
@@ -54,6 +59,11 @@ export class ProductListComponent {
         this.isUser = true;
       } else {
         this.isUser = false;
+      }
+      if (this.authSvc.getUserRole()?.some(role => role.roleType === 'ADMIN')) {
+        this.isAdmin = true;
+      } else {
+        this.isAdmin = false;
       }
 
       this.crudSvc.getAllEntities(this.productUrl, 'product').subscribe(products => {
@@ -105,8 +115,8 @@ export class ProductListComponent {
   }
 onSubmit(form: NgForm) {
   if (form.invalid) {
-      return;
-    }
+    return;
+  }
     }
 
     createProduct() {
@@ -134,5 +144,8 @@ onSubmit(form: NgForm) {
     const target = event.target as HTMLInputElement;
     const query = target?.value ?? '';
     this.searchSvc.changeSearchQuery(query);
+  }
+  toggleSearchBar() {
+    this.isSearchBarActive = !this.isSearchBarActive;
   }
 }

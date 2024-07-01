@@ -32,4 +32,8 @@ export class HeaderComponent {
   logout() {
     this.authSvc.logout();
   }
+
+  closeCollapse() {
+    this.isCollapsed = true;
+  }
 }
