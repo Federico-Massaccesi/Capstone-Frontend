@@ -206,7 +206,6 @@ private modalService = inject(NgbModal);
           this.productInCart = false;
           this.quantity = 0;
           this.storedQuantity = 0;
-          this.showTooltip[this.product.id!] = false;
           console.log('Product removed from cart:', this.product);
         }
       }

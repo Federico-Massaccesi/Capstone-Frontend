@@ -1,142 +1,193 @@
-<div
-  [ngClass]="{
-    'bg-warning': !productAvailable,
-    'bg-success': productAvailable
-  }"
-  class="card"
-  style="width: 18rem"
->
-<img [src]="product?.imageURL" class="card-img-top" alt="..." (error)="onImageError()" />
-  <div class="card-body">
-    <p class="card-text">{{ product?.name }}</p>
-    <p class="card-text">{{ product?.description }}</p>
-    <p class="card-text">{{ product?.price }}</p>
-    <p *ngFor="let item of product?.categories" class="card-text">
-      {{ item.name }}
-    </p>
+<div class="">
+  <img
+    [src]="product?.imageURL"
+    class="card-img-top"
+    alt="..."
+    (error)="onImageError()"
+  />
+  <div class="card-body mx-2">
+    <div class="text-center">
+      <p class="card-title fs-1 my-3">{{ product?.name }}</p>
+      <p class="card-text fs-5">{{ product?.description }}</p>
+    </div>
+    <div class="mx-3 mt-4 d-flex fs-5">
+      <div class="col-6">
+        <p>
+          {{ (product?.categories)!.length > 1 ? "Categorie:" : "Categoria:" }}
+        </p>
+        <p *ngFor="let item of product?.categories" class="card-text">
+          {{ item.name }}
+        </p>
+      </div>
+      <div class="col-6 d-flex flex-column align-items-end">
+        <p class="mt-4 card-text me-4 fs-1">{{ product?.price | currency:'EUR' }}</p>
+
+        <div *ngIf="isUser && product">
+          <button
+            class="button"
+            *ngIf="!showTooltip[product.id!]"
+            (click)="openCartCommands()"
+          >
+            <i class="bi bi-bag-plus-fill"></i>
+          </button>
+        </div>
+      </div>
+    </div>
     <div *ngIf="isUser && product">
-      <i *ngIf="!showTooltip[product.id!]" (click)="openCartCommands()" class="bi bi-bag-plus-fill"></i>
-      <div *ngIf="showTooltip[product.id!]">
+      <div class="mx-5 text-center" *ngIf="showTooltip[product.id!]">
         <label for="quantity">Quantità:</label>
-        <div class="input-group mb-3">
-          <input type="number" [(ngModel)]="quantity" id="quantity" name="quantity" min="0" class="form-control" (input)="checkQuantity()">
-        </div>
-        <button *ngIf="productInCart && quantity === storedQuantity" routerLink="/cart">Vai al carrello</button>
-        <button *ngIf="quantity !== storedQuantity && quantity > 0" (click)="addToCart(product!)">Conferma ordine</button>
-        <button *ngIf="productInCart && quantity === 1" (click)="removeFromCart()">Rimuovi dal carrello</button>
-        <p *ngIf="quantityWarnings" class="text-danger">Imposta una quantità maggiore di 0 per aggiungere al carrello.</p>
-      </div>
-    </div>
-    <div *ngIf="isAdmin || isWarehouse">
-      <button *ngIf="isAdmin" (click)="deleteProduct()">DELETE</button>
-      <div (click)="productAvailable = !productAvailable" class="checkbox">
-        <i *ngIf="productAvailable" class="bi bi-check"></i>
-        <i *ngIf="!productAvailable" class="bi bi-x"></i>
-      </div>
-      <button
-        *ngIf="productAvailable !== product?.available"
-        (click)="toggleAvailability(productAvailable)"
-      >
-        Salva disponibilità e torna alla lista prodotti
-      </button>
-      <button *ngIf="isAdmin" (click)="open(content)">Modifica prodotto</button>
-
-    </div>
-  </div>
-</div>
-
-<ng-template #content let-modal>
-  <div class="modal-header">
-    <h4 class="modal-title" id="modal-basic-title">Modifica prodotto</h4>
-    <button
-      type="button"
-      class="btn-close"
-      aria-label="Close"
-      (click)="modal.dismiss('Cross click')"
-    ></button>
-  </div>
-  <div class="modal-body">
-    <form #productForm="ngForm" (ngSubmit)="onSubmit(productForm)">
-      <div class="input-group row">
-        <div class="mx-auto col-10">
-          <input
-            type="text"
-            required
-            name="name"
-            class="form-control rounded-5"
-            id="name"
-            [(ngModel)]="editedProduct.name"
-            placeholder="Nome del prodotto"
-            [value]="editedProduct.name"
-          />
-        </div>
-        <div class="mx-auto col-10">
+        <div class="input-group">
           <input
             type="number"
-            required
-            name="price"
-            class="form-control rounded-5"
-            id="price"
-            [(ngModel)]="editedProduct.price"
-            placeholder="Prezzo"
-            [value]="editedProduct.price"
+            [(ngModel)]="quantity"
+            id="quantity"
+            name="quantity"
+            min="0"
+            class="form-control my-3"
+            (input)="checkQuantity()"
           />
         </div>
-        <div class="mx-auto col-10">
-          <input
-            type="text"
-            required
-            name="description"
-            class="form-control rounded-5"
-            id="description"
-            [(ngModel)]="editedProduct.description"
-            placeholder="Descrizione"
-            [value]="editedProduct.description"
-          />
-        </div>
-        <div class="mx-auto col-10">
-          <label for="categories">Seleziona le categorie:</label>
-          <select
-            id="categories"
-            name="categories"
-            class="form-select rounded-5"
-            multiple
-            required
-            [(ngModel)]="selectedCategoryIds"
-            #categories="ngModel"
+        <button
+        class="button"
+          *ngIf="productInCart && quantity === storedQuantity"
+          routerLink="/cart"
+        >
+          Vai al carrello
+        </button>
+        <button
+          class="button col-7"
+          *ngIf="quantity !== storedQuantity && quantity > 0"
+          (click)="addToCart(product!)"
+        >
+          Conferma ordine
+        </button>
+        <button
+        class="button"
+          *ngIf="productInCart && quantity === 1"
+          (click)="removeFromCart()"
+        >
+          Rimuovi dal carrello
+        </button>
+        <p *ngIf="quantityWarnings" class="text-danger">
+          Imposta una quantità maggiore di 0 per aggiungere al carrello.
+        </p>
+        <div *ngIf="isAdmin || isWarehouse">
+          <button class="button" *ngIf="isAdmin" (click)="deleteProduct()">DELETE</button>
+          <div (click)="productAvailable = !productAvailable" class="checkbox">
+            <i *ngIf="productAvailable" class="bi bi-check"></i>
+            <i *ngIf="!productAvailable" class="bi bi-x"></i>
+          </div>
+          <button
+            *ngIf="productAvailable !== product?.available"
+            (click)="toggleAvailability(productAvailable)"
           >
-            <option
-              *ngFor="let category of allCategories"
-              [ngValue]="category.id"
-            >
-              {{ category.name }}
-            </option>
-          </select>
-        </div>
-        <div class="mx-auto col-10">
-          <input
-            type="file"
-            name="file"
-            class="form-control rounded-5"
-            id="file"
-            (change)="onFileSelected($event)"
-            accept="image/*"
-          />
-        </div>
-        <div class="mx-auto col-10">
-          <img [src]="editedProduct.imageURL" class="img-thumbnail mt-2"
-           alt="Product Image" style="max-height: 200px;">
+            Salva disponibilità e torna alla lista prodotti
+          </button>
+          <button class="button" *ngIf="isAdmin" (click)="open(content)">
+            Modifica prodotto
+          </button>
         </div>
       </div>
-    </form>
+    </div>
   </div>
-  <div class="modal-footer">
-    <button
-      type="button"
-      class="btn btn-outline-secondary"
-      (click)="updateProduct(modal)"
-    >
-      Save
-    </button>
-  </div>
-</ng-template>
+
+  <ng-template #content let-modal>
+    <div class="modal-header">
+      <h4 class="modal-title" id="modal-basic-title">Modifica prodotto</h4>
+      <button
+        type="button"
+        class="btn-close"
+        aria-label="Close"
+        (click)="modal.dismiss('Cross click')"
+      ></button>
+    </div>
+    <div class="modal-body">
+      <form #productForm="ngForm" (ngSubmit)="onSubmit(productForm)">
+        <div class="input-group row">
+          <div class="mx-auto col-10">
+            <input
+              type="text"
+              required
+              name="name"
+              class="form-control rounded-5"
+              id="name"
+              [(ngModel)]="editedProduct.name"
+              placeholder="Nome del prodotto"
+              [value]="editedProduct.name"
+            />
+          </div>
+          <div class="mx-auto col-10">
+            <input
+              type="number"
+              required
+              name="price"
+              class="form-control rounded-5"
+              id="price"
+              [(ngModel)]="editedProduct.price"
+              placeholder="Prezzo"
+              [value]="editedProduct.price"
+            />
+          </div>
+          <div class="mx-auto col-10">
+            <input
+              type="text"
+              required
+              name="description"
+              class="form-control rounded-5"
+              id="description"
+              [(ngModel)]="editedProduct.description"
+              placeholder="Descrizione"
+              [value]="editedProduct.description"
+            />
+          </div>
+          <div class="mx-auto col-10">
+            <label for="categories">Seleziona le categorie:</label>
+            <select
+              id="categories"
+              name="categories"
+              class="form-select rounded-5"
+              multiple
+              required
+              [(ngModel)]="selectedCategoryIds"
+              #categories="ngModel"
+            >
+              <option
+                *ngFor="let category of allCategories"
+                [ngValue]="category.id"
+              >
+                {{ category.name }}
+              </option>
+            </select>
+          </div>
+          <div class="mx-auto col-10">
+            <input
+              type="file"
+              name="file"
+              class="form-control rounded-5"
+              id="file"
+              (change)="onFileSelected($event)"
+              accept="image/*"
+            />
+          </div>
+          <div class="mx-auto col-10">
+            <img
+              [src]="editedProduct.imageURL"
+              class="img-thumbnail mt-2"
+              alt="Product Image"
+              style="max-height: 200px"
+            />
+          </div>
+        </div>
+      </form>
+    </div>
+    <div class="modal-footer">
+      <button
+        type="button"
+        class="btn btn-outline-secondary"
+        (click)="updateProduct(modal)"
+      >
+        Save
+      </button>
+    </div>
+  </ng-template>
+</div>

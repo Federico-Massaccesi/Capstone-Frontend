@@ -1,7 +1,8 @@
+import { CRUDService } from './../../CRUD.service';
 import { Component } from '@angular/core';
 import { CartService } from './cart.service';
 import { iCartItem } from '../../Models/cart-item';
-import { Subscription } from 'rxjs';
+import { Subscription, pipe, tap } from 'rxjs';
 import { AuthService } from '../../auth/auth.service';
 import { IOrderRequest } from '../../Models/i-order-request';
 import { iRole } from '../../Models/iUser';
@@ -17,14 +18,17 @@ export class CartComponent {
   cartList: iCartItem[] = []
   totalPrice: number = 0;
   private cartSubscription!: Subscription;
+  private productSubscription!: Subscription;
   private userRoles: iRole[] | undefined;
   isCompanyUser: boolean = false;
   payLater: boolean = false;
+  missingProductIds: (number|undefined)[] = [];
 
 
   constructor(private cartSvc: CartService
     ,private authSvc: AuthService,
-  private router:Router) { }
+  private router:Router,
+private crudSvc: CRUDService) { }
 
   ngOnInit(): void {
     this.cartSubscription = this.cartSvc.cart$.subscribe(cart => {
@@ -33,6 +37,11 @@ export class CartComponent {
 
       this.userRoles = this.authSvc.getUserRole();
     this.isCompanyUser = this.userRoles?.some(role => role.roleType === 'COMPANY') || false;
+    this.checkMissingProducts();
+    });
+
+    this.productSubscription = this.crudSvc.productItems$.subscribe(() => {
+      this.checkMissingProducts();
     });
   }
 
@@ -40,6 +49,18 @@ export class CartComponent {
     if (this.cartSubscription) {
       this.cartSubscription.unsubscribe();
     }
+    if (this.productSubscription) {
+      this.productSubscription.unsubscribe();
+    }
+  }
+
+  checkMissingProducts(): void {
+    this.crudSvc.productItems$.subscribe(productItems => {
+      const productIds = productItems.map(product => product.id).filter((id): id is number => id !== undefined);
+      this.missingProductIds = this.cartList
+        .map(item => item.product.id)
+        .filter(id => id !== undefined && !productIds.includes(id));
+    });
   }
 
   updateTotalPrice(): void {
@@ -81,13 +102,13 @@ export class CartComponent {
           clientId: clientId,
           products: this.cartList,
           totalPrice: this.totalPrice,
-          pending: true  // Imposta pending su true se l'utente ha selezionato "Vuoi pagare in futuro?"
+          pending: true
         };
 
         this.cartSvc.createOrder(order).subscribe({
           next: (response) => {
             this.cartSvc.cleanCart();
-            this.router.navigate(['/home']); // Reindirizza alla home dopo aver creato l'ordine
+            this.router.navigate(['/home']);
           }
         });
       } else {

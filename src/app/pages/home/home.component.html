@@ -1,4 +1,4 @@
-<h1>Benvenuto {{ (user$ | async)?.username }}</h1>
+<h1>Benvenuto {{ userName$ | async }}</h1>
 
 <a *ngIf="!(isUser$ | async)" routerLink="/userList">userList</a>
 <hr />

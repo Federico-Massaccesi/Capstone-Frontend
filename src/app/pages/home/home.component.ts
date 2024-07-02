@@ -10,18 +10,26 @@ import { BehaviorSubject } from 'rxjs';
 })
 export class HomeComponent {
 
+  userId: number | undefined;
+  userName$ = new BehaviorSubject<string | null>(null);
   isUser$ = new BehaviorSubject<boolean>(false);
-  user$ = new BehaviorSubject<iUser | null>(null);
-  userId!: number | null;
 
-  constructor(private authSvc: AuthService,private cdr: ChangeDetectorRef) { }
+  constructor(private authSvc: AuthService, private cdr: ChangeDetectorRef) {}
 
   ngOnInit() {
-    this.userId = this.authSvc.getUserId();
-    this.user$.next(this.authSvc.getUserInfo());
+    this.authSvc.user$.subscribe(userInfo => {
+      if (userInfo) {
+        this.userId = userInfo.id;
+        this.userName$.next(userInfo.username);
+        this.isUser$.next(true);
+      } else {
+        this.userName$.next(null);
+        this.isUser$.next(false);
+      }
+      this.cdr.detectChanges();
+    });
     this.checkUserRole();
   }
-
   //DA FIXARE LO USER NON VEDE IL TASTO PROFILO
   checkUserRole() {
     const roles = this.authSvc.getUserRole();
