@@ -19,7 +19,7 @@
       <div class="d-flex justify-content-center p-0">
         <ul class="toggle d-flex justify-content-around list-unstyled col-12  mt-4">
           <li *ngIf="isUser || isAdmin || isWarehouse" class="col-2">
-            <a routerLink="/home" class="nav-link text-secondary">Home</a>
+            <a routerLink="/home" class="nav-link text-white">Home</a>
           </li>
           <li *ngIf="!isUser && (isAuthenticated$ | async)" class="col-2">
             <a routerLink="/orderList" class="nav-link text-white">Orders</a>
@@ -41,7 +41,7 @@
           </li>
         </ul>
       </div>
-      <div class="row justify-content-center">
+      <div class="row justify-content-center text-black">
         <button type="button" (click)="logout(); closeCollapse()" class="button  col-6" *ngIf="isAuthenticated$ | async" (click)="closeCollapse()">Logout</button>
         <button type="button" routerLink="/auth/login" class="button col-6 mx-4" *ngIf="!(isAuthenticated$ | async)" (click)="closeCollapse()">Login</button>
         <button type="button" routerLink="/auth/register" class="button col-6" *ngIf="!(isAuthenticated$ | async)" (click)="closeCollapse()">Register</button>

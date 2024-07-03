@@ -6,5 +6,5 @@ export const environment = {
   productsUrl :'http://localhost:8080/api/products',
   ordersUrl:'http://localhost:8080/api/orders',
   categoriesUrl:'http://localhost:8080/categories',
-  usersUrl: 'http://localhost:8080/users'
+  usersUrl: 'http://localhost:8080/users',
 };

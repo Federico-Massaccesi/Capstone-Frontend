@@ -47,6 +47,9 @@ export class ProductListComponent {
 
   searchQuery: string = '';
 
+  descriptionError: boolean = false;
+
+
   constructor(
      public crudSvc: CRUDService,
      private http:HttpClient,
@@ -67,13 +70,11 @@ export class ProductListComponent {
       }
 
       this.crudSvc.getAllEntities(this.productUrl, 'product').subscribe(products => {
-        console.log('Prodotti caricati:', products);
         this.products = products;
         this.results = products;
       });
 
       this.crudSvc.productItems$.subscribe(products => {
-        console.log('Prodotti aggiornati:', products);
         this.products = products;
         if (!this.searchQuery) {
           this.results = products;
@@ -108,6 +109,10 @@ export class ProductListComponent {
     );
   }
 
+  onDescriptionInput(event: any) {
+    const description = event.target.value;
+    this.descriptionError = description.length > 255;
+  }
 
   onFileSelected(event: any) {
     const file: File = event.target.files[0];
@@ -120,6 +125,11 @@ onSubmit(form: NgForm) {
     }
 
     createProduct() {
+      if (this.newProduct.description && this.newProduct.description.length > 255) {
+        this.descriptionError = true;
+        return;
+      }
+
       this.newProduct.categories = this.selectedCategoryIds;
       this.newProduct.available = this.availableCreate;
 

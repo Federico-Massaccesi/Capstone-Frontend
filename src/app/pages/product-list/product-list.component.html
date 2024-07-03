@@ -24,10 +24,10 @@
       <h2>Nessun risultato trovato</h2>
     </ng-template>
   </div>
-  <div class="row" *ngIf="searchQuery.length === 0">
+  <div class="row justify-content-center" *ngIf="searchQuery.length === 0">
     <h2 class="my-2 text-center">I nostri prodotti:</h2>
-      <div *ngIf="isAdmin" class="row text-center col-12">
-        <a class="col-12" (click)="open(content)"><i class="bi bi-plus-circle"></i></a>
+      <div *ngIf="isAdmin" class="row text-center my-4 fs-5 justify-content-center col-12 text-black">
+        <button class="col-3 rounded-circle" (click)="open(content)"><i class="bi bi-plus-circle"></i></button>
       </div>
     <div class="col-md-6 col-lg-3" *ngFor="let prod of products">
       <app-product-card [product]="prod" [isUser]="isUser"></app-product-card>
@@ -88,7 +88,11 @@
               [(ngModel)]="newProduct.description"
               placeholder="Descrizione. Max 255 caratteri"
               rows="4"
+              (input)="onDescriptionInput($event)"
             ></textarea>
+            <p *ngIf="descriptionError" class="text-danger mt-2">
+              Descrizione. Max 255 caratteri
+            </p>
           </div>
         </div>
         <div class="mx-auto col-10  mb-3">
@@ -137,8 +141,12 @@
       type="button"
       class="button"
       (click)="modal.close('Save click')"
+      [disabled]="descriptionError"
     >
-      Save
+    <ng-container *ngIf="descriptionError; else saveText">
+      <i class="bi bi-ban"></i>
+    </ng-container>
+    <ng-template #saveText>Save</ng-template>
     </button>
   </div>
 </ng-template>

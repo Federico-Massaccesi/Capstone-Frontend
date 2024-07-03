@@ -1,0 +1,38 @@
+#payLater {
+  opacity: 0;
+  position: absolute;
+  width: 0;
+  height: 0;
+}
+
+.custom-checkbox {
+  display: inline-block;
+  width: 25px; /* Regola questa dimensione per ingrandire */
+  height: 25px; /* Regola questa dimensione per ingrandire */
+  background-color: white;
+  border: 2px solid #e6dc5b;
+  border-radius: 3px;
+  position: relative;
+  cursor: pointer;
+}
+
+.custom-checkbox::after {
+  content: '';
+  position: absolute;
+  display: none;
+  left: 7px;
+  top: 3px;
+  width: 6px;
+  height: 12px;
+  border: solid white;
+  border-width: 0 3px 3px 0;
+  transform: rotate(45deg);
+}
+
+#payLater:checked + .custom-checkbox::after {
+  display: block;
+}
+
+.custom-checkbox:hover {
+  background-color: #e6dc5b;
+}

@@ -85,7 +85,7 @@ export class AuthService {
 
     const userJson = localStorage.getItem('accessData');
     if (!userJson){
-      console.error('No access data found');
+      console.log('No access data found');
       return undefined
     }else{
       const accessData: AccessData = JSON.parse(userJson);

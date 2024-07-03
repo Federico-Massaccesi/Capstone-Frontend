@@ -11,7 +11,7 @@
       <p class="card-text fs-5">{{ product?.description }}</p>
     </div>
     <div class="mx-3 mt-4 d-flex fs-5">
-      <div class="col-6">
+      <div class="col-6 mt-3 mb-5">
         <p>
           {{ (product?.categories)!.length > 1 ? "Categorie:" : "Categoria:" }}
         </p>
@@ -20,12 +20,14 @@
         </p>
       </div>
       <div class="col-6 d-flex flex-column align-items-end">
-        <p class="mt-4 card-text me-4 fs-1">{{ product?.price | currency:'EUR' }}</p>
+        <p class="mt-4 card-text me-4 fs-1">
+          {{ product?.price | currency : "EUR" }}
+        </p>
 
         <div *ngIf="isUser && product">
           <button
-            class="button"
-            *ngIf="!showTooltip[product.id!]"
+            class="button mb-4"
+            *ngIf="!showTooltip[product.id!] && product.available"
             (click)="openCartCommands()"
           >
             <i class="bi bi-bag-plus-fill"></i>
@@ -48,21 +50,21 @@
           />
         </div>
         <button
-        class="button"
+          class="button"
           *ngIf="productInCart && quantity === storedQuantity"
           routerLink="/cart"
         >
           Vai al carrello
         </button>
         <button
-          class="button col-7"
+          class="button col-7 mb-4"
           *ngIf="quantity !== storedQuantity && quantity > 0"
           (click)="addToCart(product!)"
         >
           Conferma ordine
         </button>
         <button
-        class="button"
+          class="button"
           *ngIf="productInCart && quantity === 1"
           (click)="removeFromCart()"
         >
@@ -71,23 +73,26 @@
         <p *ngIf="quantityWarnings" class="text-danger">
           Imposta una quantità maggiore di 0 per aggiungere al carrello.
         </p>
-        <div *ngIf="isAdmin || isWarehouse">
-          <button class="button" *ngIf="isAdmin" (click)="deleteProduct()">DELETE</button>
-          <div (click)="productAvailable = !productAvailable" class="checkbox">
-            <i *ngIf="productAvailable" class="bi bi-check"></i>
-            <i *ngIf="!productAvailable" class="bi bi-x"></i>
-          </div>
-          <button
-            *ngIf="productAvailable !== product?.available"
-            (click)="toggleAvailability(productAvailable)"
-          >
-            Salva disponibilità e torna alla lista prodotti
-          </button>
-          <button class="button" *ngIf="isAdmin" (click)="open(content)">
-            Modifica prodotto
-          </button>
-        </div>
       </div>
+    </div>
+    <div class="row text-center flex-column align-items-center" *ngIf="isAdmin || isWarehouse">
+      <div (click)="productAvailable = !productAvailable" class="fs-3 row justify-content-center checkbox col-7 mb-3">
+        <i *ngIf="productAvailable" class="bi bi-check"></i>
+        <i *ngIf="!productAvailable" class="bi bi-x"></i>
+      </div>
+      <button
+      class="button col-11 mb-3"
+      *ngIf="productAvailable !== product?.available"
+      (click)="toggleAvailability(productAvailable)"
+      >
+      Salva disponibilità e torna alla lista prodotti
+    </button>
+      <button class="button col-5 mb-3" *ngIf="isAdmin" (click)="deleteProduct()">
+        DELETE
+      </button>
+    <button class="button col-6 mb-3" *ngIf="isAdmin" (click)="open(content)">
+      Modifica prodotto
+    </button>
     </div>
   </div>
 

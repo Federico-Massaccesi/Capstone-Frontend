@@ -21,7 +21,7 @@
             <div *ngIf="isUser">
               <button
                 class="button"
-                *ngIf="!showTooltip[product.id!]"
+                *ngIf="!showTooltip[product.id!] && product.available"
                 (click)="toggleTooltip()"
               >
                 <i class="bi bi-bag-plus-fill"></i>
@@ -44,10 +44,11 @@
                 Imposta una quantità maggiore di 0 per aggiungere al carrello.
               </p>
             </div>
-            <button class="align-self-center button button-confirm-order" (click)="addToCart()">Conferma ordine</button>
+            <button class="align-self-center button col-12" (click)="addToCart()">Conferma quantità nel carrello</button>
             <button
               *ngIf="productInCart && quantity > 0"
               (click)="removeFromCart()"
+              class="button mt-3 col-10"
             >
               Rimuovi dal carrello
             </button>

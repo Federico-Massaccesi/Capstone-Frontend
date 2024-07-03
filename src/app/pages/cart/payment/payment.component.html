@@ -1,12 +1,7 @@
-<div class="container">
-  <h2>Pagamento</h2>
-  <div *ngFor="let item of cartList">
-    <p>Product Name: {{ item.product.name }}</p>
-    <p>Quantity: {{ item.quantity }}</p>
-    <p>Price: {{ item.product.price | currency:'EUR' }}</p>
-  </div>
+<div class=" mt-4 row justify-content-center text-center">
+  <p class="fs-1">Pagamento</p>
   <div class="total-price">
-    <p>Total Price: {{ totalPrice | currency:'EUR' }}</p>
-    <button (click)="processPayment()">Paga Ora</button>
+    <p class="fs-3">Total Price: {{ totalPrice | currency:'EUR' }}</p>
+    <button class="button" (click)="processPayment()">Paga Ora</button>
   </div>
 </div>

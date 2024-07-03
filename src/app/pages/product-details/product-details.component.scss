@@ -61,10 +61,15 @@ input:checked + .slider:before {
 
 .checkbox{
   background-color: white;
-  width: 20px;
-  height: 20px;
+  width: 30px;
+  height: 30px;
   border: solid 1px #000;
+  border-radius: 50%;
   position: relative;
 }
 
-
+.checkbox i {
+  position: absolute;
+  right: 9px;
+  top: -2px;
+}

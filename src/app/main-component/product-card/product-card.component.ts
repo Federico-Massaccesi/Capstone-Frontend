@@ -23,13 +23,10 @@ export class ProductCardComponent {
   private cartSubscription!: Subscription;
 
   ngOnInit(): void {
-    console.log('Product:', this.product);
 
     if (!this.product || this.product.id === undefined) {
-      console.error('Product is not defined or ID is undefined');
       return;
     }
-    console.log('Product Image URL:', this.product.imageURL);
 
     this.cartSubscription = this.cartSvc.cart$.subscribe(cart => {
       const cartItem = cart.find(item => item.product.id === this.product.id);
