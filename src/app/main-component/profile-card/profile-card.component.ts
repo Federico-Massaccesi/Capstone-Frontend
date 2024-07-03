@@ -29,8 +29,11 @@ export class ProfileCardComponent {
       this.checkRoles();
       this.loadOrders();
       this.isAdmin = this.authSvc.getUserRole()!.some(role => role.roleType === 'ADMIN'); // Verifica se l'utente è admin
-
     }
+    console.log(this.user);
+
+    console.log(this.isCompanyUser);
+
   }
 
   ngOnChanges(changes: SimpleChanges) {

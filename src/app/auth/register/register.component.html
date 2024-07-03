@@ -47,6 +47,13 @@
           class="form-control my-4 rounded-5 w-100"
           placeholder="CAP"
         />
+        <input
+          type="number"
+          name="telephoneNumber"
+          [(ngModel)]="registerData.telephoneNumber"
+          class="form-control my-4 rounded-5 w-100"
+          placeholder="Numero di cellulare"
+        />
       <!-- Campi visibili solo se la checkbox è spuntata -->
       <input
         *ngIf="privateOrCompany"

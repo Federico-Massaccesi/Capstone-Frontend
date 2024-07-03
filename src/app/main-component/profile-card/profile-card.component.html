@@ -6,26 +6,30 @@
           <div class="card mb-3 rounded-5">
             <div class="row g-0">
               <div>
-                <div class="card-body p-4 text-left">
-                  <h6>Informazioni:</h6>
+                <div class="card-body p-4">
+                  <h6>Il tuo profilo:</h6>
                   <hr class="mt-0 mb-4" />
-                  <div class="row pt-1">
-                    <div class="col-6 mb-3" *ngIf="user">
-                      <h6 *ngIf="isPrivateUser" class="text-start">Username:</h6>
-                      <h6 *ngIf="isCompanyUser" class="text-start">Nome azienda:</h6>
-                      <p *ngIf="isPrivateUser" class="text-muted text-start">
+                  <div class="row pt-1 text-center">
+                    <div class="mb-3" *ngIf="user">
+                      <h6 class="col-12" *ngIf="isPrivateUser">Username:</h6>
+                      <h6 *ngIf="isCompanyUser" class="col-12">
+                        Nome azienda:
+                      </h6>
+                      <p *ngIf="isPrivateUser" class="text-muted">
                         {{ user.username }}
                       </p>
-                      <p *ngIf="isCompanyUser" class="text-muted text-start">
+                      <p *ngIf="isCompanyUser" class="text-muted">
                         {{ user.companyName }}
                       </p>
-                      <p *ngIf="user.town && user.address">{{ user.town }}, {{ user.address }}</p>
+                      <p *ngIf="user.town && user.address">
+                        {{ user.town }}, {{ user.address }}
+                      </p>
                     </div>
-                    <div class="col-6 mb-3" *ngIf="user">
-                      <h6 class="text-start">Email</h6>
-                      <p class="text-muted text-start">{{ user.email }}</p>
+                    <div class="col-12 mb-3" *ngIf="user">
+                      <h6 class="col-12">Email</h6>
+                      <p class="text-muted">{{ user.email }}</p>
                     </div>
-                    <div class="col-12 mb-3" *ngIf="isCompanyUser && user.pIVA">
+                    <div class="col-12 mb-3" *ngIf="isCompanyUser">
                       <h6>Dati Aziendali:</h6>
                       <hr class="mt-0 mb-4" />
                       <div class="row pt-1">
@@ -36,29 +40,54 @@
                       </div>
                     </div>
                     <div class="col-12 mb-3">
-                      <h6 *ngIf="orders.length == 0">L'utente non ha ancora effettuato nessun ordine</h6>
+                      <h6 *ngIf="orders.length == 0">
+                        Nessun ordine effettuato
+                      </h6>
                       <div *ngIf="orders.length > 0">
                         <h6>Ordini:</h6>
                         <hr class="mt-0 mb-4" />
-                        <button type="button" class="btn btn-outline-primary mt-2" (click)="isOrdersCollapsed = !isOrdersCollapsed" [attr.aria-expanded]="!isOrdersCollapsed" aria-controls="ordersCollapse">
+                        <button
+                          type="button"
+                          class="button mt-2 col-10"
+                          (click)="isOrdersCollapsed = !isOrdersCollapsed"
+                          [attr.aria-expanded]="!isOrdersCollapsed"
+                          aria-controls="ordersCollapse"
+                        >
                           Visualizza Ordini
                         </button>
-                        <div [ngbCollapse]="isOrdersCollapsed" class="mt-2" id="ordersCollapse">
+                        <div
+                          [ngbCollapse]="isOrdersCollapsed"
+                          class="mt-2"
+                          id="ordersCollapse"
+                        >
                           <div *ngFor="let order of orders" class="mb-3">
                             <p>Data ordine: {{ order.localDate | date }}</p>
-                            <p *ngIf="order.pending == true">Stato: {{ order.pending ? 'In sospeso' : 'Completato' }}</p>
+                            <p *ngIf="order.pending == true">
+                              Stato:
+                              {{ order.pending ? "In sospeso" : "Completato" }}
+                            </p>
                             <p>Totale: {{ order.totalPrice | currency }}</p>
                             <div *ngIf="isAdmin">
-                              <a class="btn btn-primary mt-3" [routerLink]="['/order-details', order.id]">
+                              <a
+                                class="btn btn-primary mt-3"
+                                [routerLink]="['/order-details', order.id]"
+                              >
                                 Dettagli ordine
                               </a>
                             </div>
                             <div *ngIf="isCompanyUser && order.pending">
-                              <button class="btn btn-warning mt-3" (click)="navigateToPayment(order.id!)">
+                              <button
+                                class="btn btn-warning mt-3"
+                                (click)="navigateToPayment(order.id!)"
+                              >
                                 Paga Ora
                               </button>
                             </div>
-                            <i [ngClass]="getOrderStatusClass(order.localDate)" *ngIf="order.pending" class="bi bi-exclamation-triangle-fill"></i>
+                            <i
+                              [ngClass]="getOrderStatusClass(order.localDate)"
+                              *ngIf="order.pending"
+                              class="bi bi-exclamation-triangle-fill"
+                            ></i>
                             <hr class="mt-2 mb-4" />
                           </div>
                         </div>
