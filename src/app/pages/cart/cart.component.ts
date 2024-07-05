@@ -7,6 +7,7 @@ import { AuthService } from '../../auth/auth.service';
 import { IOrderRequest } from '../../Models/i-order-request';
 import { iRole } from '../../Models/iUser';
 import { Router } from '@angular/router';
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-cart',
@@ -57,6 +58,9 @@ private crudSvc: CRUDService) { }
   checkMissingProducts(): void {
     this.crudSvc.productItems$.subscribe(productItems => {
       const productIds = productItems.map(product => product.id).filter((id): id is number => id !== undefined);
+      if(productIds.length == 0){
+        this.crudSvc.getAllEntities(environment.productsUrl,'product').subscribe()
+      }
       this.missingProductIds = this.cartList
         .map(item => item.product.id)
         .filter(id => id !== undefined && !productIds.includes(id));

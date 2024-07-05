@@ -7,8 +7,8 @@
 
 .custom-checkbox {
   display: inline-block;
-  width: 25px; /* Regola questa dimensione per ingrandire */
-  height: 25px; /* Regola questa dimensione per ingrandire */
+  width: 25px;
+  height: 25px;
   background-color: white;
   border: 2px solid #e6dc5b;
   border-radius: 3px;
@@ -27,6 +27,10 @@
   border: solid white;
   border-width: 0 3px 3px 0;
   transform: rotate(45deg);
+}
+
+#payLater:checked + .custom-checkbox {
+  background-color: #e6dc5b;
 }
 
 #payLater:checked + .custom-checkbox::after {

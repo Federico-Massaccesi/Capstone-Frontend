@@ -15,40 +15,28 @@ export class ProfileCardComponent {
   @Input() user!: iUser;
   orders: IOrder[] = [];
   isOrdersCollapsed = true;
-  isAdmin: boolean = false;
+  @Input() isAdmin!: boolean;
+  @Input() isPrivateUser!: boolean;
+  @Input() isCompanyUser!: boolean;
 
-
-  isPrivateUser: boolean = false;
-  isCompanyUser: boolean = false;
-
-  constructor(private crudSvc: CRUDService, private authSvc: AuthService,private router: Router){}
+  constructor(private crudSvc: CRUDService,
+    private authSvc: AuthService,
+    private router: Router){}
 
   ngOnInit() {
+    console.log('ciao');
+
     if (this.user) {
       console.log('ngOnInit user:', this.user);
-      this.checkRoles();
       this.loadOrders();
-      this.isAdmin = this.authSvc.getUserRole()!.some(role => role.roleType === 'ADMIN'); // Verifica se l'utente è admin
     }
-    console.log(this.user);
-
-    console.log(this.isCompanyUser);
-
   }
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes['user'] && changes['user'].currentValue) {
       console.log('ngOnChanges user:', changes['user'].currentValue);
-      this.checkRoles();
       this.loadOrders();
 
-    }
-  }
-
-  checkRoles() {
-    if (this.user && this.user.roles) {
-      this.isPrivateUser = this.user.roles.some(role => role.roleType === 'PRIVATE');
-      this.isCompanyUser = this.user.roles.some(role => role.roleType === 'COMPANY');
     }
   }
 
@@ -86,5 +74,9 @@ export class ProfileCardComponent {
 
   navigateToPayment(orderId: number): void {
     this.router.navigate(['/cart/payment'], { queryParams: { orderId: orderId } });
+  }
+
+  checkUserRole(roleType: string): boolean {
+    return this.user?.roles?.some(role => role.roleType === roleType) || false;
   }
 }
