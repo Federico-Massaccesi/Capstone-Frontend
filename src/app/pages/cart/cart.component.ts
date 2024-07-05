@@ -98,6 +98,11 @@ private crudSvc: CRUDService) { }
       return;
     }
 
+    if (this.cartList.length === 0) {
+      console.error('Cart is empty. Cannot create order.');
+      return;
+  }
+
     if (this.userRoles?.some(role => role.roleType === 'PRIVATE')) {
       this.router.navigate(['/cart/payment'], { state: { clientId, cartList: this.cartList, totalPrice: this.totalPrice, pending: false } });
     } else if (this.isCompanyUser) {

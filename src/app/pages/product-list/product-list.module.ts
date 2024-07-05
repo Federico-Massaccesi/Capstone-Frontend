@@ -16,7 +16,7 @@ import { NgbTooltipModule } from '@ng-bootstrap/ng-bootstrap';
     CommonModule,
     ProductListRoutingModule,
     FormsModule,
-    NgbTooltipModule
+    NgbTooltipModule,
   ]
 })
 export class ProductListModule { }

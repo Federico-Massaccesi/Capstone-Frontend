@@ -15,7 +15,8 @@ export class OrderDetailsComponent {
   isCollapsed = true;
   isWarehouse: boolean = false;
   isAdmin: boolean = false;
-
+  checkedItems: boolean[] = [];
+  showError: boolean = false;
 
 
   constructor(
@@ -35,21 +36,36 @@ export class OrderDetailsComponent {
       const idNumber = Number(orderId);
       this.crudService.getOneEntity(environment.ordersUrl, idNumber, 'order').subscribe((order: IOrder) => {
         this.order = order;
+        this.checkedItems = this.order.items.map(() => false);
       });
     }
   }
 
+  toggleCheckbox(index: number): void {
+    this.checkedItems[index] = !this.checkedItems[index];
+  }
+
+  allItemsChecked(): boolean {
+    return this.checkedItems.every(item => item);
+  }
+
   printOrder(): void {
     if (this.order) {
-      if (this.isWarehouse && this.order.pending) {
-        this.order.pending = false;
-        this.crudService.patchOrderCompleted(environment.ordersUrl, this.order.id!, false).subscribe(() => {
-          //AGGIUNGERE EMAIL DI AVVISO ORDINE
-          window.print();
-          this.router.navigate(['/order-list']);
-        });
+      if (this.isWarehouse && !this.order.completed) {
+        if (this.allItemsChecked()) {
+          this.order.completed = true;
+          this.crudService.patchOrderCompleted(environment.ordersUrl, this.order.id!, true).subscribe(() => {
+            // AGGIUNGERE EMAIL DI AVVISO ORDINE
+            window.print();
+            this.router.navigate(['/order-list']);
+          });
+          this.showError = false;
+        } else {
+          this.showError = true;
+        }
       } else {
         window.print();
+        this.showError = false;
       }
     }
   }

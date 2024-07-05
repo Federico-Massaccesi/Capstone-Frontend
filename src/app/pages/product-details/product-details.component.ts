@@ -54,6 +54,8 @@ export class ProductDetailsComponent implements OnInit {
 
   private cartSubscription!: Subscription;
 
+  descriptionError: boolean = false;
+
   constructor(
   private route: ActivatedRoute,
   private router: Router,
@@ -95,12 +97,18 @@ ngOnInit(): void {
       });
     });
   }
+  this.fetchCategories();
 }
 
 ngOnDestroy(): void {
   if (this.cartSubscription) {
     this.cartSubscription.unsubscribe();
   }
+}
+
+onDescriptionInput(event: any) {
+  const description = event.target.value;
+  this.descriptionError = description.length > 255;
 }
 
 deleteProduct(): void {
@@ -242,5 +250,7 @@ private modalService = inject(NgbModal);
         console.error('L\'immagine non può essere caricata.');
       }
 
-
+      openVerticallyCentered(content: TemplateRef<any>) {
+        this.modalService.open(content, { centered: true });
+      }
     }

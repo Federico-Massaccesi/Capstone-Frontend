@@ -73,3 +73,8 @@ input:checked + .slider:before {
   right: 9px;
   top: -2px;
 }
+
+textarea::-webkit-scrollbar {
+  width: 0px;
+  background: transparent;
+}

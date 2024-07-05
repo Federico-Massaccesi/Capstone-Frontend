@@ -75,28 +75,57 @@
         </p>
       </div>
     </div>
-    <div class="row text-center flex-column align-items-center" *ngIf="isAdmin || isWarehouse">
-      <div (click)="productAvailable = !productAvailable" class="fs-3 row justify-content-center checkbox col-7 mb-3">
+    <div
+      class="row text-center flex-column align-items-center"
+      *ngIf="isAdmin || isWarehouse"
+    >
+      <div
+        (click)="productAvailable = !productAvailable"
+        class="fs-3 row justify-content-center checkbox col-7 mb-3"
+      >
         <i *ngIf="productAvailable" class="bi bi-check"></i>
         <i *ngIf="!productAvailable" class="bi bi-x"></i>
       </div>
       <button
-      class="button col-11 mb-3"
-      *ngIf="productAvailable !== product?.available"
-      (click)="toggleAvailability(productAvailable)"
+        class="button col-11 mb-3"
+        *ngIf="productAvailable !== product?.available"
+        (click)="toggleAvailability(productAvailable)"
       >
-      Salva disponibilità e torna alla lista prodotti
-    </button>
-      <button class="button col-5 mb-3" *ngIf="isAdmin" (click)="deleteProduct()">
-        DELETE
+        Salva disponibilità e torna alla lista prodotti
       </button>
-    <button class="button col-6 mb-3" *ngIf="isAdmin" (click)="open(content)">
-      Modifica prodotto
-    </button>
+      <button
+        class="button col-4 mb-3"
+        (click)="openVerticallyCentered(deleteContent )"
+      >
+        ELIMINA
+      </button>
+      <ng-template #deleteContent  let-modal>
+        <div class="modal-header">
+          <h4 class="modal-title">ATTENZIONE</h4>
+          <button
+            type="button"
+            class="btn-close"
+            aria-label="Close"
+            (click)="modal.dismiss('Cross click')"
+          ></button>
+        </div>
+        <div class="modal-body">
+          <p>Sei sicuro di voler eliminare il prodotto? </p>
+        </div>
+        <div class="modal-footer row justify-content-center">
+          <button class="button col-8 mb-3" (click)="deleteProduct()">
+            CONFERMA ELIMINAZIONE
+          </button>
+        </div>
+      </ng-template>
+
+      <button class="button col-6 mb-3" *ngIf="isAdmin" (click)="open(modifyContent)">
+        Modifica prodotto
+      </button>
     </div>
   </div>
 
-  <ng-template #content let-modal>
+  <ng-template #modifyContent let-modal>
     <div class="modal-header">
       <h4 class="modal-title" id="modal-basic-title">Modifica prodotto</h4>
       <button
@@ -133,17 +162,21 @@
               [value]="editedProduct.price"
             />
           </div>
-          <div class="mx-auto col-10">
-            <input
-              type="text"
+          <div class="mx-auto col-10 mb-3">
+            <label for="description">Descrizione:</label>
+            <textarea
               required
               name="description"
               class="form-control rounded-5"
               id="description"
               [(ngModel)]="editedProduct.description"
-              placeholder="Descrizione"
-              [value]="editedProduct.description"
-            />
+              placeholder="Descrizione. Max 255 caratteri"
+              rows="4"
+              (input)="onDescriptionInput($event)"
+            ></textarea>
+            <p *ngIf="descriptionError" class="text-danger mt-2">
+              Descrizione. Max 255 caratteri
+            </p>
           </div>
           <div class="mx-auto col-10">
             <label for="categories">Seleziona le categorie:</label>
@@ -188,10 +221,14 @@
     <div class="modal-footer">
       <button
         type="button"
-        class="btn btn-outline-secondary"
+        class="button"
         (click)="updateProduct(modal)"
+        [disabled]="descriptionError"
       >
-        Save
+        <ng-container *ngIf="descriptionError; else saveText">
+          <i class="bi bi-ban"></i>
+        </ng-container>
+        <ng-template #saveText>Save</ng-template>
       </button>
     </div>
   </ng-template>
