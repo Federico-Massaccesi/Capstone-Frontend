@@ -17,6 +17,8 @@ export class OrderListComponent {
   filteredOrders$: BehaviorSubject<IOrder[]> = new BehaviorSubject<IOrder[]>([]);
   userRoles: iRole[] | undefined;
   isAdmin: boolean = false;
+  currentFilter: string = 'all';
+
 
 
   constructor(private crudService: CRUDService,
@@ -51,6 +53,8 @@ export class OrderListComponent {
   }
 
   setFilter(filter: string): void {
+    this.currentFilter = filter;
+
     this.orders$.pipe(
       map(orders => {
         switch (filter) {
