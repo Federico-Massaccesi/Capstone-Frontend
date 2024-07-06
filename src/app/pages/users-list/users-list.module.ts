@@ -4,6 +4,7 @@ import { CommonModule } from '@angular/common';
 import { UsersListRoutingModule } from './users-list-routing.module';
 import { UsersListComponent } from './users-list.component';
 import { RouterModule } from '@angular/router';
+import { NgbTooltip } from '@ng-bootstrap/ng-bootstrap';
 
 
 @NgModule({
@@ -13,7 +14,8 @@ import { RouterModule } from '@angular/router';
   imports: [
     CommonModule,
     UsersListRoutingModule,
-    RouterModule
+    RouterModule,
+    NgbTooltip
     ]
 })
 export class UsersListModule { }

@@ -4,6 +4,7 @@ import { CRUDService } from '../../CRUD.service';
 import { environment } from '../../../environments/environment';
 import { SearchbarService } from '../../searchbar.service';
 import { AuthService } from '../../auth/auth.service';
+import { IOrder } from '../../Models/i-order';
 
 @Component({
   selector: 'app-users-list',
@@ -15,6 +16,7 @@ export class UsersListComponent {
   results!: iUser[];
   searchQuery: string = '';
   userUrl: string = environment.usersUrl;
+  orders: IOrder[] = [];
 
   constructor(
     private userSvc: CRUDService,
@@ -25,13 +27,14 @@ export class UsersListComponent {
   ngOnInit(): void {
     this.userSvc.getAllEntities(this.userUrl, 'user').subscribe((users: iUser[]) => {
       this.userList = users;
-      this.results = users; // Mostra tutti gli utenti all'inizio
+      this.results = users;
+      this.fetchAllOrders();
     });
 
     this.userSvc.userItems$.subscribe((users: iUser[]) => {
       this.userList = users;
       if (!this.searchQuery) {
-        this.results = users; // Mostra tutti gli utenti all'inizio
+        this.results = users;
       }
     });
 
@@ -42,7 +45,7 @@ export class UsersListComponent {
           this.results = data.length > 0 ? [...data] : [];
         });
       } else {
-        this.results = this.userList; // Resetta i risultati di ricerca quando la barra di ricerca è vuota
+        this.results = this.userList;
       }
     });
   }
@@ -53,9 +56,17 @@ export class UsersListComponent {
     this.searchSvc.changeSearchQuery(query);
   }
 
-  hasRole(roles: any[], roleType: string): boolean {
-    const userRoles = this.authSvc.getUserRole();
-    return userRoles ? userRoles.some(role => role.roleType === roleType) : false;
+  hasRole(user: iUser, role: string): boolean {
+    return user.roles.some(r => r.roleType === role);
   }
 
+  hasPendingOrders(user: iUser): boolean {
+    return this.orders.filter(order => order.client.id === user.id && order.pending).length > 3;
+  }
+
+  private fetchAllOrders() {
+    this.userSvc.getAllEntities(environment.ordersUrl, 'order').subscribe((orders: IOrder[]) => {
+      this.orders = orders;
+    });
+  }
 }
