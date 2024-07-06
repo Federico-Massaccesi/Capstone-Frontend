@@ -14,7 +14,7 @@ export class HeaderComponent {
   isWarehouse: boolean = false;
   isAuthenticated$: Observable<boolean>;
   userId: number | null = null;
-  isCollapsed = false;
+  isCollapsed = true;
 
   constructor(private authSvc: AuthService) {
     this.isAuthenticated$ = this.authSvc.isAuthenticated();
