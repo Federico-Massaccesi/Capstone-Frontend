@@ -1,14 +1,14 @@
 <header>
-  <div class="row justify-content-center">
+  <div class="row h-50 justify-content-center">
     <img
-      class="col-4 justify-content-start"
+      class="col-4 img-fluid header-image justify-content-start"
       src="https://t3.ftcdn.net/jpg/04/03/00/68/360_F_403006870_h8lU4z0wxIi93XSW2tKaaeFODuCF4ugb.jpg"
     />
   </div>
   <div class="row justify-content-center">
     <button
       type="button"
-      class="btn text-white mb-2"
+      class="btn text-white mb-2 p-0"
       (click)="collapse.toggle()"
       [attr.aria-expanded]="!isCollapsed"
       aria-controls="collapseExample"
@@ -16,22 +16,22 @@
       Visualizza pagine
     </button>
     <div class="collapse row mb-4" #collapse="ngbCollapse" [(ngbCollapse)]="isCollapsed">
-      <div class="d-flex justify-content-center p-0">
+      <div class="d-flex justify-content-center p-0 px-sm-5 mb-3">
         <ul class="toggle d-flex justify-content-around list-unstyled col-12  mt-4">
-          <li *ngIf="isUser || isAdmin || isWarehouse" class="col-2">
+          <li *ngIf="isUser || isAdmin || isWarehouse" class="col-2 col-sm-1">
             <a routerLink="/home" class="nav-link text-white">Home</a>
           </li>
-          <li *ngIf="!isUser && (isAuthenticated$ | async)" class="col-2">
-            <a routerLink="/orderList" class="nav-link text-white">Orders</a>
+          <li *ngIf="!isUser && (isAuthenticated$ | async)" class="col-2 col-sm-1">
+            <a routerLink="/orderList" class="nav-link text-white">Ordini</a>
           </li>
-          <li *ngIf="isUser || isAdmin || isWarehouse" class="col-2">
+          <li *ngIf="isUser || isAdmin || isWarehouse" class="col-2 col-sm-1">
             <a routerLink="/productList" class="nav-link text-white">
-              Products
+              Prodotti
             </a>
           </li>
-          <li *ngIf="isAdmin" class="col-2">
+          <li *ngIf="isAdmin" class="col-2 col-sm-1">
             <a routerLink="/userList" class="nav-link text-white">
-              Customers
+              Utenti
             </a>
           </li>
           <li *ngIf="isUser" class="col-2">
@@ -42,9 +42,9 @@
         </ul>
       </div>
       <div class="row justify-content-center text-black">
-        <button type="button" (click)="logout(); closeCollapse()" class="button  col-6" *ngIf="isAuthenticated$ | async" (click)="closeCollapse()">Logout</button>
-        <button type="button" routerLink="/auth/login" class="button col-6 mx-4" *ngIf="!(isAuthenticated$ | async)" (click)="closeCollapse()">Login</button>
-        <button type="button" routerLink="/auth/register" class="button col-6" *ngIf="!(isAuthenticated$ | async)" (click)="closeCollapse()">Register</button>
+        <button type="button" (click)="logout(); closeCollapse()" class="button  col-6 col-sm-2 col-md-1" *ngIf="isAuthenticated$ | async" (click)="closeCollapse()">Logout</button>
+        <button type="button" routerLink="/auth/login" class="button col-4 col-sm-2 col-md-1 mx-4" *ngIf="!(isAuthenticated$ | async)" (click)="closeCollapse()">Login</button>
+        <button type="button" routerLink="/auth/register" class="button col-4 col-sm-2 col-md-1" *ngIf="!(isAuthenticated$ | async)" (click)="closeCollapse()">Register</button>
         <button *ngIf="isUser && (isAuthenticated$ | async)" type="button" routerLink="/cart" class="button ms-3 col-6">
           <i class="bi bi-cart-check"></i>
         </button>

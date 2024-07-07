@@ -71,13 +71,13 @@
                               {{ order.pending ? "In sospeso" : "Completato" }}
                             </p>
                             <p>Totale: {{ order.totalPrice | currency }}</p>
-                            <div *ngIf="isAdmin">
-                              <a
-                                class="button mt-3"
+                            <div *ngIf="isAdmin" class="row justify-content-center">
+                              <button
+                                class="button mt-3 col-9"
                                 [routerLink]="['/order-details', order.id]"
                               >
                                 Dettagli ordine
-                              </a>
+                              </button>
                             </div>
                             <div *ngIf="isCompanyUser && order.pending">
                               <button
