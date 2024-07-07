@@ -103,10 +103,12 @@ input[type="number"]::-webkit-inner-spin-button {
   border-radius: 0;
 }
 
-textarea {
-  overflow-y: hidden; /* Nasconde la barra di scorrimento verticale */
+textarea::-webkit-scrollbar {
+  width: 0px;
+  background: transparent;
 }
 
 .bi-plus-circle{
   font-size: 3rem;
 }
+

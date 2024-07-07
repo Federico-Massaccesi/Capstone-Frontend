@@ -40,6 +40,8 @@ export class ProductDetailsComponent implements OnInit {
 
   pageProductID!:number
 
+  showConfirmButton: boolean = false;
+
   private selectedFile: File | undefined;
 
   productInCart!: boolean;
@@ -117,6 +119,10 @@ deleteProduct(): void {
       this.router.navigate(['/productList']);
     });
   }
+}
+
+toggleProductAvailable(): void {
+  this.showConfirmButton = true;
 }
 
 toggleAvailability(checked: boolean): void {

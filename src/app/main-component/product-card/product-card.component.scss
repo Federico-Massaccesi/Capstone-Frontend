@@ -1,7 +1,23 @@
-img{
+.product-image {
   width: 100%;
-  border-radius: 50%;
   height: 100%;
+  object-fit: cover;
+  border-radius: 50%;
+}
+
+.image-container {
+  height: 250px; /* dimensione fissa per il contenitore dell'immagine */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+  padding-top: 20px;
+}
+
+@media (max-width: 375px) {
+  .image-container {
+    height: 200px
+  }
 }
 
 .cardTitle{
@@ -17,19 +33,19 @@ img{
 }
 
 .availability-icon {
-  display: none; /* Nascondi l'icona di default */
+  display: none;
   position: absolute;
   top: -35px;
   right:-23px;
   font-size: 50px;
-  font-weight: 900; /* Puoi modificare la dimensione dell'icona */
-  color: red; /* Colore dell'icona */
+  font-weight: 900;
+  color: red;
 }
 
 .card.available .availability-icon {
-  display: none; /* Nascondi l'icona se il prodotto è disponibile */
+  display: none;
 }
 
 .card:not(.available) .availability-icon {
-  display: inline; /* Mostra l'icona se il prodotto non è disponibile */
+  display: inline;
 }

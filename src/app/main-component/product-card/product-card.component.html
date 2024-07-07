@@ -1,14 +1,14 @@
 <div
   class="card mb-4"
 >
-  <div class="row">
-    <div class="col-12 col-md-4 px-4 mb-3">
-      <img class="my-3" [src]="product.imageURL" [alt]="product.name" />
+  <div class="row ">
+    <div class="col-12 px-4 image-container">
+      <img class="product-image" [src]="product.imageURL" [alt]="product.name" />
     </div>
-    <div class="h-50 col-md-8">
+    <div class="row">
       <div class="card-body">
-        <p class="cardTitle">{{ product.name }}</p>
-        <div class="d-flex flex-column align-items-end">
+        <p class="cardTitle text-truncate">{{ product.name }}</p>
+        <div class="d-flex flex-column align-items-end text-end">
           <p class="fs-1">{{ product.price | currency : "EUR" }}</p>
           <div class="d-flex justify-content-evenly">
             <button
@@ -44,7 +44,7 @@
                 Imposta una quantità maggiore di 0 per aggiungere al carrello.
               </p>
             </div>
-            <button class="align-self-center button col-12" (click)="addToCart()">Conferma quantità nel carrello</button>
+            <button class="align-self-center button col-12 col-lg-10" (click)="addToCart()">Conferma quantità nel carrello</button>
             <button
               *ngIf="productInCart && quantity > 0"
               (click)="removeFromCart()"

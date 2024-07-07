@@ -40,3 +40,21 @@
 .custom-checkbox:hover {
   background-color: #e6dc5b;
 }
+
+img {
+  height: 200px; /* Altezza fissa per tutte le immagini */
+  width: 100%;
+  object-fit: cover; /* Mantiene le proporzioni e riempie l'area */
+}
+
+.card-body {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 1rem;
+}
+.product-card {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}

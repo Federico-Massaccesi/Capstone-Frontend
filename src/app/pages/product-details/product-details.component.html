@@ -1,7 +1,8 @@
-<div class="">
-  <img
+<div class="container-fluid">
+  <div class="row justify-content-center">
+    <div class="col-12 col-md-10 col-lg-8 central-column">  <img
     [src]="product?.imageURL"
-    class="card-img-top"
+    class="img-fluid"
     alt="..."
     (error)="onImageError()"
   />
@@ -79,20 +80,32 @@
       class="row text-center flex-column align-items-center"
       *ngIf="isAdmin || isWarehouse"
     >
-      <div
-        (click)="productAvailable = !productAvailable"
-        class="fs-3 row justify-content-center checkbox col-7 mb-3"
-      >
-        <i *ngIf="productAvailable" class="bi bi-check"></i>
-        <i *ngIf="!productAvailable" class="bi bi-x"></i>
-      </div>
-      <button
-        class="button col-11 mb-3"
-        *ngIf="productAvailable !== product?.available"
-        (click)="toggleAvailability(productAvailable)"
-      >
-        Salva disponibilità e torna alla lista prodotti
-      </button>
+    <div class="checkbox-wrapper mb-3">
+      <input
+        style="display: none;"
+        type="checkbox"
+        id="cbx"
+        class="inp-cbx"
+        [(ngModel)]="productAvailable"
+        (change)="toggleProductAvailable()"
+      />
+      <label for="cbx" class="cbx">
+        <span>
+          <svg viewBox="0 0 12 9" height="9px" width="12px">
+            <polyline points="1 5 4 8 11 1"></polyline>
+          </svg>
+        </span>
+        <!-- Modificato: Unica scritta "Disponibile" con barra se non disponibile -->
+        <span class="availability-text" [class.not-available]="!productAvailable">Disponibile</span>
+      </label>
+    </div>
+    <button
+      class="button col-11 mb-3"
+      *ngIf="showConfirmButton"
+      (click)="toggleAvailability(productAvailable)"
+    >
+      Salva disponibilità e torna alla lista prodotti
+    </button>
       <button
         class="button col-4 mb-3"
         (click)="openVerticallyCentered(deleteContent )"
@@ -138,7 +151,7 @@
     <div class="modal-body">
       <form #productForm="ngForm" (ngSubmit)="onSubmit(productForm)">
         <div class="input-group row">
-          <div class="mx-auto col-10">
+          <div class="mx-auto col-10 mb-3">
             <input
               type="text"
               required
@@ -150,7 +163,7 @@
               [value]="editedProduct.name"
             />
           </div>
-          <div class="mx-auto col-10">
+          <div class="mx-auto col-10  mb-3">
             <input
               type="number"
               required
@@ -178,7 +191,7 @@
               Descrizione. Max 255 caratteri
             </p>
           </div>
-          <div class="mx-auto col-10">
+          <div class="mx-auto col-10  mb-3">
             <label for="categories">Seleziona le categorie:</label>
             <select
               id="categories"
@@ -197,7 +210,7 @@
               </option>
             </select>
           </div>
-          <div class="mx-auto col-10">
+          <div class="mx-auto col-10 mb-3">
             <input
               type="file"
               name="file"
@@ -205,14 +218,6 @@
               id="file"
               (change)="onFileSelected($event)"
               accept="image/*"
-            />
-          </div>
-          <div class="mx-auto col-10">
-            <img
-              [src]="editedProduct.imageURL"
-              class="img-thumbnail mt-2"
-              alt="Product Image"
-              style="max-height: 200px"
             />
           </div>
         </div>
