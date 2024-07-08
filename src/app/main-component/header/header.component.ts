@@ -37,4 +37,8 @@ export class HeaderComponent {
   closeCollapse() {
     this.isCollapsed = true;
   }
+
+  getLoggedUserId(): number | null {
+    return this.authSvc.getUserId();
+  }
 }

@@ -52,7 +52,7 @@
                         <hr class="mt-0 mb-3" />
                         <button
                           type="button"
-                          class="button mt-2 mb-4 col-10"
+                          class="button mt-2 mb-4 col-10 col-sm-8 col-md-6 col-lg-4"
                           (click)="isOrdersCollapsed = !isOrdersCollapsed"
                           [attr.aria-expanded]="!isOrdersCollapsed"
                           aria-controls="ordersCollapse"
@@ -73,7 +73,7 @@
                             <p>Totale: {{ order.totalPrice | currency }}</p>
                             <div *ngIf="isAdmin" class="row justify-content-center">
                               <button
-                                class="button mt-3 col-9"
+                                class="button mt-3 col-9 col-sm-7 col-md-5 col-lg-3"
                                 [routerLink]="['/order-details', order.id]"
                               >
                                 Dettagli ordine
@@ -90,7 +90,7 @@
                             <i
                               [ngClass]="getOrderStatusClass(order.localDate)"
                               *ngIf="order.pending"
-                              class="bi bi-exclamation-triangle-fill"
+                              class="fs-2 bi bi-exclamation-triangle-fill"
                             ></i>
                             <hr class="mt-2" />
                           </div>

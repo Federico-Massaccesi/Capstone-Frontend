@@ -1,31 +1,31 @@
 <div class="container">
   <div class="row">
     <div class="row mx-2 col-12 text-center my-4">
-      <div class="row mb-3">
+      <div class="row justify-content-between mb-3">
         <button
-          class="button mx-2 mb-3"
+          class="button col-md-2 mb-3 mb-md-0"
           (click)="setFilter('all')"
           [ngClass]="{ 'active-filter': currentFilter === 'all' }"
         >
           Lista Completa
         </button>
         <button
-          class="button mx-2 mb-3"
+          class="button col-md-2 mb-3 mb-md-0"
           (click)="setFilter('completed')"
           [ngClass]="{ 'active-filter': currentFilter === 'completed' }"
         >
-          Ordini Completati
+          Completati
         </button>
         <button
-          class="button mx-2 mb-3"
+          class="button  col-md-2 mb-3 mb-md-0"
           (click)="setFilter('incomplete')"
           [ngClass]="{ 'active-filter': currentFilter === 'incomplete' }"
         >
-          Ordini da Completare
+          Da Completare
         </button>
         <button
           *ngIf="showNewOrdersButton"
-          class="button mx-2"
+          class="button col-md-2 "
           (click)="setFilter('new')"
           [ngClass]="{ 'active-filter': currentFilter === 'new' }"
         >
@@ -37,19 +37,21 @@
   <div class="row">
     <div class="col-md-4" *ngFor="let order of filteredOrders$ | async">
       <div class="card mb-3">
-        <div class="card-header row justify-content-between">
-          Ordine #{{ order.id }}
-          <div class="row justify-content-end col-6">
+        <div class="card-header row justify-content-between mx-0">
+          <div class="col-6">
+            Ordine #{{ order.id }}
+          </div>
+          <div class="col-6 d-flex justify-content-end">
             <button
               *ngIf="
                 isAdmin && order.checked == true && order.completed == true
               "
-              class="btn btn-danger col-3 btn-sm float-right"
+              class="btn btn-danger rounded-circle btn-sm"
               (click)="deleteOrder(order.id!)"
             >
-              <i class="bi bi-trash3 "></i>
+              <i class="bi bi-trash3"></i>
             </button>
-            <i *ngIf="!order.checked" class="bi bi-bell col-3"></i>
+            <i *ngIf="!order.checked" class="bi bi-bell"></i>
           </div>
         </div>
         <div class="card-body">
@@ -69,4 +71,5 @@
       </div>
     </div>
   </div>
+
 </div>

@@ -15,37 +15,31 @@
     >
       Visualizza pagine
     </button>
-    <div class="collapse row mb-4" #collapse="ngbCollapse" [(ngbCollapse)]="isCollapsed">
-      <div class="d-flex justify-content-center p-0 px-sm-5 mb-3">
-        <ul class="toggle d-flex justify-content-around list-unstyled col-12 text-center mt-4">
+    <div class="collapse row mb-4 mx-0" #collapse="ngbCollapse" [(ngbCollapse)]="isCollapsed">
+      <div class="d-flex justify-content-center p-0 px-sm-5 mb-3 w-100">
+        <ul class="toggle d-flex justify-content-around list-unstyled col-12 text-center mt-4 mx-0 w-inherit">
           <li *ngIf="isUser || isAdmin || isWarehouse" class="col-2 col-sm-1">
-            <a routerLink="/home" class="nav-link text-white">Home</a>
+            <a routerLink="/home" class="nav-link text-white" (click)="closeCollapse()">Home</a> <!-- Modifica -->
           </li>
           <li *ngIf="!isUser && (isAuthenticated$ | async)" class="col-2 col-sm-1">
-            <a routerLink="/orderList" class="nav-link text-white">Ordini</a>
+            <a routerLink="/orderList" class="nav-link text-white" (click)="closeCollapse()">Ordini</a> <!-- Modifica -->
           </li>
           <li *ngIf="isUser || isAdmin || isWarehouse" class="col-2 col-sm-1">
-            <a routerLink="/productList" class="nav-link text-white">
-              Prodotti
-            </a>
+            <a routerLink="/productList" class="nav-link text-white" (click)="closeCollapse()">Prodotti</a> <!-- Modifica -->
           </li>
           <li *ngIf="isAdmin" class="col-2 col-sm-1">
-            <a routerLink="/userList" class="nav-link text-white">
-              Utenti
-            </a>
+            <a routerLink="/userList" class="nav-link text-white" (click)="closeCollapse()">Utenti</a> <!-- Modifica -->
           </li>
           <li *ngIf="isUser" class="col-2 col-sm-1">
-            <a [routerLink]="['/profile', userId]" class="nav-link text-white">
-              Profilo
-            </a>
+            <a [routerLink]="['/profile', getLoggedUserId()]" class="nav-link text-white" (click)="closeCollapse()">Profilo</a> <!-- Modifica -->
           </li>
         </ul>
       </div>
-      <div class="row col-12 justify-content-center text-black">
-        <button type="button" (click)="logout(); closeCollapse()" class="button  col-6 col-sm-2 col-md-1" *ngIf="isAuthenticated$ | async" (click)="closeCollapse()">Logout</button>
-        <button type="button" routerLink="/auth/login" class="button col-4 col-sm-2 col-md-1 mx-4" *ngIf="!(isAuthenticated$ | async)" (click)="closeCollapse()">Login</button>
-        <button type="button" routerLink="/auth/register" class="button col-4 col-sm-2 col-md-1" *ngIf="!(isAuthenticated$ | async)" (click)="closeCollapse()">Register</button>
-        <button *ngIf="isUser && (isAuthenticated$ | async)" type="button" routerLink="/cart" class="button col-4 col-sm-2 col-md-1 mx-4">
+      <div class="row col-12 justify-content-center text-black mx-0">
+        <button type="button" (click)="logout(); closeCollapse()" class="button col-6 col-sm-2 col-md-1" *ngIf="isAuthenticated$ | async">Logout</button>
+        <button type="button" routerLink="/auth/login" class="button col-4 col-sm-2 col-md-1 mx-4" *ngIf="!(isAuthenticated$ | async)" (click)="closeCollapse()">Login</button> <!-- Modifica -->
+        <button type="button" routerLink="/auth/register" class="button col-4 col-sm-2 col-md-1" *ngIf="!(isAuthenticated$ | async)" (click)="closeCollapse()">Register</button> <!-- Modifica -->
+        <button *ngIf="isUser && (isAuthenticated$ | async)" type="button" routerLink="/cart" class="button col-4 col-sm-2 col-md-1 mx-4" (click)="closeCollapse()"> <!-- Modifica -->
           <i class="bi bi-cart-check"></i>
         </button>
       </div>

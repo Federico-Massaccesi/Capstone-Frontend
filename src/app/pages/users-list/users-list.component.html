@@ -1,93 +1,103 @@
-<div class="row justify-content-center px-4">
-  <div class="row justify-content-center my-4">
-    <div class="col-8">
-      <input
-        type="text"
-        class="form-control"
-        placeholder="Search..."
-        (input)="updateSearchQuery($event)"
-      />
+<div class="container">
+  <div class="row justify-content-center px-4">
+    <div class="row justify-content-center my-4">
+      <div class="col-6">
+        <input
+          type="text"
+          class="form-control"
+          placeholder="Cerca tra gli utenti"
+          (input)="updateSearchQuery($event)"
+        />
+      </div>
     </div>
-  </div>
-  <div class="row" *ngIf="searchQuery.length > 0">
-    <ng-container *ngIf="results.length > 0; else noResultsFound">
-      <div
-        class="user-card row border border-secondary rounded col-12 py-3 mb-4"
-        *ngFor="let user of results"
-      >
-        <div class="col-3 row align-items-center fs-1">
-          <i *ngIf="hasRole(user, 'COMPANY')" class="bi bi-shop"></i>
-          <i *ngIf="hasRole(user, 'PRIVATE')" class="bi bi-person-circle"></i>
-        </div>
-        <div class="col-7 row flex-column ps-3">
-          <p class="col-10">ID:{{ user.id }}</p>
-          <p class="col-10" *ngIf="hasRole(user, 'COMPANY')">
-            {{ user.companyName }}
-          </p>
-          <p class="col-10" *ngIf="hasRole(user, 'PRIVATE')">
-            {{ user.username }}
-          </p>
-        </div>
-        <div class="col-3 ms-4 row align-items-center">
-          <button
-            type="button"
-            class="button"
-            [routerLink]="['/user-details', user.id]"
+    <div class="row" *ngIf="searchQuery.length > 0">
+      <ng-container *ngIf="results.length > 0; else noResultsFound">
+        <div class="col-12 col-md-6 col-lg-4 mb-4" *ngFor="let user of results">
+          <div
+            class="user-card border border-secondary rounded p-3 d-flex align-items-center"
           >
-            <i class="bi bi-arrow-right-circle"></i>
-          </button>
+            <div
+              class="user-icon-container position-relative me-3 d-flex align-items-center justify-content-center"
+              [ngClass]="{ 'pending-order': hasPendingOrders(user) }"
+              ngbTooltip="L'utente ha più di 3 ordini da saldare."
+              placement="right"
+              container="body"
+            >
+              <i *ngIf="hasRole(user, 'COMPANY')" class="bi bi-shop fs-1"></i>
+              <i
+                *ngIf="hasRole(user, 'PRIVATE')"
+                class="bi bi-person-circle fs-1"
+              ></i>
+            </div>
+
+            <div class="flex-grow-1">
+              <p class="mb-0">ID:{{ user.id }}</p>
+              <p class="mb-0" *ngIf="hasRole(user, 'COMPANY')">
+                {{ user.companyName }}
+              </p>
+              <p class="mb-0" *ngIf="hasRole(user, 'PRIVATE')">
+                {{ user.username }}
+              </p>
+            </div>
+            <div>
+              <button
+                type="button"
+                class="button"
+                [routerLink]="['/user-details', user.id]"
+              >
+                <i class="bi bi-arrow-right-circle"></i>
+              </button>
+            </div>
+          </div>
         </div>
-        <i
-          *ngIf="hasPendingOrders(user)"
-          class="bi bi-exclamation-circle-fill pending-icon text-danger"
-          ngbTooltip="L'utente ha più di 3 ordini da saldare."
-          placement="left"
-          container="body"
-        ></i>
-      </div>
-    </ng-container>
-    <ng-template #noResultsFound>
-      <h2>Nessun risultato trovato</h2>
-    </ng-template>
-  </div>
-  <div
-    class="row col-12 justify-content-center"
-    *ngIf="searchQuery.length === 0 && userList.length > 0"
-  >
-    <h2 class="mb-5 text-center">I nostri utenti:</h2>
+      </ng-container>
+      <ng-template #noResultsFound>
+        <h2>Nessun risultato trovato</h2>
+      </ng-template>
+    </div>
     <div
-      class="user-card row border border-secondary rounded col-12 py-3 mb-4"
-      *ngFor="let user of userList"
+      class="row justify-content-center"
+      *ngIf="searchQuery.length === 0 && userList.length > 0"
     >
-      <div class="col-3 row align-items-center fs-1">
-        <i *ngIf="hasRole(user, 'COMPANY')" class="bi bi-shop"></i>
-        <i *ngIf="hasRole(user, 'PRIVATE')" class="bi bi-person-circle"></i>
-      </div>
-      <div class="col-7 row flex-column ps-3">
-        <p class="col-10">ID:{{ user.id }}</p>
-        <p class="col-10" *ngIf="hasRole(user, 'COMPANY')">
-          {{ user.companyName }}
-        </p>
-        <p class="col-10" *ngIf="hasRole(user, 'PRIVATE')">
-          {{ user.username }}
-        </p>
-      </div>
-      <div class="col-3 ms-4 row align-items-center">
-        <button
-          type="button"
-          class="button"
-          [routerLink]="['/user-details', user.id]"
+      <h2 class="mb-5 text-center">I nostri utenti:</h2>
+      <div class="col-12 col-md-6 col-lg-4 mb-4" *ngFor="let user of userList">
+        <div
+          class="user-card border border-secondary rounded p-3 d-flex align-items-center"
         >
-          <i class="bi bi-arrow-right-circle"></i>
-        </button>
+          <div
+            class="user-icon-container position-relative me-3 d-flex align-items-center justify-content-center"
+            [ngClass]="{ 'pending-order': hasPendingOrders(user) }"
+            ngbTooltip="L'utente ha più di 3 ordini da saldare."
+            placement="right"
+            container="body"
+          >
+            <i *ngIf="hasRole(user, 'COMPANY')" class="bi bi-shop fs-1"></i>
+            <i
+              *ngIf="hasRole(user, 'PRIVATE')"
+              class="bi bi-person-circle fs-1"
+            ></i>
+          </div>
+
+          <div class="flex-grow-1">
+            <p class="mb-0">ID:{{ user.id }}</p>
+            <p class="mb-0" *ngIf="hasRole(user, 'COMPANY')">
+              {{ user.companyName }}
+            </p>
+            <p class="mb-0" *ngIf="hasRole(user, 'PRIVATE')">
+              {{ user.username }}
+            </p>
+          </div>
+          <div>
+            <button
+              type="button"
+              class="button"
+              [routerLink]="['/user-details', user.id]"
+            >
+              <i class="bi bi-arrow-right-circle"></i>
+            </button>
+          </div>
+        </div>
       </div>
-      <i
-        *ngIf="hasPendingOrders(user)"
-        class="bi bi-exclamation-circle-fill pending-icon text-danger"
-        ngbTooltip="L'utente ha più di 3 ordini da saldare."
-        placement="left"
-        container="body"
-      ></i>
     </div>
   </div>
 </div>

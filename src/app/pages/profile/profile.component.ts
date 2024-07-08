@@ -12,31 +12,44 @@ import { AuthService } from '../../auth/auth.service';
 })
 export class ProfileComponent {
 
+
   user!: iUser;
   isAdmin!: boolean;
   isPrivateUser!: boolean;
   isCompanyUser!: boolean;
 
   constructor(private route: ActivatedRoute,
-    private crudService: CRUDService,
-    private authSvc : AuthService
-    ){}
+              private crudService: CRUDService,
+              private authSvc: AuthService) {}
 
-    ngOnInit(): void {
+  ngOnInit(): void {
+    this.checkRoles();
+
+    // Se l'utente è un admin, usa l'ID dall'URL, altrimenti ottieni l'ID dell'utente loggato
+    if (this.isAdmin) {
       const userId = +this.route.snapshot.paramMap.get('id')!;
-      this.crudService.getOneEntity(environment.usersUrl, userId, 'user')
-        .subscribe((user: iUser) => {
-          this.user = user;
-          this.checkRoles()
-        });
-    }
-
-    checkRoles() {
-      const roles: iRole[] | undefined = this.authSvc.getUserRole();
-      if (roles) {
-        this.isPrivateUser = roles.some(role => role.roleType === 'PRIVATE');
-        this.isCompanyUser = roles.some(role => role.roleType === 'COMPANY');
-        this.isAdmin = roles.some(role => role.roleType === 'ADMIN');
+      this.getUserProfile(userId);
+    } else {
+      const userId = this.authSvc.getUserId();
+      if (userId) {
+        this.getUserProfile(userId);
       }
     }
+  }
+
+  getUserProfile(userId: number): void {
+    this.crudService.getOneEntity(environment.usersUrl, userId, 'user')
+      .subscribe((user: iUser) => {
+        this.user = user;
+      });
+  }
+
+  checkRoles(): void {
+    const roles: iRole[] | undefined = this.authSvc.getUserRole();
+    if (roles) {
+      this.isPrivateUser = roles.some(role => role.roleType === 'PRIVATE');
+      this.isCompanyUser = roles.some(role => role.roleType === 'COMPANY');
+      this.isAdmin = roles.some(role => role.roleType === 'ADMIN');
+    }
+  }
 }
