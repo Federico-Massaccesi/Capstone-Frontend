@@ -1,47 +1,20 @@
-@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
-
-body{
-
-  font-family: "Montserrat", sans-serif;
-}
-
-img{
-  border-radius: 50%;
-
-}
-
-
-.button {
-  text-decoration: none;
-  width: 100px;
-  padding: 15px 15px;
-  border: 1px solid #a09b96;
-  color: #a09b96;
-  font-weight: 400;
-  cursor: pointer;
-  border-radius: 75%;
-  position: relative;
-  z-index: 0;
+.picsum-img-wrapper {
+  width: 100%;
+  max-width: 1200px; /* Imposta la larghezza massima desiderata */
+  height: 600px; /* Imposta l'altezza fissa desiderata */
   overflow: hidden;
-  transition: all 0.5s ease;
+  margin: 0 auto; /* Centra il contenitore */
+  position: relative;
 }
-.button::after {
-  content: "";
+
+.picsum-img-wrapper img {
   width: 100%;
   height: 100%;
-  background: #a09b96;
-  position: absolute;
-  bottom: -100%;
-  left: 0;
-  border-radius: 50%;
-  z-index: -1;
-  transition: all 0.5s ease;
-}
-.button:hover {
-  color: #fff;
-}
-.button:hover::after {
-  bottom: 0;
-  border-radius: 0;
+  object-fit: cover; /* Mantiene le proporzioni dell'immagine riempiendo il contenitore */
+  object-position: center; /* Centra l'immagine */
 }
 
+.carousel {
+  display: flex;
+  justify-content: center; /* Centra il carosello */
+}

@@ -1,48 +1,37 @@
-<header>
-  <div class="row h-50 justify-content-center">
-    <img
-      class="col-4 img-fluid header-image justify-content-start"
-      src="https://t3.ftcdn.net/jpg/04/03/00/68/360_F_403006870_h8lU4z0wxIi93XSW2tKaaeFODuCF4ugb.jpg"
-    />
+<header class="d-flex flex-wrap align-items-center justify-content-between py-3 ">
+  <div class="col-12 col-lg-3 mb-2 mb-lg-0 text-center ps-4 text-lg-start">
+    <a href="/" class="d-inline-flex link-body-emphasis text-decoration-none">
+      <img
+        class="img-fluid header-image"
+        src="https://t3.ftcdn.net/jpg/04/03/00/68/360_F_403006870_h8lU4z0wxIi93XSW2tKaaeFODuCF4ugb.jpg"
+      />
+    </a>
   </div>
-  <div class="row justify-content-center">
-    <button
-      type="button"
-      class="btn text-white mb-2 p-0"
-      (click)="collapse.toggle()"
-      [attr.aria-expanded]="!isCollapsed"
-      aria-controls="collapseExample"
-    >
-      Visualizza pagine
+
+  <ul class="nav col-12 col-lg-auto fs-5 mb-2 justify-content-around mb-lg-0">
+    <li *ngIf="isUser || isAdmin || isWarehouse" class="nav-link text-center  px-2">
+      <a routerLink="/home" class="nav-link text-white">Home</a>
+    </li>
+    <li *ngIf="!isUser && (isAuthenticated$ | async)" class="nav-link text-center  px-2">
+      <a routerLink="/orderList" class="nav-link text-white">Ordini</a>
+    </li>
+    <li *ngIf="isUser || isAdmin || isWarehouse" class="nav-link text-center  px-2">
+      <a routerLink="/productList" class="nav-link text-white">Prodotti</a>
+    </li>
+    <li *ngIf="isAdmin" class="nav-link px-2">
+      <a routerLink="/userList" class="nav-link text-white text-center ">Utenti</a>
+    </li>
+    <li *ngIf="isUser" class="nav-link px-2">
+      <a [routerLink]="['/profile', getLoggedUserId()]" class="nav-link text-white text-center ">Profilo</a>
+    </li>
+  </ul>
+
+  <div class="col-12 col-lg-3 text-center text-lg-end mt-3 mt-lg-0">
+    <button type="button" (click)="logout();" class="button me-3" *ngIf="isAuthenticated$ | async">Logout</button>
+    <button type="button" routerLink="/auth/login" class="button me-3" *ngIf="!(isAuthenticated$ | async)">Login</button>
+    <button type="button" routerLink="/auth/register" class="button" *ngIf="!(isAuthenticated$ | async)">Register</button>
+    <button *ngIf="isUser && (isAuthenticated$ | async)" type="button" routerLink="/cart" class="button">
+      <i class="bi bi-cart-check"></i>
     </button>
-    <div class="collapse row mb-4 mx-0" #collapse="ngbCollapse" [(ngbCollapse)]="isCollapsed">
-      <div class="d-flex justify-content-center p-0 px-sm-5 mb-3 w-100">
-        <ul class="toggle d-flex justify-content-around list-unstyled col-12 text-center mt-4 mx-0 w-inherit">
-          <li *ngIf="isUser || isAdmin || isWarehouse" class="col-2 col-sm-1">
-            <a routerLink="/home" class="nav-link text-white" (click)="closeCollapse()">Home</a> <!-- Modifica -->
-          </li>
-          <li *ngIf="!isUser && (isAuthenticated$ | async)" class="col-2 col-sm-1">
-            <a routerLink="/orderList" class="nav-link text-white" (click)="closeCollapse()">Ordini</a> <!-- Modifica -->
-          </li>
-          <li *ngIf="isUser || isAdmin || isWarehouse" class="col-2 col-sm-1">
-            <a routerLink="/productList" class="nav-link text-white" (click)="closeCollapse()">Prodotti</a> <!-- Modifica -->
-          </li>
-          <li *ngIf="isAdmin" class="col-2 col-sm-1">
-            <a routerLink="/userList" class="nav-link text-white" (click)="closeCollapse()">Utenti</a> <!-- Modifica -->
-          </li>
-          <li *ngIf="isUser" class="col-2 col-sm-1">
-            <a [routerLink]="['/profile', getLoggedUserId()]" class="nav-link text-white" (click)="closeCollapse()">Profilo</a> <!-- Modifica -->
-          </li>
-        </ul>
-      </div>
-      <div class="row col-12 justify-content-center text-black mx-0">
-        <button type="button" (click)="logout(); closeCollapse()" class="button col-6 col-sm-2 col-md-1" *ngIf="isAuthenticated$ | async">Logout</button>
-        <button type="button" routerLink="/auth/login" class="button col-4 col-sm-2 col-md-1 mx-4" *ngIf="!(isAuthenticated$ | async)" (click)="closeCollapse()">Login</button> <!-- Modifica -->
-        <button type="button" routerLink="/auth/register" class="button col-4 col-sm-2 col-md-1" *ngIf="!(isAuthenticated$ | async)" (click)="closeCollapse()">Register</button> <!-- Modifica -->
-        <button *ngIf="isUser && (isAuthenticated$ | async)" type="button" routerLink="/cart" class="button col-4 col-sm-2 col-md-1 mx-4" (click)="closeCollapse()"> <!-- Modifica -->
-          <i class="bi bi-cart-check"></i>
-        </button>
-      </div>
-    </div>
   </div>
 </header>

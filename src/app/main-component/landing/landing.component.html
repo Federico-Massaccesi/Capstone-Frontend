@@ -1,45 +1,10 @@
-<div class="justify-content-center text-center row">
-  <h1 class="my-4">BENVENUTO IN FOODMANAGER</h1>
-  <div class="row mb-5">
-    <div class="d-flex flex-column justify-content-sm-center align-items-center col-sm-4">
-      <h3>
-        Con Food Manager come azienda, avrai la possibilità di ricevere un
-        servizio rapido e puntuale per essere sempre al passo con i ritmi
-        lavorativi.
-      </h3>
+<ngb-carousel [interval]="5000" [wrap]="true" [keyboard]="false" [pauseOnHover]="false">
+  <ng-template ngbSlide *ngFor="let image of images; let i = index; trackBy: trackByImage">
+    <div class="picsum-img-wrapper">
+      <img [src]="image" alt="Random slide" />
+      <div class="carousel-caption">
+        <h3 class="fs-2">{{ captions[i] }}</h3>
+      </div>
     </div>
-    <div class="col-sm-8">
-      <img
-        class="img img-fluid my-3"
-        src="https://www.immobiliare.it/news/app/uploads/2023/03/cucina-ristorante.png"
-        alt=""
-      />
-    </div>
-  </div>
-  <div class="row mb-4">
-    <div class="col-sm-6 row  align-items-center">
-      <img
-        class="img img-fluid my-5 h-75"
-        src="https://cronachedigusto-it.cdn-immedia.net/wp-content/uploads/2016/12/pranzo_in_famiglia.jpg"
-        alt=""
-      />
-    </div>
-    <div class="d-flex flex-column justify-content-sm-center align-items-center col-sm-6">
-      <h3>
-        Se invece sei un privato e hai sempre desiderato portare in tavola tutti
-        quei prodotti esclusivi che non riesci a trovare nei normali
-        supermercati ,con Food Manager ora ne avrai la possibilità.Ordina
-        comodamente da casa tua e preparati a sorprendere i tuoi ospiti con una
-        vera cena da RE!
-      </h3>
-    </div>
-  </div>
-
-  <h3>
-    Dai un'occhiata ai nostri prodotti e registrati per iniziare ad effettuare
-    ordini!
-  </h3>
-  <a class="button btn-product-list col-12 my-3" routerLink="/productList"
-    >Lista Prodotti</a
-  >
-</div>
+  </ng-template>
+</ngb-carousel>
