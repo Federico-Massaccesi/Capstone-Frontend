@@ -156,11 +156,11 @@ private modalService = inject(NgbModal);
 
   updateProduct(modal: NgbActiveModal): void {
     if (this.product) {
-
       const selectedCategories = this.selectedCategoryIds.map(id => {
-        return this.allCategories.find(category => category.id === id)!});
+        return this.allCategories.find(category => category.id === id)!;
+      });
 
-      const updatedProduct:IProduct = {
+      const updatedProduct: IProduct = {
         ...this.product,
         name: this.editedProduct.name!,
         price: this.editedProduct.price!,
@@ -170,10 +170,9 @@ private modalService = inject(NgbModal);
         categories: selectedCategories
       };
 
-
       this.prodSvc.updateProduct(this.prodUrl, this.pageProductID, updatedProduct, this.selectedFile).subscribe({
         next: (response) => {
-          this.product = updatedProduct
+          this.product = updatedProduct;
           modal.close();
         },
         error: (error) => {
@@ -182,6 +181,7 @@ private modalService = inject(NgbModal);
       });
     }
   }
+
 
 
 

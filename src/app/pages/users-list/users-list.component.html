@@ -12,23 +12,29 @@
     </div>
     <div class="row" *ngIf="searchQuery.length > 0">
       <ng-container *ngIf="results.length > 0; else noResultsFound">
-        <div class="col-12 col-md-6 col-lg-4 mb-4" *ngFor="let user of results">
+        <div class="col-12  col-md-6 col-lg-4 mb-4" *ngFor="let user of results">
           <div
             class="user-card border border-secondary rounded p-3 d-flex align-items-center"
           >
-            <div
-              class="user-icon-container position-relative me-3 d-flex align-items-center justify-content-center"
-              [ngClass]="{ 'pending-order': hasPendingOrders(user) }"
-              ngbTooltip="L'utente ha più di 3 ordini da saldare."
-              placement="right"
-              container="body"
-            >
-              <i *ngIf="hasRole(user, 'COMPANY')" class="bi bi-shop fs-1"></i>
-              <i
-                *ngIf="hasRole(user, 'PRIVATE')"
-                class="bi bi-person-circle fs-1"
-              ></i>
-            </div>
+          <div
+          class="user-icon-container position-relative me-3 d-flex align-items-center justify-content-center"
+          [ngClass]="{ 'pending-order': hasPendingOrders(user) }"
+          *ngIf="hasPendingOrders(user)"
+          ngbTooltip="L'utente ha più di 3 ordini da saldare."
+          placement="right"
+          container="body"
+        >
+          <i *ngIf="hasRole(user, 'COMPANY')" class="bi bi-shop fs-1"></i>
+          <i *ngIf="hasRole(user, 'PRIVATE')" class="bi bi-person-circle fs-1"></i>
+        </div>
+        <div
+          class="user-icon-container position-relative me-3 d-flex align-items-center justify-content-center"
+          [ngClass]="{ 'pending-order': hasPendingOrders(user) }"
+          *ngIf="!hasPendingOrders(user)"
+        >
+          <i *ngIf="hasRole(user, 'COMPANY')" class="bi bi-shop fs-1"></i>
+          <i *ngIf="hasRole(user, 'PRIVATE')" class="bi bi-person-circle fs-1"></i>
+        </div>
 
             <div class="flex-grow-1">
               <p class="mb-0">ID:{{ user.id }}</p>
@@ -59,24 +65,30 @@
       class="row justify-content-center"
       *ngIf="searchQuery.length === 0 && userList.length > 0"
     >
-      <h2 class="mb-5 text-center">I nostri utenti:</h2>
+      <h2 class="mb-5 text-white fs-2 text-center">I nostri utenti:</h2>
       <div class="col-12 col-md-6 col-lg-4 mb-4" *ngFor="let user of userList">
         <div
           class="user-card border border-secondary rounded p-3 d-flex align-items-center"
         >
-          <div
-            class="user-icon-container position-relative me-3 d-flex align-items-center justify-content-center"
-            [ngClass]="{ 'pending-order': hasPendingOrders(user) }"
-            ngbTooltip="L'utente ha più di 3 ordini da saldare."
-            placement="right"
-            container="body"
-          >
-            <i *ngIf="hasRole(user, 'COMPANY')" class="bi bi-shop fs-1"></i>
-            <i
-              *ngIf="hasRole(user, 'PRIVATE')"
-              class="bi bi-person-circle fs-1"
-            ></i>
-          </div>
+        <div
+        class="user-icon-container position-relative me-3 d-flex align-items-center justify-content-center"
+        [ngClass]="{ 'pending-order': hasPendingOrders(user) }"
+        *ngIf="hasPendingOrders(user)"
+        ngbTooltip="L'utente ha più di 3 ordini da saldare."
+        placement="right"
+        container="body"
+      >
+        <i *ngIf="hasRole(user, 'COMPANY')" class="bi bi-shop fs-1"></i>
+        <i *ngIf="hasRole(user, 'PRIVATE')" class="bi bi-person-circle fs-1"></i>
+      </div>
+      <div
+        class="user-icon-container position-relative me-3 d-flex align-items-center justify-content-center"
+        [ngClass]="{ 'pending-order': hasPendingOrders(user) }"
+        *ngIf="!hasPendingOrders(user)"
+      >
+        <i *ngIf="hasRole(user, 'COMPANY')" class="bi bi-shop fs-1"></i>
+        <i *ngIf="hasRole(user, 'PRIVATE')" class="bi bi-person-circle fs-1"></i>
+      </div>
 
           <div class="flex-grow-1">
             <p class="mb-0">ID:{{ user.id }}</p>

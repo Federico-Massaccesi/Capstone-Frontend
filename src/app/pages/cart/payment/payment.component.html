@@ -1,4 +1,4 @@
-<div class=" mt-4 row justify-content-center text-center">
+<div class=" mt-4 row justify-content-center text-white text-center">
   <p class="fs-1">Pagamento</p>
   <div class="total-price">
     <p class="fs-3">Prezzo totale: {{ totalPrice | currency:'EUR' }}</p>
@@ -79,7 +79,7 @@
         </div>
         </div>
       </div>
-        <button (click)="processPayment()" class="purchase--btn">Checkout</button>
+        <button (click)="processPayment()" class="purchase--btn fs-5">Checkout</button>
 
       </form>
     </div>

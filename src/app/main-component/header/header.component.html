@@ -9,9 +9,6 @@
   </div>
 
   <ul class="nav col-12 col-lg-auto fs-5 mb-2 justify-content-around mb-lg-0">
-    <li *ngIf="isUser || isAdmin || isWarehouse" class="nav-link text-center  px-2">
-      <a routerLink="/home" class="nav-link text-white">Home</a>
-    </li>
     <li *ngIf="!isUser && (isAuthenticated$ | async)" class="nav-link text-center  px-2">
       <a routerLink="/orderList" class="nav-link text-white">Ordini</a>
     </li>

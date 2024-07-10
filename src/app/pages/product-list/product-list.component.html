@@ -1,5 +1,5 @@
 <div class=" row justify-content-center p-0 m-0">
-  <div class="search-container mt-3">
+  <div class="search-container text-white mt-3">
     <i class="bi bi-search" (click)="toggleSearchBar()"></i>
     <div class="search-bar-container" [class.active]="isSearchBarActive">
       <input
@@ -12,7 +12,7 @@
   </div>
   <div class="row" *ngIf="searchQuery.length > 0">
     <ng-container *ngIf="results.length > 0; else noResultsFound">
-      <h2>I tuoi risultati</h2>
+      <h2 class="text-white">I tuoi risultati</h2>
       <div class="col-md-6 col-lg-3" *ngFor="let result of results">
         <app-product-card
           [product]="result"
@@ -21,20 +21,20 @@
       </div>
     </ng-container>
     <ng-template #noResultsFound>
-      <h2>Nessun risultato trovato</h2>
+      <h2 class="text-white">Nessun risultato trovato</h2>
     </ng-template>
   </div>
   <div *ngIf="isAdmin" class="row text-center d-block my-4 fs-5 justify-content-center col-11 col-sm-7 col-md-5 col-lg-4 col-xl-2 text-black">
     <button class="col-3 col-xl-4 rounded-circle" (click)="open(content)"><i class="bi bi-plus-circle"></i></button>
   </div>
   <div class="row justify-content-center" *ngIf="searchQuery.length === 0">
-    <h2 class="my-2 text-center">I nostri prodotti:</h2>
+    <h2 class="my-2 text-center text-white mb-5 fs-1">I nostri prodotti:</h2>
     <div class="col-sm-6 col-lg-3" *ngFor="let prod of products">
       <app-product-card [product]="prod" [isUser]="isUser"></app-product-card>
     </div>
   </div>
   <ng-template #loading>
-    <p>Loading products...</p>
+    <p class="text-white">Loading products...</p>
   </ng-template>
 </div>
 

@@ -16,7 +16,7 @@ import { environment } from '../../../environments/environment';
 })
 export class CartComponent {
 
-  cartList: iCartItem[] = []
+  cartList: iCartItem[] = [];
   totalPrice: number = 0;
   private cartSubscription!: Subscription;
   private productSubscription!: Subscription;
@@ -24,12 +24,10 @@ export class CartComponent {
   isCompanyUser: boolean = false;
   payLater: boolean = false;
   missingProductIds: (number|undefined)[] = [];
+  unavailableProductIds: (number|undefined)[] = [];
+  orderBlocked: boolean = false;
 
-
-  constructor(private cartSvc: CartService
-    ,private authSvc: AuthService,
-  private router:Router,
-private crudSvc: CRUDService) { }
+  constructor(private cartSvc: CartService, private authSvc: AuthService, private router: Router, private crudSvc: CRUDService) {}
 
   ngOnInit(): void {
     this.cartSubscription = this.cartSvc.cart$.subscribe(cart => {
@@ -37,12 +35,16 @@ private crudSvc: CRUDService) { }
       this.updateTotalPrice();
 
       this.userRoles = this.authSvc.getUserRole();
-    this.isCompanyUser = this.userRoles?.some(role => role.roleType === 'COMPANY') || false;
-    this.checkMissingProducts();
+      this.isCompanyUser = this.userRoles?.some(role => role.roleType === 'COMPANY') || false;
+      this.checkMissingProducts();
+      this.checkProductAvailability();
+      this.updateOrderBlockedStatus();
     });
 
     this.productSubscription = this.crudSvc.productItems$.subscribe(() => {
       this.checkMissingProducts();
+      this.checkProductAvailability();
+      this.updateOrderBlockedStatus();
     });
   }
 
@@ -58,8 +60,8 @@ private crudSvc: CRUDService) { }
   checkMissingProducts(): void {
     this.crudSvc.productItems$.subscribe(productItems => {
       const productIds = productItems.map(product => product.id).filter((id): id is number => id !== undefined);
-      if(productIds.length == 0){
-        this.crudSvc.getAllEntities(environment.productsUrl,'product').subscribe()
+      if (productIds.length == 0) {
+        this.crudSvc.getAllEntities(environment.productsUrl, 'product').subscribe();
       }
       this.missingProductIds = this.cartList
         .map(item => item.product.id)
@@ -67,8 +69,23 @@ private crudSvc: CRUDService) { }
     });
   }
 
+  checkProductAvailability(): void {
+    this.crudSvc.productItems$.subscribe(productItems => {
+      this.unavailableProductIds = productItems
+        .filter(product => !product.available)
+        .map(product => product.id)
+        .filter((id): id is number => id !== undefined);
+    });
+  }
+
   updateTotalPrice(): void {
     this.totalPrice = this.cartSvc.getTotalPrice();
+  }
+
+  updateOrderBlockedStatus(): void {
+    this.orderBlocked = this.cartList.some(item =>
+      this.missingProductIds.includes(item.product.id) || this.unavailableProductIds.includes(item.product.id)
+    );
   }
 
   incrementQuantity(item: iCartItem): void {
@@ -93,6 +110,10 @@ private crudSvc: CRUDService) { }
   }
 
   createOrder(): void {
+    if (this.orderBlocked) {
+      return;
+    }
+
     const clientId = this.authSvc.getUserId();
     if (clientId === null) {
       return;
@@ -101,7 +122,7 @@ private crudSvc: CRUDService) { }
     if (this.cartList.length === 0) {
       console.error('Cart is empty. Cannot create order.');
       return;
-  }
+    }
 
     if (this.userRoles?.some(role => role.roleType === 'PRIVATE')) {
       this.router.navigate(['/cart/payment'], { state: { clientId, cartList: this.cartList, totalPrice: this.totalPrice, pending: false } });
@@ -117,7 +138,7 @@ private crudSvc: CRUDService) { }
         this.cartSvc.createOrder(order).subscribe({
           next: (response) => {
             this.cartSvc.cleanCart();
-            this.router.navigate(['/home']);
+            this.router.navigate(['/productList']);
           }
         });
       } else {

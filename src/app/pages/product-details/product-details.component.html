@@ -1,4 +1,4 @@
-<div class="container-fluid">
+<div class="container-fluid mb-3">
   <div class="row justify-content-center">
     <div
       class="col-12 row col-md-10 col-lg-8 central-column justify-content-center"
@@ -9,7 +9,7 @@
         alt="..."
         (error)="onImageError()"
       />
-      <div class="card-body mx-2">
+      <div class="card-body text-white mx-2">
         <div class="text-center">
           <p class="card-title fs-1 my-3">{{ product?.name }}</p>
           <p class="card-text fs-5">{{ product?.description }}</p>
@@ -42,9 +42,9 @@
           </div>
         </div>
         <div *ngIf="isUser && product">
-          <div class="mx-5 text-center" *ngIf="showTooltip[product.id!]">
+          <div class="mx-5 row flex-column text-center align-items-center" *ngIf="showTooltip[product.id!]">
             <label for="quantity">Quantità:</label>
-            <div class="input-group">
+            <div class="col-6">
               <input
                 type="number"
                 [(ngModel)]="quantity"
@@ -56,14 +56,14 @@
               />
             </div>
             <button
-              class="button"
+              class="button col-3"
               *ngIf="productInCart && quantity === storedQuantity"
               routerLink="/cart"
             >
               Vai al carrello
             </button>
             <button
-              class="button col-7 mb-4"
+              class="button col-3 mb-4"
               *ngIf="quantity !== storedQuantity && quantity > 0"
               (click)="addToCart(product!)"
             >
@@ -76,7 +76,7 @@
             >
               Rimuovi dal carrello
             </button>
-            <p *ngIf="quantityWarnings" class="text-danger">
+            <p *ngIf="quantityWarnings" class="warning">
               Imposta una quantità maggiore di 0 per aggiungere al carrello.
             </p>
           </div>
@@ -85,7 +85,7 @@
           class="row text-center flex-column align-items-center"
           *ngIf="isAdmin || isWarehouse"
         >
-          <div class="checkbox-wrapper mb-3">
+          <div class="checkbox-wrapper fs-3 mb-3">
             <input
               style="display: none"
               type="checkbox"
@@ -101,14 +101,14 @@
                 </svg>
               </span>
               <span
-                class="availability-text"
+                class="availability-text text-white"
                 [class.not-available]="!productAvailable"
                 >Disponibile</span
               >
             </label>
           </div>
           <button
-            class="button col-11 col-md-6 mb-3"
+            class="button col-11 col-md-4 mb-3"
             *ngIf="showConfirmButton"
             (click)="toggleAvailability(productAvailable)"
           >
@@ -142,7 +142,7 @@
           </ng-template>
 
           <button
-            class="button col-6 mb-3"
+            class="button col-4 mb-3"
             *ngIf="isAdmin"
             (click)="open(modifyContent)"
           >

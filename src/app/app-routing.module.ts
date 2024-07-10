@@ -21,9 +21,7 @@ const routes: Routes = [
     path:'not-authorized',
     component:NotAuthorizedComponent
   },
-  { path: 'home', loadChildren: () => import('./pages/home/home.module').then(m => m.HomeModule),
-    canActivate: [AuthGuard],
-    canActivateChild: [AuthGuard] },
+
   { path: 'userList', loadChildren: () => import('./pages/users-list/users-list.module').then(m => m.UsersListModule) ,
     canActivate:[AdminGuard],
     canActivateChild: [AdminGuard]

@@ -42,19 +42,17 @@
 }
 
 img {
-  height: 200px;
+  height: 100%;
   width: 100%;
   object-fit: cover;
 }
 
-.card-body {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  padding: 1rem;
-}
+
 .product-card {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   justify-content: space-between;
+  align-items: center;
 }
+
+

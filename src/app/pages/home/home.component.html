@@ -1,9 +1,0 @@
-<h1>Benvenuto {{ userName$ | async }}</h1>
-
-<a *ngIf="!(isUser$ | async)" routerLink="/userList">userList</a>
-<hr />
-<a routerLink="/productList">productList</a>
-<hr />
-<a *ngIf="!(isUser$ | async)" routerLink="/orderList">orderList</a>
-<hr />
-<a *ngIf="isUser$ | async" [routerLink]="['/profile', userId]" class="nav-link text-white">Profilo</a>

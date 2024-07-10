@@ -68,7 +68,7 @@ export class PaymentComponent {
       this.cartSvc.createOrder(order).subscribe({
         next: (response) => {
           this.cartSvc.cleanCart();
-          this.router.navigate(['/home']);
+          this.router.navigate(['/productList']);
 
         }
       });
