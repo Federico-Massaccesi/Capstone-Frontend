@@ -1,3 +1,11 @@
+.blur-background {
+  background: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border-radius: 10px;
+  padding: 20px;
+}
+
 .central-column {
   padding-left: 1rem;
   padding-right: 1rem;

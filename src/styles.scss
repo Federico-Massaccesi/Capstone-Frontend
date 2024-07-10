@@ -1,11 +1,10 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto+Condensed:ital,wght@0,100..900;1,100..900&display=swap');
 @import 'bootstrap/scss/bootstrap';
 
-@import 'bootstrap/scss/bootstrap';
 
-@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
 
-html,body{
-  font-family: "Montserrat", sans-serif;
+html, body, .app-root {
+  font-family: "Roboto Condensed", sans-serif;
 }
 
 .button {
