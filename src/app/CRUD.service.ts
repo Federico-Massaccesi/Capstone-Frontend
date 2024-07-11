@@ -128,6 +128,16 @@ export class CRUDService {
     );
   }
 
+  updateUser(id: number, user: Partial<iUser>): Observable<iUser> {
+    const url = `${environment.usersUrl}/${id}`;
+    return this.http.put<iUser>(url, user).pipe(
+      tap((updatedUser) => {
+        this.userItems = this.userItems.map(u => u.id === id ? updatedUser : u);
+        this.userItemsSubject.next(this.userItems);
+      })
+    );
+  }
+
   patchOrderChecked(url: string, id: number, checked: boolean): Observable<IOrder> {
     return this.http.patch<IOrder>(`${url}/${id}/checked`, { checked }).pipe(
       tap((updatedOrder) => {

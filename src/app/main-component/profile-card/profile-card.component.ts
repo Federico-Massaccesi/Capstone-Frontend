@@ -18,23 +18,24 @@ export class ProfileCardComponent {
   @Input() isAdmin!: boolean;
   @Input() isPrivateUser!: boolean;
   @Input() isCompanyUser!: boolean;
+  editMode = false;
+  loggedUserId: number | null = null;
+
 
   constructor(private crudSvc: CRUDService,
     private authSvc: AuthService,
     private router: Router){}
 
   ngOnInit() {
-    console.log('ciao');
+    this.loggedUserId = this.authSvc.getUserId();
 
     if (this.user) {
-      console.log('ngOnInit user:', this.user);
       this.loadOrders();
     }
   }
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes['user'] && changes['user'].currentValue) {
-      console.log('ngOnChanges user:', changes['user'].currentValue);
       this.loadOrders();
 
     }
@@ -50,6 +51,16 @@ export class ProfileCardComponent {
             localDate: new Date(order.localDate)
           };
         });
+      });
+    }
+  }
+
+
+  updateUser() {
+    if (this.user && this.user.id) {
+      this.crudSvc.updateUser(this.user.id, this.user).subscribe(updatedUser => {
+        this.user = updatedUser;
+        this.editMode = false;
       });
     }
   }

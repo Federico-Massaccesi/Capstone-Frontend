@@ -11,13 +11,13 @@ id?: number;
 
   email: string;
 
-  pIVA?: string;
+  piva?: string;
 
   address: string;
 
   town: string;
 
-  CAP:number;
+  cap:number;
 
   orders: IOrder[];
 
