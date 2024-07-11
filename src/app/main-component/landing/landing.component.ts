@@ -10,16 +10,15 @@ import { environment } from '../../../environments/environment';
 })
 export class LandingComponent {
   images: string[] = [];
-  productUrl:string = environment.productsUrl
+  productUrl: string = environment.productsUrl;
   captions: string[] = [
     'Benvenuto in Food Manager',
-    "Il tuo supermercato online",
-    "Per aziende e privati",
+    'Il tuo supermercato online',
+    'Per aziende e privati',
     'Trova tutto ciò che ti serve',
     'Per la tua cena da Re!'
-
   ];
-
+  maxItems: number = 5;  // Numero massimo di elementi da mostrare nel carosello
 
   constructor(private crudService: CRUDService) {}
 

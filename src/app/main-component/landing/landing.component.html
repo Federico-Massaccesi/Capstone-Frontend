@@ -1,5 +1,5 @@
 <ngb-carousel [interval]="5000" [wrap]="true" [keyboard]="false" [pauseOnHover]="false">
-  <ng-template ngbSlide *ngFor="let image of images; let i = index; trackBy: trackByImage">
+  <ng-template ngbSlide *ngFor="let image of images.slice(0, maxItems); let i = index; trackBy: trackByImage">
     <div class="picsum-img-wrapper">
       <img [src]="image" alt="Random slide" />
       <div class="carousel-caption">
@@ -8,6 +8,6 @@
     </div>
   </ng-template>
 </ngb-carousel>
-<div class="row justify-content-center mt-5">
-  <button   routerLink="/productList" class="button col-1">Vai alla lista prodotti! </button>
+<div class="row justify-content-center mt-5 mb-4">
+  <button routerLink="/productList" class="button col-1">Vai alla lista prodotti!</button>
 </div>

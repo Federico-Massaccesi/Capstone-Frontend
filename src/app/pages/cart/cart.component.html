@@ -29,20 +29,20 @@
         </div>
         <div class="row justify-content-end my-3 me-3 fs-3 fw-bold">
           <button
-            class="button small-button col-1"
+            class="button small-button col-2"
             (click)="incrementQuantity(item)"
             *ngIf="!missingProductIds.includes(item.product.id) && !unavailableProductIds.includes(item.product.id)"
           >
             +
           </button>
           <button
-            class="button mx-3 small-button col-1"
+            class="button mx-3 small-button col-2"
             *ngIf="item.quantity > 1 && !missingProductIds.includes(item.product.id) && !unavailableProductIds.includes(item.product.id)"
             (click)="decrementQuantity(item)"
           >
             -
           </button>
-          <button class="button small-button col-1" (click)="removeFromCart(item)">
+          <button class="button small-button col-2" (click)="removeFromCart(item)">
             <i class="bi bi-trash3-fill"></i>
           </button>
         </div>
