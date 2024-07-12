@@ -113,13 +113,16 @@ onDescriptionInput(event: any) {
   this.descriptionError = description.length > 255;
 }
 
-deleteProduct(): void {
+deleteProduct(modal: NgbActiveModal): void {
   if (this.pageProductID !== undefined) {
     this.prodSvc.deleteEntity(this.prodUrl, this.pageProductID, 'product').subscribe(() => {
       this.router.navigate(['/productList']);
+      modal.close();
     });
   }
 }
+
+
 
 toggleProductAvailable(): void {
   this.showConfirmButton = true;
@@ -145,118 +148,118 @@ toggleAvailability(checked: boolean): void {
 
 private modalService = inject(NgbModal);
 
-	open(content: TemplateRef<any>) {
-    this.fetchCategories()
+open(content: TemplateRef<any>) {
+  this.fetchCategories();
 
-    this.modalService.open(content, { ariaLabelledBy: 'modal-basic-title' }).result.then(
-      () => {
+  const modalRef = this.modalService.open(content, { ariaLabelledBy: 'modal-basic-title' });
+  modalRef.result.then(
+    (result) => {
+    },
+    (reason) => {
+    }
+  );
+}
+
+
+updateProduct(modal: NgbActiveModal): void {
+  if (this.product) {
+    const selectedCategories = this.selectedCategoryIds.map(id => {
+      return this.allCategories.find(category => category.id === id)!;
+    });
+
+    const updatedProduct: IProduct = {
+      ...this.product,
+      name: this.editedProduct.name!,
+      price: this.editedProduct.price!,
+      description: this.editedProduct.description!,
+      imageURL: this.editedProduct.imageURL!,
+      available: this.editedProduct.available!,
+      categories: selectedCategories
+    };
+
+    this.prodSvc.updateProduct(this.prodUrl, this.pageProductID, updatedProduct, this.selectedFile).subscribe({
+      next: (response) => {
+        this.product = updatedProduct;
+        modal.close(); // Chiude la modale
+      },
+      error: (error) => {
+        console.error('Error updating product', error);
       }
-    );
+    });
   }
+}
 
-  updateProduct(modal: NgbActiveModal): void {
-    if (this.product) {
-      const selectedCategories = this.selectedCategoryIds.map(id => {
-        return this.allCategories.find(category => category.id === id)!;
-      });
+onSubmit(form: NgForm) {
+  if (form.invalid) {
+    return;
+  }
+}
 
-      const updatedProduct: IProduct = {
-        ...this.product,
-        name: this.editedProduct.name!,
-        price: this.editedProduct.price!,
-        description: this.editedProduct.description!,
-        imageURL: this.editedProduct.imageURL!,
-        available: this.editedProduct.available!,
-        categories: selectedCategories
-      };
+fetchCategories() {
+  this.http.get<ICategory[]>(this.categoryUrl).subscribe(
+    (categories) => {
+      this.allCategories = categories;
+    }
+  );
+}
 
-      this.prodSvc.updateProduct(this.prodUrl, this.pageProductID, updatedProduct, this.selectedFile).subscribe({
-        next: (response) => {
-          this.product = updatedProduct;
-          modal.close();
-        },
-        error: (error) => {
-          console.error('Error updating product', error);
-        }
-      });
+onFileSelected(event: any) {
+  const file: File = event.target.files[0];
+  this.selectedFile = file;
+}
+
+addToCart(product: IProduct): void {
+  if (this.quantity < 1) {
+    this.quantityWarnings = true;
+    return;
+  } else {
+    this.cartSvc.addProductToCart(product, this.quantity);
+    this.quantityWarnings = false;
+    console.log('Product added to cart:', product);
+  }
+}
+
+removeFromCart(): void {
+  if (this.product) {
+    this.cartSvc.removeProductFromCart(this.product);
+    this.productInCart = false;
+    this.quantity = 0;
+    this.storedQuantity = 0;
+    console.log('Product removed from cart:', this.product);
+  }
+}
+
+openCartCommands(): void {
+  if (this.product) {
+    this.showTooltip[this.product.id!] = true;
+    if (!this.productInCart) {
+      this.quantity = 1;
+    } else {
+      const cartItem = this.cartSvc.getCart().find(item => item.product.id === this.product!.id);
+      if (cartItem) {
+        this.quantity = cartItem.quantity;
+      }
     }
   }
+}
 
+checkQuantity(): void {
+  if (this.quantity === 0) {
+    this.removeFromCart();
+    this.quantityWarnings = true;
+  } else if (this.quantity === null || this.quantity === undefined ) {
+    this.quantity = 1;
+    this.quantityWarnings = false;
+  } else {
+    this.quantityWarnings = false;
+  }
+}
 
+onImageError() {
+  console.error('L\'immagine non può essere caricata.');
+}
 
-
-  onSubmit(form: NgForm) {
-    if (form.invalid) {
-        return;
-      }
-      }
-
-      fetchCategories() {
-        this.http.get<ICategory[]>(this.categoryUrl).subscribe(
-          (categories) => {
-            this.allCategories = categories;
-          }
-        );
-      }
-
-      onFileSelected(event: any) {
-        const file: File = event.target.files[0];
-        this.selectedFile = file;
-      }
-
-      addToCart(product: IProduct): void {
-        if (this.quantity < 1) {
-          this.quantityWarnings = true;
-          return;
-        } else {
-          this.cartSvc.addProductToCart(product, this.quantity);
-          this.quantityWarnings = false;
-          console.log('Product added to cart:', product);
-        }
-      }
-      removeFromCart(): void {
-        if (this.product) {
-          this.cartSvc.removeProductFromCart(this.product);
-          this.productInCart = false;
-          this.quantity = 0;
-          this.storedQuantity = 0;
-          console.log('Product removed from cart:', this.product);
-        }
-      }
-
-      openCartCommands(): void {
-        if (this.product) {
-          this.showTooltip[this.product.id!] = true;
-          if (!this.productInCart) {
-            this.quantity = 1;
-          } else {
-            const cartItem = this.cartSvc.getCart().find(item => item.product.id === this.product!.id);
-            if (cartItem) {
-              this.quantity = cartItem.quantity;
-            }
-          }
-        }
-      }
-
-      checkQuantity(): void {
-        if (this.quantity === 0) {
-          this.removeFromCart();
-          this.quantityWarnings = true;
-        } else if (this.quantity === null || this.quantity === undefined ) {
-          this.quantity = 1;
-          this.quantityWarnings = false;
-        } else {
-          this.quantityWarnings = false;
-        }
-      }
-
-
-
-      onImageError() {
-        console.error('L\'immagine non può essere caricata.');
-      }
-
-      openVerticallyCentered(content: TemplateRef<any>) {
-        this.modalService.open(content, { centered: true });
-      }
+openVerticallyCentered(content: TemplateRef<any>) {
+  this.modalService.open(content, { centered: true });
+}
     }
