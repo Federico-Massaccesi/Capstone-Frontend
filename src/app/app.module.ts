@@ -13,6 +13,7 @@ import { OrderCardComponent } from './main-component/order-card/order-card.compo
 import { NgbCollapseModule, NgbModule, NgbTooltipModule } from '@ng-bootstrap/ng-bootstrap';
 import { NotAuthorizedComponent } from './main-component/not-authorized/not-authorized.component';
 import { FormsModule } from '@angular/forms';
+import { ChatComponent } from './main-component/chat/chat.component';
 
 @NgModule({
   declarations: [
@@ -21,7 +22,8 @@ import { FormsModule } from '@angular/forms';
     LandingComponent,
     ContactsComponent,
     OrderCardComponent,
-    NotAuthorizedComponent
+    NotAuthorizedComponent,
+    ChatComponent
   ],
   imports: [
     BrowserModule,

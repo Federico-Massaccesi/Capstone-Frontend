@@ -1,0 +1,10 @@
+<div class="chat-container">
+  <div id="chatbox">
+    <!-- Ciclo per visualizzare dinamicamente i messaggi -->
+    <div id="messages">
+      <div *ngFor="let message of messages">{{ message }}</div>
+    </div>
+    <input type="text" id="userInput" placeholder="Scrivi un messaggio..." [(ngModel)]="userMessage" (keyup.enter)="sendMessage()">
+    <button (click)="sendMessage()">Invia</button>
+  </div>
+</div>

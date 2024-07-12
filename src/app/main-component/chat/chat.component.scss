@@ -1,0 +1,66 @@
+/* chat.component.scss */
+.chat-container {
+  position: fixed;
+  bottom: 0;
+  right: 0;
+  width: 300px;
+  background: white;
+  border: 1px solid #ccc;
+  padding: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  max-height: 400px;
+}
+
+#chatbox {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  overflow-y: auto;
+}
+
+#messages {
+  flex-grow: 1;
+  margin-bottom: 10px;
+}
+
+#userInput {
+  width: calc(100% - 60px);
+  padding: 5px;
+  margin-right: 10px;
+}
+
+button {
+  width: 50px;
+  padding: 5px;
+}
+
+input,
+button {
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  outline: none;
+}
+
+input:focus,
+button:focus {
+  border-color: #0056b3;
+}
+
+div {
+  margin-bottom: 5px;
+}
+
+div:nth-child(odd) {
+  background-color: #f1f1f1;
+}
+
+div:nth-child(even) {
+  background-color: #e1e1e1;
+}
+
+div {
+  padding: 5px;
+  border-radius: 4px;
+}
