@@ -41,32 +41,32 @@ html, body, .app-root {
 }
 body {
   background-image: url('./assets/openart-image_ektzWaCW_1720539263093_raw.jpg');
-  background-size: cover; /* Adatta l'immagine per coprire l'intera area */
-  background-repeat: no-repeat; /* Evita che l'immagine si ripeta */
-  background-attachment: fixed; /* L'immagine di sfondo rimane fissa durante lo scrolling */
-  background-position: center; /* Centra l'immagine */
-  margin: 0; /* Rimuove il margine del body */
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  background-position: center;
+  margin: 0;
   height: 100%;
   width: 100%;
-  overflow-x: hidden; /* Impedisce lo scroll orizzontale */
+  overflow-x: hidden;
   position: relative;
   z-index: 0;
 }
 
 body::before {
   content: '';
-  position: fixed; /* Fissa l'overlay durante lo scrolling */
+  position: fixed;
   top: 0;
   left: 0;
   width: 100%;
-  height: 100vh; /* Copre l'intera altezza della viewport */
-  background: rgba(0, 0, 0, 0.5); /* Overlay scuro */
-  z-index: -1; /* Assicura che l'overlay sia dietro il contenuto del body */
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: -1;
 }
 
 .content {
   position: relative;
-  z-index: 1; /* Assicura che il contenuto sia sopra l'overlay */
+  z-index: 1;
 }
 
 
