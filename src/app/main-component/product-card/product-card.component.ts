@@ -56,6 +56,7 @@ export class ProductCardComponent {
   addToCart(): void {
     if (this.quantity > 0) {
       this.cartSvc.addProductToCart(this.product, this.quantity);
+      this.toggleTooltip()
     } else {
       this.quantityWarnings = true;
       console.error('Invalid quantity:', this.quantity);

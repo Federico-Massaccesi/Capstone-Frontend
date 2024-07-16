@@ -6,7 +6,6 @@
   width: 350px;
   background: white;
   border: 1px solid #ccc;
-  padding: 10px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   display: flex;
   flex-direction: column;
@@ -16,6 +15,7 @@
 }
 
 .chat-container.expanded {
+border-radius: 5px;
   height: 400px;
   max-height: 400px; /* Expanded height */
 }
@@ -33,7 +33,11 @@
 }
 
 .chat-title {
+  padding: 10px 0;
+
+  color: white;
   flex-grow: 1;
+  background-color: #25204f;
 }
 
 .close-button {
